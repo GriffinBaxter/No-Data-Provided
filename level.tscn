@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=9 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
+[ext_resource type="Material" uid="uid://d35dbj777xdx3" path="res://Materials/dark.tres" id="2_10e20"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vuur2"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -19,6 +20,8 @@ glow_enabled = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_lcjhv"]
+
 [node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -26,11 +29,8 @@ environment = SubResource("Environment_uxqxj")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+visible = false
 shadow_enabled = true
-
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-use_collision = true
-size = Vector3(10, 0.001, 10)
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -48,3 +48,46 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
 fov = 80.0
+
+[node name="Hallway" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Floor" type="CSGMesh3D" parent="Hallway"]
+transform = Transform3D(2.5, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+use_collision = true
+mesh = SubResource("PlaneMesh_lcjhv")
+material = ExtResource("2_10e20")
+
+[node name="Ceiling" type="CSGMesh3D" parent="Hallway"]
+transform = Transform3D(-2.5, 8.74228e-08, 0, -2.18557e-07, -1, 0, 0, 0, 20, 0, 5, 0)
+use_collision = true
+mesh = SubResource("PlaneMesh_lcjhv")
+material = ExtResource("2_10e20")
+
+[node name="Left Wall" type="CSGMesh3D" parent="Hallway"]
+transform = Transform3D(-1.09278e-07, 1, 0, -2.5, -4.37114e-08, 0, 0, 0, 20, -2.5, 2.5, 0)
+use_collision = true
+mesh = SubResource("PlaneMesh_lcjhv")
+material = ExtResource("2_10e20")
+
+[node name="Right Wall" type="CSGMesh3D" parent="Hallway"]
+transform = Transform3D(-1.09278e-07, -1, 0, 2.5, -4.37114e-08, 0, 0, 0, 20, 2.5, 2.5, 0)
+use_collision = true
+mesh = SubResource("PlaneMesh_lcjhv")
+material = ExtResource("2_10e20")
+
+[node name="Back" type="CSGMesh3D" parent="Hallway"]
+transform = Transform3D(2.5, 0, 0, 0, -4.37114e-08, 2.5, 0, -1, -1.09278e-07, 0, 2.5, 20)
+use_collision = true
+mesh = SubResource("PlaneMesh_lcjhv")
+material = ExtResource("2_10e20")
+
+[node name="Front" type="CSGMesh3D" parent="Hallway"]
+transform = Transform3D(2.5, 0, 0, 0, -4.37114e-08, -2.5, 0, 1, -1.09278e-07, 0, 2.5, -20)
+use_collision = true
+mesh = SubResource("PlaneMesh_lcjhv")
+material = ExtResource("2_10e20")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -35)
+light_color = Color(0.513726, 0.588235, 0.713726, 1)

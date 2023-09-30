@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d35dbj777xdx3"]
+
+[resource]
+albedo_color = Color(0.176471, 0.176471, 0.176471, 1)
+anisotropy = 1.0
+ao_light_affect = 1.0
+heightmap_scale = 16.0
+subsurf_scatter_strength = 0.7
