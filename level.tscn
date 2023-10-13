@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=10 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Material" uid="uid://d35dbj777xdx3" path="res://Materials/dark.tres" id="2_10e20"]
+[ext_resource type="Material" uid="uid://dj6622xf07pv1" path="res://Materials/light.tres" id="3_o1qfb"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vuur2"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -88,6 +89,40 @@ use_collision = true
 mesh = SubResource("PlaneMesh_lcjhv")
 material = ExtResource("2_10e20")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="Red Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -35)
-light_color = Color(0.513726, 0.588235, 0.713726, 1)
+light_color = Color(1, 0.282353, 0.333333, 1)
+omni_range = 6.0
+
+[node name="Blue Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.5, -27.5)
+light_color = Color(0, 0.768627, 0.960784, 1)
+light_energy = 0.4
+omni_range = 6.0
+
+[node name="Purple Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3.5, -23.5)
+light_color = Color(0.780392, 0.592157, 1, 1)
+light_energy = 0.4
+omni_range = 6.0
+
+[node name="Green Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -19.5)
+light_color = Color(0.0862745, 0.839216, 0, 1)
+light_energy = 0.4
+omni_range = 6.0
+
+[node name="Table" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -34.5)
+
+[node name="Top" type="CSGBox3D" parent="Table"]
+transform = Transform3D(0.979575, 0, 0.201078, 0, 1, 0, -0.201078, 0, 0.979575, 0, 0.25, 0)
+use_collision = true
+size = Vector3(2.5, 0.1, 2.5)
+material = ExtResource("3_o1qfb")
+
+[node name="Leg" type="CSGBox3D" parent="Table"]
+transform = Transform3D(0.979575, 0, 0.201078, 0, 1, 0, -0.201078, 0, 0.979575, 0, -0.409, 0)
+use_collision = true
+size = Vector3(0.25, 1.17329, 0.25)
+material = ExtResource("3_o1qfb")
