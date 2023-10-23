@@ -5,6 +5,8 @@
 [ext_resource type="Material" uid="uid://dj6622xf07pv1" path="res://Materials/light.tres" id="3_o1qfb"]
 [ext_resource type="Material" uid="uid://h83gg7tdbsed" path="res://Materials/emission.tres" id="4_g8rsm"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vuur2"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -20,27 +22,56 @@ ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_lcjhv"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_uxqxj")
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Player" type="CharacterBody3D" parent="."]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 1.25
+stretch_mode = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/AspectRatioContainer"]
+layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Control/AspectRatioContainer/SubViewportContainer"]
+handle_input_locally = false
+use_taa = true
+size = Vector2i(1350, 1080)
+render_target_update_mode = 4
+
+[node name="Player" type="CharacterBody3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_2b40y")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"]
 shape = SubResource("CapsuleShape3D_8ocoo")
 
-[node name="Head" type="Node3D" parent="Player"]
+[node name="Head" type="Node3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Player/Head"]
+[node name="Camera3D" type="Camera3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head"]
 fov = 80.0
+
+[node name="SMMCamera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.839828, 0.542852, 0, -0.542852, 0.839828, 0, 2.525, -36.149)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uxqxj")
 
 [node name="Hallway" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
