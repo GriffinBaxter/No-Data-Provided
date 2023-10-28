@@ -68,7 +68,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 fov = 80.0
 
 [node name="SMMCamera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.839828, 0.542852, 0, -0.542852, 0.839828, 0, 2.525, -36.149)
+transform = Transform3D(0.979575, -0.0849792, 0.182238, 0, 0.906307, 0.422618, -0.201078, -0.413986, 0.887796, 0.4, 1.65, -32.739)
+fov = 80.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_uxqxj")
@@ -100,20 +101,23 @@ use_collision = true
 mesh = SubResource("PlaneMesh_lcjhv")
 material = ExtResource("2_10e20")
 
-[node name="Back" type="CSGMesh3D" parent="Hallway"]
+[node name="Front" type="CSGMesh3D" parent="Hallway"]
 transform = Transform3D(2.5, 0, 0, 0, -4.37114e-08, 2.5, 0, -1, -1.09278e-07, 0, 2.5, 20)
 use_collision = true
 mesh = SubResource("PlaneMesh_lcjhv")
 material = ExtResource("2_10e20")
 
-[node name="Front" type="CSGMesh3D" parent="Hallway"]
-transform = Transform3D(2.5, 0, 0, 0, -4.37114e-08, -2.5, 0, 1, -1.09278e-07, 0, 2.5, -20)
+[node name="BackNode" type="Node3D" parent="Hallway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Back" type="CSGMesh3D" parent="Hallway/BackNode"]
+transform = Transform3D(2.5, 0, 0, 0, -4.37114e-08, -2.5, 0, 1, -1.09278e-07, 0, 2.5, 0)
 use_collision = true
 mesh = SubResource("PlaneMesh_lcjhv")
 material = ExtResource("4_g8rsm")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Hallway"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5, -32.5)
+[node name="BackSpotLight" type="SpotLight3D" parent="Hallway/BackNode"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5, -12.5)
 light_energy = 1.5
 shadow_enabled = true
 shadow_bias = 0.005
