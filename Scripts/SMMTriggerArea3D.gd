@@ -1,17 +1,10 @@
 extends Area3D
 
 @onready var player = $"../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
+@onready var sub_viewport_container = $"../Control/AspectRatioContainer/SubViewportContainer"
+@onready var smm_animation_player = $"../SMMAnimationPlayer"
 
 func _on_body_entered(body):
 	if (body == player):
-		print("Player Reached Area")
+		sub_viewport_container.visible = false
+		smm_animation_player.play("cutscene_1")

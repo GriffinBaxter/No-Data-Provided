@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=15 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/SMMTriggerArea3D.gd" id="2_2iwfq"]
@@ -7,6 +7,91 @@
 [ext_resource type="Material" uid="uid://h83gg7tdbsed" path="res://Materials/emission.tres" id="4_g8rsm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
+
+[sub_resource type="Animation" id="Animation_gn0kb"]
+resource_name = "cutscene_1"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SMMCamera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [Vector3(0, 2.5, -2.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SMMCamera3D:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [Vector3(-0.261799, 0.0872665, 0.0872665)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SMMCamera3D:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [50.0]
+}
+
+[sub_resource type="Animation" id="Animation_5plsx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SMMCamera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.4, 1.65, -32.8364)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SMMCamera3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.436332, 0.202458, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SMMCamera3D:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [80.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d8wt3"]
+_data = {
+"RESET": SubResource("Animation_5plsx"),
+"cutscene_1": SubResource("Animation_gn0kb")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0bhrb"]
 size = Vector3(5, 5, 1)
@@ -72,8 +157,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 fov = 80.0
 
 [node name="SMMCamera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.979575, -0.0849793, 0.182239, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.65, -32.8364)
+transform = Transform3D(0.979575, -0.0849792, 0.182239, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.65, -32.8364)
 fov = 80.0
+
+[node name="SMMAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_d8wt3")
+}
 
 [node name="SMMTriggerArea3D" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -33)
