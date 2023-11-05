@@ -1,11 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=12 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
+[ext_resource type="Script" path="res://Scripts/SMMTriggerArea3D.gd" id="2_2iwfq"]
 [ext_resource type="Material" uid="uid://d35dbj777xdx3" path="res://Materials/dark.tres" id="2_10e20"]
 [ext_resource type="Material" uid="uid://dj6622xf07pv1" path="res://Materials/light.tres" id="3_o1qfb"]
 [ext_resource type="Material" uid="uid://h83gg7tdbsed" path="res://Materials/emission.tres" id="4_g8rsm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0bhrb"]
+size = Vector3(5, 5, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vuur2"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -68,8 +72,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 fov = 80.0
 
 [node name="SMMCamera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.979575, -0.0849792, 0.182238, 0, 0.906307, 0.422618, -0.201078, -0.413986, 0.887796, 0.4, 1.65, -32.739)
+transform = Transform3D(0.979575, -0.0849793, 0.182239, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.65, -32.8364)
 fov = 80.0
+
+[node name="SMMTriggerArea3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -33)
+script = ExtResource("2_2iwfq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SMMTriggerArea3D"]
+shape = SubResource("BoxShape3D_0bhrb")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_uxqxj")
@@ -139,3 +150,5 @@ transform = Transform3D(0.979575, 0, 0.201078, 0, 1, 0, -0.201078, 0, 0.979575, 
 use_collision = true
 size = Vector3(0.25, 1.17329, 0.25)
 material = ExtResource("3_o1qfb")
+
+[connection signal="body_entered" from="SMMTriggerArea3D" to="SMMTriggerArea3D" method="_on_body_entered"]
