@@ -157,7 +157,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 fov = 80.0
 
 [node name="SMMCamera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.979575, -0.0849791, 0.182238, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.75, -32.836)
+transform = Transform3D(0.979575, -0.0849791, 0.182238, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.65, -32.8364)
 fov = 80.0
 
 [node name="SMMTriggerArea3D" type="Area3D" parent="SMMCamera3D"]
