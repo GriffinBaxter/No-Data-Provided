@@ -9,9 +9,15 @@ extends Area3D
 @onready var smm_camera = $".."
 
 var player_entered_area = false
+var intro_cutscene_started = false
 var cutscene_started = false
 
 func _process(_delta):
+	if (!intro_cutscene_started):
+		intro_cutscene_started = true
+
+		smm_animation_player.play("hallway_intro")
+
 	if (!cutscene_started and player_entered_area and is_within_offset_degrees(-25, 10, player_camera.rotation_degrees.x) and is_within_offset_degrees(11.6, 10, player_head.rotation_degrees.y)):
 		cutscene_started = true
 
@@ -22,7 +28,7 @@ func _process(_delta):
 		await get_tree().create_timer(0.5).timeout
 
 		sub_viewport_container.visible = false
-		smm_animation_player.play("cutscene_1")
+		smm_animation_player.play("hallway_outro")
 
 func _on_body_entered(body):
 	if (body == player):
