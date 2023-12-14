@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/SMMTriggerArea3D.gd" id="2_2iwfq"]
 [ext_resource type="Material" uid="uid://d35dbj777xdx3" path="res://Materials/dark.tres" id="2_10e20"]
-[ext_resource type="Material" uid="uid://dj6622xf07pv1" path="res://Materials/light.tres" id="3_o1qfb"]
 [ext_resource type="Material" uid="uid://h83gg7tdbsed" path="res://Materials/emission.tres" id="4_g8rsm"]
 [ext_resource type="PackedScene" uid="uid://b3vgjtsw4n7jt" path="res://Blender/table.blend" id="6_rmbf6"]
 
@@ -167,6 +166,8 @@ glow_enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lcjhv"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
+
 [node name="Node3D" type="Node3D"]
 
 [node name="Control" type="Control" parent="."]
@@ -279,27 +280,18 @@ shadow_blur = 4.0
 spot_range = 55.0
 spot_angle = 17.5
 
-[node name="Table" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -34.5)
+[node name="Table" parent="." instance=ExtResource("6_rmbf6")]
+transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, 0, -34.5)
 
-[node name="Top" type="CSGBox3D" parent="Table"]
-transform = Transform3D(0.979575, 0, 0.201078, 0, 1, 0, -0.201078, 0, 0.979575, 0, 0.25, 0)
-use_collision = true
-size = Vector3(2.5, 0.1, 2.5)
-material = ExtResource("3_o1qfb")
+[node name="StaticBody3D" type="StaticBody3D" parent="Table"]
 
-[node name="Leg" type="CSGBox3D" parent="Table"]
-transform = Transform3D(0.979575, 0, 0.201078, 0, 1, 0, -0.201078, 0, 0.979575, 0, -0.409, 0)
-use_collision = true
-size = Vector3(0.25, 1.17329, 0.25)
-material = ExtResource("3_o1qfb")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.399951, 0)
+shape = SubResource("BoxShape3D_fpbco")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1035, 0)
 light_energy = 16.0
-
-[node name="table" parent="." instance=ExtResource("6_rmbf6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.48897, 0, -32.8275)
 
 [connection signal="body_entered" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_entered"]
 [connection signal="animation_finished" from="SMMAnimationPlayer" to="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player" method="_on_smm_animation_player_animation_finished"]
