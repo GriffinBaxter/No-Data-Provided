@@ -231,7 +231,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -22.5)
 
 [node name="BackSpotLight" type="SpotLight3D" parent="hallway"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 5, -75)
-light_energy = 16.0
+light_energy = 8.0
 shadow_enabled = true
 shadow_bias = 0.005
 shadow_blur = 4.0
@@ -239,8 +239,9 @@ spot_range = 62.5
 spot_angle = 17.5
 
 [node name="OmniLight3D" type="OmniLight3D" parent="hallway"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.207, 45)
-light_energy = 16.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 48)
+light_energy = 2.0
+omni_range = 15.0
 
 [node name="Table" parent="." instance=ExtResource("6_rmbf6")]
 transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, 0, -34.5)
