@@ -7,6 +7,7 @@ extends Area3D
 @onready var player_camera = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D"
 @onready var player_head = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head"
 @onready var smm_camera = $".."
+@onready var table = $"../../Table"
 
 var player_entered_area = false
 var intro_cutscene_started = false
@@ -29,6 +30,15 @@ func _process(_delta):
 
 		sub_viewport_container.visible = false
 		smm_animation_player.play("hallway_outro")
+		
+		await get_tree().create_timer(5).timeout
+
+		table.rotation_degrees = Vector3(0, 0, 0)
+
+		await get_tree().create_timer(9.9).timeout
+
+		var table_tween = get_tree().create_tween()
+		table_tween.tween_property(table, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
 
 func _on_body_entered(body):
 	if (body == player):
