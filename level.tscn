@@ -1,9 +1,13 @@
-[gd_scene load_steps=15 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=19 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/SMMTriggerArea3D.gd" id="2_2iwfq"]
+[ext_resource type="PackedScene" uid="uid://jbvm1lbh4tns" path="res://Blender/phone.blend" id="5_1ckc7"]
+[ext_resource type="Script" path="res://Scripts/Valuable.gd" id="5_dhriq"]
 [ext_resource type="PackedScene" uid="uid://b3vgjtsw4n7jt" path="res://Blender/table.blend" id="6_rmbf6"]
 [ext_resource type="PackedScene" uid="uid://b2cv287efwgcu" path="res://Blender/hallway.blend" id="6_ujk86"]
+[ext_resource type="PackedScene" uid="uid://cj6kxuuldsw1h" path="res://Blender/passport.blend" id="7_hftig"]
+[ext_resource type="PackedScene" uid="uid://l1rtbhd4qjcv" path="res://Blender/license.blend" id="8_xwh8j"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
@@ -251,6 +255,21 @@ transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Table/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.399951, 0)
 shape = SubResource("BoxShape3D_fpbco")
+
+[node name="Valuable" type="Node3D" parent="Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.91, 0.25)
+script = ExtResource("5_dhriq")
+
+[node name="phone" parent="Table/Valuable" instance=ExtResource("5_1ckc7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+
+[node name="passport" parent="Table/Valuable" instance=ExtResource("7_hftig")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+
+[node name="license" parent="Table/Valuable" instance=ExtResource("8_xwh8j")]
+visible = false
 
 [connection signal="body_entered" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_entered"]
 [connection signal="animation_finished" from="SMMAnimationPlayer" to="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player" method="_on_smm_animation_player_animation_finished"]
