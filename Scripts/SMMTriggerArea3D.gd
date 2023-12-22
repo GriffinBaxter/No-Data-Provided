@@ -10,18 +10,31 @@ extends Area3D
 @onready var table = $"../../Table"
 @onready var valuable = $"../../Table/Valuable"
 
+enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH, AFTER_OUTRO_CUTSCENE}
+var state = State.BEFORE_INTRO_CUTSCENE
+signal autosave
+
+const level = 0
+
 var player_entered_area = false
 var intro_cutscene_started = false
-var cutscene_started = false
+
+func update_state(new_state):
+	state = new_state
+	emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
 
 func _process(_delta):
 	if (!intro_cutscene_started):
 		intro_cutscene_started = true
 
 		smm_animation_player.play("hallway_intro")
+		
+		await get_tree().create_timer(5).timeout
+		
+		update_state(State.AFTER_INTRO_CUTSCENE)
 
-	if (!cutscene_started and player_entered_area and is_within_offset_degrees(-25, 10, player_camera.rotation_degrees.x) and is_within_offset_degrees(11.6, 10, player_head.rotation_degrees.y)):
-		cutscene_started = true
+	if (state < State.MATCH and player_entered_area and is_within_offset_degrees(-25, 10, player_camera.rotation_degrees.x) and is_within_offset_degrees(11.6, 10, player_head.rotation_degrees.y)):
+		update_state(State.MATCH)
 
 		var tween = get_tree().create_tween().set_parallel()
 		tween.tween_property(player_camera, "global_position", smm_camera.position, 0.5)
@@ -45,6 +58,8 @@ func _process(_delta):
 		await get_tree().create_timer(0.1).timeout
 
 		valuable.visible = true
+		
+		update_state(State.AFTER_OUTRO_CUTSCENE)
 
 func _on_body_entered(body):
 	if (body == player):

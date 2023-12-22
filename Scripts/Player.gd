@@ -13,9 +13,6 @@ var can_move = false
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 
-func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
 func _unhandled_input(event):
 	if can_move and event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
