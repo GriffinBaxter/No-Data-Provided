@@ -3,9 +3,18 @@ extends Node
 @onready var smm = $"../SMMCamera3D/SMMTriggerArea3D"
 @onready var pause_menu = $"../PauseMenu"
 
+const default_save = {
+	"level": 0,
+	"state": 0,
+	"player_position": [0, 1, 0],
+}
+
+signal load
+
 func _ready():
 	smm.autosave.connect(save_game)
 	pause_menu.save_player_position.connect(save_game_player_position)
+	emit_signal("load", load_game())
 
 func save_game(level, state, player_position):
 	save_game_to_file({
@@ -15,7 +24,7 @@ func save_game(level, state, player_position):
 	})
 
 func save_game_player_position(player_position):
-	var save = load_game()  # fails when save is empty file, should be fixed once loading is fully implemented
+	var save = load_game()
 	save.player_position = player_position
 	save_game_to_file(save)
 
@@ -33,4 +42,6 @@ func load_game():
 		var parse_result = json.parse(json_string)
 		var node_data = json.get_data()
 		save_game.close()
-		return node_data
+		if node_data:
+			return node_data
+	return default_save

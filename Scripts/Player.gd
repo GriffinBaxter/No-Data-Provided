@@ -12,6 +12,7 @@ var can_move = false
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
+@onready var smm = $"../../../../../SMMCamera3D/SMMTriggerArea3D"
 
 func _unhandled_input(event):
 	if can_move and event is InputEventMouseMotion:
@@ -51,6 +52,8 @@ func _physics_process(delta):
 func _process(_delta):
 	move_and_slide()  # Not ideal, should move out of _process eventually
 
-func _on_smm_animation_player_animation_finished(anim_name):
-	if anim_name == "hallway_intro":
-		can_move = true
+func _ready():
+	smm.movable.connect(update_can_move)
+
+func update_can_move(movable):
+	can_move = movable

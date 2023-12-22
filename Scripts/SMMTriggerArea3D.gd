@@ -9,9 +9,12 @@ extends Area3D
 @onready var smm_camera = $".."
 @onready var table = $"../../Table"
 @onready var valuable = $"../../Table/Valuable"
+@onready var save_load = $"../../SaveLoad"
 
 enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH, AFTER_OUTRO_CUTSCENE}
 var state = State.BEFORE_INTRO_CUTSCENE
+const states_moveable = [State.AFTER_INTRO_CUTSCENE]
+signal movable
 signal autosave
 
 const level = 0
@@ -19,12 +22,24 @@ const level = 0
 var player_entered_area = false
 var intro_cutscene_started = false
 
-func update_state(new_state):
+func load_game(save):
+	update_state(save.state, false)
+	player.position = Vector3(save.player_position[0], save.player_position[1], save.player_position[2])
+
+func update_state(new_state, autosave = true):
 	state = new_state
-	emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
+	if states_moveable.has(int(state)):
+		emit_signal("movable", true)
+	else:
+		emit_signal("movable", false)
+	if autosave:
+		emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
+
+func _ready():
+	save_load.load.connect(load_game)
 
 func _process(_delta):
-	if (!intro_cutscene_started):
+	if (state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started):
 		intro_cutscene_started = true
 
 		smm_animation_player.play("hallway_intro")
