@@ -11,7 +11,7 @@ extends Area3D
 @onready var valuable = $"../../Table/Valuable"
 @onready var save_load = $"../../SaveLoad"
 
-enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH, AFTER_OUTRO_CUTSCENE}
+enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH}
 var state = State.BEFORE_INTRO_CUTSCENE
 const states_moveable = [State.AFTER_INTRO_CUTSCENE]
 signal movable
@@ -28,6 +28,8 @@ func load_game(save):
 
 func update_state(new_state, autosave = true):
 	state = new_state
+	if state == State.MATCH and not autosave:
+		match_cutscene()
 	if states_moveable.has(int(state)):
 		emit_signal("movable", true)
 	else:
@@ -57,28 +59,33 @@ func _process(_delta):
 
 		await get_tree().create_timer(0.5).timeout
 
-		sub_viewport_container.visible = false
-		smm_animation_player.play("hallway_outro")
+		match_cutscene()
+
+func match_cutscene():
+	sub_viewport_container.visible = false
+	smm_animation_player.play("hallway_outro")
 		
-		await get_tree().create_timer(5).timeout
+	await get_tree().create_timer(5).timeout
 
-		table.rotation_degrees = Vector3(0, 0, 0)
-		valuable.visible = false
+	table.rotation_degrees = Vector3(0, 0, 0)
+	valuable.visible = false
 
-		await get_tree().create_timer(9.9).timeout
+	await get_tree().create_timer(9.9).timeout
 
-		var table_tween = get_tree().create_tween()
-		table_tween.tween_property(table, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
+	var table_tween = get_tree().create_tween()
+	table_tween.tween_property(table, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
 
-		await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.1).timeout
 
-		valuable.visible = true
-		
-		update_state(State.AFTER_OUTRO_CUTSCENE)
+	valuable.visible = true
 
 func _on_body_entered(body):
 	if (body == player):
 		player_entered_area = true
+
+func _on_body_exited(body):
+	if (body == player):
+		player_entered_area = false
 
 func is_within_offset_degrees(original_degrees, offset_degrees, current_degrees):
 	return original_degrees - offset_degrees <= current_degrees and current_degrees <= original_degrees + offset_degrees

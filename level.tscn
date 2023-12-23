@@ -280,4 +280,5 @@ visible = false
 script = ExtResource("11_kfi3i")
 
 [connection signal="body_entered" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_entered"]
+[connection signal="body_exited" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_exited"]
 [connection signal="animation_finished" from="SMMAnimationPlayer" to="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player" method="_on_smm_animation_player_animation_finished"]
