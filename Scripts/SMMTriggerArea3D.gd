@@ -26,15 +26,15 @@ func load_game(save):
 	update_state(save.state, false)
 	player.position = Vector3(save.player_position[0], save.player_position[1], save.player_position[2])
 
-func update_state(new_state, autosave = true):
+func update_state(new_state, updated_from_autosave = true):
 	state = new_state
-	if state == State.MATCH and not autosave:
+	if state == State.MATCH and not updated_from_autosave:
 		match_cutscene()
 	if states_moveable.has(int(state)):
 		emit_signal("movable", true)
 	else:
 		emit_signal("movable", false)
-	if autosave:
+	if updated_from_autosave:
 		emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
 
 func _ready():

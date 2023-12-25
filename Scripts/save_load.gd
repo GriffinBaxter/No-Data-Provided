@@ -29,19 +29,19 @@ func save_game_player_position(player_position):
 	save_game_to_file(save)
 
 func save_game_to_file(save):
-	var save_game = FileAccess.open("user://01.save", FileAccess.WRITE)
+	var current_save = FileAccess.open("user://01.save", FileAccess.WRITE)
 	var json_string = JSON.stringify(save)
-	save_game.store_line(json_string)
-	save_game.close()
+	current_save.store_line(json_string)
+	current_save.close()
 
 func load_game():
 	if FileAccess.file_exists("user://01.save"):
-		var save_game = FileAccess.open("user://01.save", FileAccess.READ)
-		var json_string =  save_game.get_line()
+		var current_save = FileAccess.open("user://01.save", FileAccess.READ)
+		var json_string =  current_save.get_line()
 		var json = JSON.new()
-		var parse_result = json.parse(json_string)
+		json.parse(json_string)
 		var node_data = json.get_data()
-		save_game.close()
+		current_save.close()
 		if node_data:
 			return node_data
 	return default_save
