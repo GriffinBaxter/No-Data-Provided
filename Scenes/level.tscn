@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b2cv287efwgcu" path="res://Blender/hallway.blend" id="6_ujk86"]
 [ext_resource type="PackedScene" uid="uid://cj6kxuuldsw1h" path="res://Blender/passport.blend" id="7_hftig"]
 [ext_resource type="PackedScene" uid="uid://l1rtbhd4qjcv" path="res://Blender/license.blend" id="8_xwh8j"]
-[ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://pause_menu.tscn" id="10_g66hf"]
+[ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
