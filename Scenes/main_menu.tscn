@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://3e383jbgun3b"]
+[gd_scene load_steps=2 format=3 uid="uid://3e383jbgun3b"]
+
+[ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_vyx2b"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_vyx2b")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -27,6 +30,7 @@ layout_mode = 2
 
 [node name="Continue" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Continue"
 
 [node name="New" type="Button" parent="MarginContainer/VBoxContainer"]
@@ -36,3 +40,7 @@ text = "New"
 [node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/New" to="." method="_on_new_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
