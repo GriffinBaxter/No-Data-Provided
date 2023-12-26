@@ -1,13 +1,15 @@
-[gd_scene load_steps=22 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=28 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
 [ext_resource type="Script" path="res://Scripts/SMMTriggerArea3D.gd" id="2_2iwfq"]
 [ext_resource type="PackedScene" uid="uid://jbvm1lbh4tns" path="res://Blender/phone.blend" id="5_1ckc7"]
+[ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
 [ext_resource type="Script" path="res://Scripts/Valuable.gd" id="5_dhriq"]
-[ext_resource type="PackedScene" uid="uid://b3vgjtsw4n7jt" path="res://Blender/table.blend" id="6_rmbf6"]
+[ext_resource type="Shader" path="res://Shaders/slice.gdshader" id="5_ga2jv"]
 [ext_resource type="PackedScene" uid="uid://b2cv287efwgcu" path="res://Blender/hallway.blend" id="6_ujk86"]
 [ext_resource type="PackedScene" uid="uid://cj6kxuuldsw1h" path="res://Blender/passport.blend" id="7_hftig"]
+[ext_resource type="Script" path="res://Scripts/Slice.gd" id="7_r7jlu"]
 [ext_resource type="PackedScene" uid="uid://l1rtbhd4qjcv" path="res://Blender/license.blend" id="8_xwh8j"]
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
@@ -170,6 +172,23 @@ ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r7r0q"]
+frequency = 0.025
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1y8xn"]
+seamless = true
+noise = SubResource("FastNoiseLite_r7r0q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o47pw"]
+render_priority = 0
+shader = ExtResource("5_ga2jv")
+shader_parameter/slice_plane = null
+shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
+
+[sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
+size = Vector3(1, 0.01, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
 
 [node name="Level" type="Node3D"]
@@ -251,8 +270,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 48)
 light_energy = 2.0
 omni_range = 15.0
 
-[node name="Table" parent="." instance=ExtResource("6_rmbf6")]
+[node name="Table" type="MeshInstance3D" parent="."]
 transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, 0, -44.5)
+material_override = SubResource("ShaderMaterial_o47pw")
+mesh = ExtResource("5_3r5t2")
+script = ExtResource("7_r7jlu")
+
+[node name="Slicer" type="MeshInstance3D" parent="Table"]
+transform = Transform3D(0.766046, -0.64279, 0, 0.642789, 0.766048, 0, -4.47035e-08, 2.98023e-08, 1, -0.5, 1, -0.200001)
+visible = false
+mesh = SubResource("BoxMesh_g4dm7")
+skeleton = NodePath("../..")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Table"]
 
