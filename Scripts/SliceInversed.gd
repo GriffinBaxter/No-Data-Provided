@@ -5,4 +5,4 @@ extends MeshInstance3D
 
 func _process(_delta):
 	material_override.set_shader_parameter("slice_plane", slicer.transform)
-	material_override.set_shader_parameter("inversed", false)
+	material_override.set_shader_parameter("inversed", true)

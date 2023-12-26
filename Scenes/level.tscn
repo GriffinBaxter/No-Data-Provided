@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=30 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://l1rtbhd4qjcv" path="res://Blender/license.blend" id="8_xwh8j"]
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
+[ext_resource type="Script" path="res://Scripts/SliceInversed.gd" id="12_0a0kg"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
@@ -184,12 +185,20 @@ noise = SubResource("FastNoiseLite_r7r0q")
 render_priority = 0
 shader = ExtResource("5_ga2jv")
 shader_parameter/slice_plane = null
+shader_parameter/inversed = false
 shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
 [sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
 size = Vector3(1, 0.01, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0p7yu"]
+render_priority = 0
+shader = ExtResource("5_ga2jv")
+shader_parameter/slice_plane = null
+shader_parameter/inversed = true
+shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
@@ -300,6 +309,18 @@ visible = false
 
 [node name="license" parent="Table/Valuable" instance=ExtResource("8_xwh8j")]
 visible = false
+
+[node name="TableSlice" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.195, -30)
+material_override = SubResource("ShaderMaterial_0p7yu")
+mesh = ExtResource("5_3r5t2")
+script = ExtResource("12_0a0kg")
+
+[node name="Slicer" type="MeshInstance3D" parent="TableSlice"]
+transform = Transform3D(0.766046, -0.64279, 0, 0.642789, 0.766048, 0, -4.47035e-08, 2.98023e-08, 1, -0.5, -0.2, -0.2)
+visible = false
+mesh = SubResource("BoxMesh_g4dm7")
+skeleton = NodePath("../..")
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_g66hf")]
 visible = false
