@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=32 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
 [ext_resource type="Script" path="res://Scripts/SliceInversed.gd" id="12_0a0kg"]
+[ext_resource type="Script" path="res://Scripts/PickupArea3D.gd" id="13_utw7h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
@@ -201,6 +202,9 @@ shader_parameter/slice_plane = null
 shader_parameter/inversed = true
 shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
+radius = 1.5
+
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
 
@@ -301,6 +305,13 @@ mesh = ExtResource("5_3r5t2")
 skeleton = NodePath("../..")
 script = ExtResource("12_0a0kg")
 
+[node name="PickupArea3D" type="Area3D" parent="TableWithInverseSlice"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, -29.75)
+script = ExtResource("13_utw7h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TableWithInverseSlice/PickupArea3D"]
+shape = SubResource("SphereShape3D_xg647")
+
 [node name="PauseMenu" parent="." instance=ExtResource("10_g66hf")]
 visible = false
 
@@ -309,3 +320,4 @@ script = ExtResource("11_kfi3i")
 
 [connection signal="body_entered" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_entered"]
 [connection signal="body_exited" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_exited"]
+[connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
