@@ -7,8 +7,8 @@ extends Area3D
 @onready var player_camera = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D"
 @onready var player_head = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head"
 @onready var smm_camera = $".."
-@onready var table = $"../../Table"
-@onready var valuable = $"../../Table/Valuable"
+@onready var table = $"../../TableWithSlice/Table"
+@onready var valuable = $"../../TableWithSlice/Table/Valuable"
 @onready var save_load = $"../../SaveLoad"
 
 enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH}

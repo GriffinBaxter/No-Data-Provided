@@ -23,7 +23,7 @@ void fragment() {
 	float noise = texture(_noise, uv).r;
 	distance += noise * 0.1;
 	
-	vec4 border_colour = vec4(1, 1, 1, 1);	
+	vec4 border_colour = vec4(1, 1, 1, 1);
 	if (distance < 0.0) discard;
 	float border_distance = smoothstep(0.0, 0.1, distance);
 	vec4 albedo_colour = texture(_albedo, UV);

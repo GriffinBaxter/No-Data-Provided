@@ -173,6 +173,9 @@ ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
 
+[sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
+size = Vector3(2.5, 0.01, 2.5)
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_r7r0q"]
 frequency = 0.025
 fractal_type = 0
@@ -188,10 +191,8 @@ shader_parameter/slice_plane = null
 shader_parameter/inversed = false
 shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
-[sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
-size = Vector3(1, 0.01, 1)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
+size = Vector3(0.8, 1, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0p7yu"]
 render_priority = 0
@@ -279,48 +280,54 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 48)
 light_energy = 2.0
 omni_range = 15.0
 
-[node name="Table" type="MeshInstance3D" parent="."]
+[node name="TableWithSlice" type="Node3D" parent="."]
+
+[node name="Slicer" type="MeshInstance3D" parent="TableWithSlice"]
+transform = Transform3D(0.771927, -0.359955, 0.523986, 0.422618, 0.906308, 0, -0.474892, 0.221446, 0.851727, 0, 1.5, -44.5)
+visible = false
+mesh = SubResource("BoxMesh_g4dm7")
+skeleton = NodePath("../..")
+
+[node name="Table" type="MeshInstance3D" parent="TableWithSlice"]
 transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, 0, -44.5)
 material_override = SubResource("ShaderMaterial_o47pw")
 mesh = ExtResource("5_3r5t2")
+skeleton = NodePath("../..")
 script = ExtResource("7_r7jlu")
 
-[node name="Slicer" type="MeshInstance3D" parent="Table"]
-transform = Transform3D(0.766046, -0.64279, 0, 0.642789, 0.766048, 0, -4.47035e-08, 2.98023e-08, 1, -0.5, 1, -0.200001)
-visible = false
-mesh = SubResource("BoxMesh_g4dm7")
-skeleton = NodePath("../..")
+[node name="StaticBody3D" type="StaticBody3D" parent="TableWithSlice/Table"]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Table"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.399951, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TableWithSlice/Table/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.4, 0)
 shape = SubResource("BoxShape3D_fpbco")
 
-[node name="Valuable" type="Node3D" parent="Table"]
+[node name="Valuable" type="Node3D" parent="TableWithSlice/Table"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.91, 0.25)
 script = ExtResource("5_dhriq")
 
-[node name="phone" parent="Table/Valuable" instance=ExtResource("5_1ckc7")]
+[node name="phone" parent="TableWithSlice/Table/Valuable" instance=ExtResource("5_1ckc7")]
 visible = false
 
-[node name="passport" parent="Table/Valuable" instance=ExtResource("7_hftig")]
+[node name="passport" parent="TableWithSlice/Table/Valuable" instance=ExtResource("7_hftig")]
 visible = false
 
-[node name="license" parent="Table/Valuable" instance=ExtResource("8_xwh8j")]
+[node name="license" parent="TableWithSlice/Table/Valuable" instance=ExtResource("8_xwh8j")]
 visible = false
 
-[node name="TableSlice" type="MeshInstance3D" parent="."]
-transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.195, -30)
-material_override = SubResource("ShaderMaterial_0p7yu")
-mesh = ExtResource("5_3r5t2")
-script = ExtResource("12_0a0kg")
+[node name="TableWithInverseSlice" type="Node3D" parent="."]
 
-[node name="Slicer" type="MeshInstance3D" parent="TableSlice"]
-transform = Transform3D(0.766046, -0.64279, 0, 0.642789, 0.766048, 0, -4.47035e-08, 2.98023e-08, 1, -0.5, -0.2, -0.2)
+[node name="Slicer" type="MeshInstance3D" parent="TableWithInverseSlice"]
+transform = Transform3D(0.771927, -0.359955, 0.523986, 0.422618, 0.906308, 0, -0.474892, 0.221446, 0.851727, 0, 0.3, -30)
 visible = false
 mesh = SubResource("BoxMesh_g4dm7")
 skeleton = NodePath("../..")
+
+[node name="TableSlice" type="MeshInstance3D" parent="TableWithInverseSlice"]
+transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.2, -30)
+material_override = SubResource("ShaderMaterial_0p7yu")
+mesh = ExtResource("5_3r5t2")
+skeleton = NodePath("../..")
+script = ExtResource("12_0a0kg")
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_g66hf")]
 visible = false
