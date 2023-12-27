@@ -61,7 +61,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D:position")
+tracks/3/path = NodePath("Player/Head/Camera3D:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -73,7 +73,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D:rotation")
+tracks/4/path = NodePath("Player/Head/Camera3D:rotation")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -89,7 +89,7 @@ length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D:position")
+tracks/0/path = NodePath("Player/Head/Camera3D:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -101,7 +101,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D:rotation")
+tracks/1/path = NodePath("Player/Head/Camera3D:rotation")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -204,45 +204,17 @@ shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-ratio = 1.25
-stretch_mode = 1
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/AspectRatioContainer"]
-layout_mode = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="Control/AspectRatioContainer/SubViewportContainer"]
-handle_input_locally = false
-use_taa = true
-size = Vector2i(1350, 1080)
-render_target_update_mode = 4
-
-[node name="Player" type="CharacterBody3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport"]
+[node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_2b40y")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = SubResource("CapsuleShape3D_8ocoo")
 
-[node name="Head" type="Node3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"]
+[node name="Head" type="Node3D" parent="Player"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.75, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head"]
+[node name="Camera3D" type="Camera3D" parent="Player/Head"]
 fov = 80.0
 
 [node name="SMMCamera3D" type="Camera3D" parent="."]
@@ -337,4 +309,3 @@ script = ExtResource("11_kfi3i")
 
 [connection signal="body_entered" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_entered"]
 [connection signal="body_exited" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_exited"]
-[connection signal="animation_finished" from="SMMAnimationPlayer" to="Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player" method="_on_smm_animation_player_animation_finished"]

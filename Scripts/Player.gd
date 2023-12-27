@@ -12,7 +12,7 @@ var can_move = false
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
-@onready var smm = $"../../../../../SMMCamera3D/SMMTriggerArea3D"
+@onready var smm = $"../SMMCamera3D/SMMTriggerArea3D"
 
 func _unhandled_input(event):
 	if can_move and event is InputEventMouseMotion:

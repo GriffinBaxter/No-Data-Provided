@@ -1,11 +1,10 @@
 extends Area3D
 
-@onready var player = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"
-@onready var sub_viewport_container = $"../../Control/AspectRatioContainer/SubViewportContainer"
+@onready var player = $"../../Player"
 @onready var smm_animation_player = $"../../SMMAnimationPlayer"
 
-@onready var player_camera = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head/Camera3D"
-@onready var player_head = $"../../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player/Head"
+@onready var player_camera = $"../../Player/Head/Camera3D"
+@onready var player_head = $"../../Player/Head"
 @onready var smm_camera = $".."
 @onready var table = $"../../TableWithSlice/Table"
 @onready var valuable = $"../../TableWithSlice/Table/Valuable"
@@ -62,7 +61,7 @@ func _process(_delta):
 		match_cutscene()
 
 func match_cutscene():
-	sub_viewport_container.visible = false
+	player_camera.current = false
 	smm_animation_player.play("hallway_outro")
 		
 	await get_tree().create_timer(5).timeout

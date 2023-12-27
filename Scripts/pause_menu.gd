@@ -1,7 +1,7 @@
 extends Control
 
 @onready var level = $".."
-@onready var player = $"../Control/AspectRatioContainer/SubViewportContainer/SubViewport/Player"
+@onready var player = $"../Player"
 
 var main_menu = "res://Scenes/main_menu.tscn"
 
