@@ -1,7 +1,6 @@
 extends Area3D
 
 @onready var player = $"../../Player"
-@onready var player_head = $"../../Player/Head"
 @onready var pickup = $"../../Player/Head/Camera3D/Pickup"
 
 @onready var table_with_inverse_slice = $".."
@@ -21,5 +20,5 @@ func _process(_delta):
 	if picked_up:
 		table_slice.position = pickup.global_position
 		slicer.position = table_slice.position + slicer_offset_position
-		table_slice.rotation.y = player_head.rotation.y
+		table_slice.rotation.y = pickup.global_rotation.y
 		slicer.rotation_degrees.y = table_slice.rotation_degrees.y + slicer_offset_rotation_degrees
