@@ -51,7 +51,7 @@ func _process(_delta):
 		
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
-	if (state < State.MATCH and is_within_offset_position(table.global_position, table_slice.global_position, 0.5)):
+	if (state < State.MATCH and is_within_offset_position(table_slice.global_position, table.global_position, 0.5) and is_within_offset_degrees(table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10)):
 		update_state(State.MATCH)
 
 		var tween = get_tree().create_tween().set_parallel()
@@ -80,8 +80,10 @@ func match_cutscene():
 
 	valuable.visible = true
 
-func is_within_offset_position(to, from, offset):
+func is_within_offset_position(from, to, offset):
 	return (to.x - offset <= from.x and from.x <= to.x + offset) and (to.y - offset <= from.y and from.y <= to.y + offset) and (to.z - offset <= from.z and from.z <= to.z + offset)
 
-func is_within_offset_degrees(original_degrees, offset_degrees, current_degrees):
-	return original_degrees - offset_degrees <= current_degrees and current_degrees <= original_degrees + offset_degrees
+func is_within_offset_degrees(from, to, offset):
+	from = snapped(from, 1) % 360
+	to = snapped(to, 1) % 360
+	return to - offset <= from and from <= to + offset
