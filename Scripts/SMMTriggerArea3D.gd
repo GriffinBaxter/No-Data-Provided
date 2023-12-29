@@ -10,6 +10,8 @@ extends Area3D
 @onready var valuable = $"../../TableWithSlice/Table/Valuable"
 @onready var save_load = $"../../SaveLoad"
 
+@onready var table_slice = $"../../TableWithInverseSlice/TableSlice"
+
 enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH}
 var state = State.BEFORE_INTRO_CUTSCENE
 const states_moveable = [State.AFTER_INTRO_CUTSCENE]
@@ -49,7 +51,7 @@ func _process(_delta):
 		
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
-	if (state < State.MATCH and player_entered_area and is_within_offset_degrees(-25, 10, player_camera.rotation_degrees.x) and is_within_offset_degrees(11.6, 10, player_head.rotation_degrees.y)):
+	if (state < State.MATCH and is_within_offset_position(table.global_position, table_slice.global_position, 0.5)):
 		update_state(State.MATCH)
 
 		var tween = get_tree().create_tween().set_parallel()
@@ -78,13 +80,8 @@ func match_cutscene():
 
 	valuable.visible = true
 
-func _on_body_entered(body):
-	if (body == player):
-		player_entered_area = true
-
-func _on_body_exited(body):
-	if (body == player):
-		player_entered_area = false
+func is_within_offset_position(to, from, offset):
+	return (to.x - offset <= from.x and from.x <= to.x + offset) and (to.y - offset <= from.y and from.y <= to.y + offset) and (to.z - offset <= from.z and from.z <= to.z + offset)
 
 func is_within_offset_degrees(original_degrees, offset_degrees, current_degrees):
 	return original_degrees - offset_degrees <= current_degrees and current_degrees <= original_degrees + offset_degrees

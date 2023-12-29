@@ -321,6 +321,4 @@ visible = false
 [node name="SaveLoad" type="Node" parent="."]
 script = ExtResource("11_kfi3i")
 
-[connection signal="body_entered" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_entered"]
-[connection signal="body_exited" from="SMMCamera3D/SMMTriggerArea3D" to="SMMCamera3D/SMMTriggerArea3D" method="_on_body_exited"]
 [connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
