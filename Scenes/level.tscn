@@ -216,10 +216,13 @@ script = ExtResource("1_2b40y")
 shape = SubResource("CapsuleShape3D_8ocoo")
 
 [node name="Head" type="Node3D" parent="Player"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.75, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.75, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
 fov = 80.0
+
+[node name="Pickup" type="Node3D" parent="Player/Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3)
 
 [node name="SMMCamera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.979575, -0.0849791, 0.182238, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.65, -42.836)
