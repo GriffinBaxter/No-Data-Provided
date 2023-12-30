@@ -1,6 +1,6 @@
 extends Node
 
-@onready var smm = $"../SMMCamera3D/SMMTriggerArea3D"
+@onready var level_node = $".."
 @onready var pause_menu = $"../PauseMenu"
 
 const default_save = {
@@ -12,8 +12,11 @@ const default_save = {
 signal load
 
 func _ready():
-	smm.autosave.connect(save_game)
+	level_node.autosave.connect(save_game)
 	pause_menu.save_player_position.connect(save_game_player_position)
+	level_node.level_node_ready.connect(level_ready)
+
+func level_ready():
 	emit_signal("load", load_game())
 
 func save_game(level, state, player_position):

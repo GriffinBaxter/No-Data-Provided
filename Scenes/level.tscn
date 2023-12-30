@@ -1,8 +1,7 @@
-[gd_scene load_steps=32 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=30 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
-[ext_resource type="Script" path="res://Scripts/SMMTriggerArea3D.gd" id="2_2iwfq"]
 [ext_resource type="PackedScene" uid="uid://jbvm1lbh4tns" path="res://Blender/phone.blend" id="5_1ckc7"]
 [ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
 [ext_resource type="Script" path="res://Scripts/Valuable.gd" id="5_dhriq"]
@@ -18,15 +17,12 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_bgb55"]
-radius = 0.1
-
 [sub_resource type="Animation" id="Animation_5plsx"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SMMCamera3D:position")
+tracks/0/path = NodePath("OMMCamera3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -38,7 +34,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SMMCamera3D:rotation")
+tracks/1/path = NodePath("OMMCamera3D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -50,7 +46,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SMMCamera3D:fov")
+tracks/2/path = NodePath("OMMCamera3D:fov")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -118,7 +114,7 @@ length = 15.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SMMCamera3D:position")
+tracks/0/path = NodePath("OMMCamera3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -130,7 +126,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SMMCamera3D:rotation")
+tracks/1/path = NodePath("OMMCamera3D:rotation")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -142,7 +138,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SMMCamera3D:fov")
+tracks/2/path = NodePath("OMMCamera3D:fov")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -224,17 +220,11 @@ fov = 80.0
 [node name="Pickup" type="Node3D" parent="Player/Head/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3)
 
-[node name="SMMCamera3D" type="Camera3D" parent="."]
+[node name="OMMCamera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.979575, -0.0849791, 0.182238, 0, 0.906308, 0.422618, -0.201078, -0.413986, 0.887797, 0.4, 1.65, -42.836)
 fov = 80.0
 
-[node name="SMMTriggerArea3D" type="Area3D" parent="SMMCamera3D"]
-script = ExtResource("2_2iwfq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SMMCamera3D/SMMTriggerArea3D"]
-shape = SubResource("SphereShape3D_bgb55")
-
-[node name="SMMAnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_d8wt3")
 }
