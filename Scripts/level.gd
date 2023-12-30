@@ -7,7 +7,6 @@ extends Node3D
 
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
-@onready var omm_camera = $OMMCamera3D
 @onready var table = $TableWithSlice/Table
 @onready var valuable = $TableWithSlice/Table/Valuable
 @onready var save_load = $SaveLoad
@@ -50,12 +49,6 @@ func _process(_delta):
 	if (state < State.MATCH and is_within_offset_position(table_slice.global_position, table.global_position, 0.5) and is_within_offset_degrees(table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10)):
 		update_state(State.MATCH)
 
-		var tween = get_tree().create_tween().set_parallel()
-		tween.tween_property(player_camera, "global_position", omm_camera.position, 0.5)
-		tween.tween_property(player_camera, "global_rotation", omm_camera.rotation, 0.5)
-
-		await get_tree().create_timer(0.5).timeout
-
 		match_cutscene()
 
 func pauseMenu():
@@ -85,10 +78,19 @@ func update_state(new_state, updated_from_autosave = true):
 		emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
 
 func match_cutscene():
-	player_camera.current = false
-	animation_player.play("hallway_outro")
-		
+	var tween1 = get_tree().create_tween().set_parallel()
+
+	tween1.tween_property(player_camera, "global_position", Vector3(0.4, 1.65, -10), 5)
+	tween1.tween_property(player_camera, "global_rotation_degrees", Vector3(-55, 11.6, 0), 5)
+
 	await get_tree().create_timer(5).timeout
+	tween1.stop()
+
+	animation_player.play("hallway_outro")
+
+	var tween2 = get_tree().create_tween().set_parallel()
+	tween2.tween_property(player_camera, "global_position", Vector3(0, 1.65, -42.75), 10)
+	tween2.tween_property(player_camera, "global_rotation_degrees", Vector3(-25, 11.6, 0), 10)
 
 	table.rotation_degrees = Vector3(0, 0, 0)
 	valuable.visible = false
