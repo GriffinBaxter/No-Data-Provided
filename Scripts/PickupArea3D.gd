@@ -2,6 +2,7 @@ extends Area3D
 
 @onready var player = $"../../Player"
 @onready var pickup = $"../../Player/Head/Camera3D/Pickup"
+@onready var level = $"../.."
 
 @onready var table_with_inverse_slice = $".."
 @onready var table_slice = $"../TableSlice"
@@ -18,7 +19,7 @@ func _on_body_entered(body):
 		picked_up = true
 
 func _process(_delta):
-	if picked_up:
+	if picked_up and level.state != level.State.MATCH:
 		if Input.is_action_pressed("rotate_left"):
 			object_rotation += 0.02;
 		if Input.is_action_pressed("rotate_right"):

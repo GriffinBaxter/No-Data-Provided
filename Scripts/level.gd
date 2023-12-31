@@ -4,6 +4,7 @@ extends Node3D
 
 @onready var player = $Player
 @onready var animation_player = $AnimationPlayer
+@onready var pickupArea3d = $TableWithInverseSlice/PickupArea3D
 
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
@@ -11,7 +12,9 @@ extends Node3D
 @onready var valuable = $TableWithSlice/Table/Valuable
 @onready var save_load = $SaveLoad
 
+@onready var slicer = $TableWithSlice/Slicer
 @onready var table_slice = $TableWithInverseSlice/TableSlice
+@onready var inverse_slicer = $TableWithInverseSlice/Slicer
 
 var paused = false
 
@@ -48,6 +51,13 @@ func _process(_delta):
 
 	if (state < State.MATCH and is_within_offset_position(table_slice.global_position, table.global_position, 0.5) and is_within_offset_degrees(table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10)):
 		update_state(State.MATCH)
+
+		var tween = get_tree().create_tween().set_parallel()
+		tween.tween_property(inverse_slicer, "global_position", inverse_slicer.global_position + Vector3(0, 0.6, 0), 1)
+		tween.tween_property(slicer, "global_position", slicer.global_position + Vector3(0, 0.6, 0), 1)
+
+		await get_tree().create_timer(2).timeout
+		tween.stop()
 
 		match_cutscene()
 
