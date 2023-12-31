@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=29 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://l1rtbhd4qjcv" path="res://Blender/license.blend" id="8_xwh8j"]
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
-[ext_resource type="Script" path="res://Scripts/SliceInversed.gd" id="12_0a0kg"]
 [ext_resource type="Script" path="res://Scripts/PickupArea3D.gd" id="13_utw7h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
@@ -244,7 +243,8 @@ transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 
 material_override = SubResource("ShaderMaterial_0p7yu")
 mesh = ExtResource("5_3r5t2")
 skeleton = NodePath("../..")
-script = ExtResource("12_0a0kg")
+script = ExtResource("7_r7jlu")
+inversed = true
 
 [node name="PickupArea3D" type="Area3D" parent="TableWithInverseSlice"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, -29.75)

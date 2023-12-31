@@ -15,6 +15,7 @@ extends Node3D
 @onready var slicer = $TableWithSlice/Slicer
 @onready var table_slice = $TableWithInverseSlice/TableSlice
 @onready var inverse_slicer = $TableWithInverseSlice/Slicer
+@onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
 
 var paused = false
 
@@ -53,10 +54,14 @@ func _process(_delta):
 		update_state(State.MATCH)
 
 		var tween = get_tree().create_tween().set_parallel()
-		tween.tween_property(inverse_slicer, "global_position", inverse_slicer.global_position + Vector3(0, 0.6, 0), 1)
-		tween.tween_property(slicer, "global_position", slicer.global_position + Vector3(0, 0.6, 0), 1)
+		tween.tween_property(inverse_slicer, "global_position", inverse_slicer.global_position + Vector3(0, 0.65, 0), 1)
+		tween.tween_property(slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1)
 
-		await get_tree().create_timer(2).timeout
+		await get_tree().create_timer(1).timeout
+
+		inverse_table_slice.visible = false
+
+		await get_tree().create_timer(1).timeout
 		tween.stop()
 
 		match_cutscene()
