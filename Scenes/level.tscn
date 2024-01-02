@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=30 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -6,6 +6,7 @@
 [ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
 [ext_resource type="Script" path="res://Scripts/Valuable.gd" id="5_dhriq"]
 [ext_resource type="Shader" path="res://Shaders/slice.gdshader" id="5_ga2jv"]
+[ext_resource type="Texture2D" uid="uid://b14patx2c41tm" path="res://Textures/Table.jpg" id="5_ic4mh"]
 [ext_resource type="PackedScene" uid="uid://b2cv287efwgcu" path="res://Blender/hallway.blend" id="6_ujk86"]
 [ext_resource type="PackedScene" uid="uid://cj6kxuuldsw1h" path="res://Blender/passport.blend" id="7_hftig"]
 [ext_resource type="Script" path="res://Scripts/Slice.gd" id="7_r7jlu"]
@@ -137,6 +138,7 @@ render_priority = 0
 shader = ExtResource("5_ga2jv")
 shader_parameter/slice_plane = null
 shader_parameter/inversed = false
+shader_parameter/_albedo = ExtResource("5_ic4mh")
 shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
@@ -147,6 +149,7 @@ render_priority = 0
 shader = ExtResource("5_ga2jv")
 shader_parameter/slice_plane = null
 shader_parameter/inversed = true
+shader_parameter/_albedo = ExtResource("5_ic4mh")
 shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
@@ -239,7 +242,7 @@ mesh = SubResource("BoxMesh_g4dm7")
 skeleton = NodePath("../..")
 
 [node name="TableSlice" type="MeshInstance3D" parent="TableWithInverseSlice"]
-transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.2, -30)
+transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.199, -30)
 material_override = SubResource("ShaderMaterial_0p7yu")
 mesh = ExtResource("5_3r5t2")
 skeleton = NodePath("../..")
