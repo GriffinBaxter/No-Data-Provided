@@ -1,7 +1,8 @@
-[gd_scene load_steps=30 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=33 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
+[ext_resource type="Shader" path="res://Shaders/camera.gdshader" id="3_wrwwu"]
 [ext_resource type="PackedScene" uid="uid://jbvm1lbh4tns" path="res://Blender/phone.blend" id="5_1ckc7"]
 [ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
 [ext_resource type="Script" path="res://Scripts/Valuable.gd" id="5_dhriq"]
@@ -155,6 +156,14 @@ shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 [sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
 radius = 1.5
 
+[sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
+render_priority = 0
+shader = ExtResource("3_wrwwu")
+
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
 
@@ -261,5 +270,11 @@ visible = false
 
 [node name="SaveLoad" type="Node" parent="."]
 script = ExtResource("11_kfi3i")
+
+[node name="CameraShader" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1.75, 0)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_vv2av")
+surface_material_override/0 = SubResource("ShaderMaterial_d8lee")
 
 [connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
