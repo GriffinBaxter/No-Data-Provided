@@ -18,12 +18,12 @@ func _on_body_entered(body):
 	if (body == player):
 		picked_up = true
 
-func _process(_delta):
+func _process(delta):
 	if picked_up and level.state != level.State.MATCH:
 		if Input.is_action_pressed("rotate_left"):
-			object_rotation += 0.02;
+			object_rotation += 2.5 * delta;
 		if Input.is_action_pressed("rotate_right"):
-			object_rotation -= 0.02;
+			object_rotation -= 2.5 * delta;
 		table_slice.position = pickup.global_position
 		slicer.position = table_slice.position + slicer_offset_position
 		table_slice.rotation.y = pickup.global_rotation.y + object_rotation
