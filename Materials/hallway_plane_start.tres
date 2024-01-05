@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cwe26l34h1vp5"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cdki2xx3qhtfp"]
 
 [ext_resource type="Texture2D" uid="uid://cw24t4bvfcfl2" path="res://Textures/Concrete.jpg" id="1_ddyxq"]
 
@@ -6,4 +6,3 @@
 albedo_color = Color(0.25098, 0.25098, 0.25098, 1)
 albedo_texture = ExtResource("1_ddyxq")
 albedo_texture_force_srgb = true
-uv1_scale = Vector3(1, 10, 1)

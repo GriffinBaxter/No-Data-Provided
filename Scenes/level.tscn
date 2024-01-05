@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
 [ext_resource type="Shader" path="res://Shaders/camera.gdshader" id="3_wrwwu"]
-[ext_resource type="Material" uid="uid://cwe26l34h1vp5" path="res://Materials/hallway_plane_start.tres" id="4_i03hr"]
+[ext_resource type="Material" uid="uid://cdki2xx3qhtfp" path="res://Materials/hallway_plane_start.tres" id="4_i03hr"]
 [ext_resource type="Texture2D" uid="uid://cw24t4bvfcfl2" path="res://Textures/Concrete.jpg" id="4_usu1b"]
 [ext_resource type="PackedScene" uid="uid://jbvm1lbh4tns" path="res://Blender/phone.blend" id="5_1ckc7"]
 [ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
@@ -125,10 +125,11 @@ ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ninyi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k7mup"]
 albedo_color = Color(0.25098, 0.25098, 0.25098, 1)
 albedo_texture = ExtResource("4_usu1b")
 albedo_texture_force_srgb = true
+uv1_scale = Vector3(1, 10, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
 size = Vector3(2.5, 0.01, 2.5)
@@ -202,19 +203,19 @@ environment = SubResource("Environment_uxqxj")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -22.5)
 
 [node name="PlaneBottom" parent="hallway" index="0"]
-material_override = ExtResource("4_i03hr")
+material_override = SubResource("StandardMaterial3D_k7mup")
 
 [node name="PlaneLeft" parent="hallway" index="1"]
-material_override = ExtResource("4_i03hr")
+material_override = SubResource("StandardMaterial3D_k7mup")
 
 [node name="PlaneRight" parent="hallway" index="2"]
-material_override = ExtResource("4_i03hr")
+material_override = SubResource("StandardMaterial3D_k7mup")
 
 [node name="PlaneTop" parent="hallway" index="3"]
-material_override = ExtResource("4_i03hr")
+material_override = SubResource("StandardMaterial3D_k7mup")
 
 [node name="PlaneStart" parent="hallway" index="5"]
-material_override = SubResource("StandardMaterial3D_ninyi")
+material_override = ExtResource("4_i03hr")
 
 [node name="BackSpotLight" type="SpotLight3D" parent="hallway"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 5, -75)
