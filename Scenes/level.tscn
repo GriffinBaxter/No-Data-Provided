@@ -1,8 +1,9 @@
-[gd_scene load_steps=36 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=38 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
 [ext_resource type="Shader" path="res://Shaders/camera.gdshader" id="3_wrwwu"]
+[ext_resource type="Script" path="res://Scripts/hallway.gd" id="4_1vink"]
 [ext_resource type="Material" uid="uid://cdki2xx3qhtfp" path="res://Materials/hallway_plane_start.tres" id="4_i03hr"]
 [ext_resource type="Texture2D" uid="uid://cw24t4bvfcfl2" path="res://Textures/Concrete.jpg" id="4_usu1b"]
 [ext_resource type="PackedScene" uid="uid://jbvm1lbh4tns" path="res://Blender/phone.blend" id="5_1ckc7"]
@@ -10,6 +11,7 @@
 [ext_resource type="Script" path="res://Scripts/Valuable.gd" id="5_dhriq"]
 [ext_resource type="Shader" path="res://Shaders/slice.gdshader" id="5_ga2jv"]
 [ext_resource type="Texture2D" uid="uid://b14patx2c41tm" path="res://Textures/Table.jpg" id="5_ic4mh"]
+[ext_resource type="Material" uid="uid://bmnnx8pgjx821" path="res://Materials/black_with_white_emission.tres" id="6_tecba"]
 [ext_resource type="PackedScene" uid="uid://b2cv287efwgcu" path="res://Blender/hallway.blend" id="6_ujk86"]
 [ext_resource type="PackedScene" uid="uid://cj6kxuuldsw1h" path="res://Blender/passport.blend" id="7_hftig"]
 [ext_resource type="Script" path="res://Scripts/Slice.gd" id="7_r7jlu"]
@@ -204,6 +206,7 @@ environment = SubResource("Environment_uxqxj")
 
 [node name="hallway" parent="." instance=ExtResource("6_ujk86")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -22.5)
+script = ExtResource("4_1vink")
 
 [node name="PlaneBottom" parent="hallway" index="0"]
 material_override = SubResource("StandardMaterial3D_k7mup")
@@ -217,8 +220,23 @@ material_override = SubResource("StandardMaterial3D_k7mup")
 [node name="PlaneTop" parent="hallway" index="3"]
 material_override = SubResource("StandardMaterial3D_k7mup")
 
+[node name="PlaneEnd" parent="hallway" index="4"]
+material_override = ExtResource("6_tecba")
+
 [node name="PlaneStart" parent="hallway" index="5"]
 material_override = ExtResource("4_i03hr")
+
+[node name="PlaneTopTriangle" parent="hallway" index="6"]
+material_override = ExtResource("6_tecba")
+
+[node name="PlaneBottomTriangle" parent="hallway" index="7"]
+material_override = ExtResource("6_tecba")
+
+[node name="PlaneLeftTriangle" parent="hallway" index="8"]
+material_override = ExtResource("6_tecba")
+
+[node name="PlaneRightTriangle" parent="hallway" index="9"]
+material_override = ExtResource("6_tecba")
 
 [node name="BackSpotLight" type="SpotLight3D" parent="hallway"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 5, -75)
