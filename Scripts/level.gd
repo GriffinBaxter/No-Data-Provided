@@ -5,6 +5,7 @@ extends Node3D
 @onready var player = $Player
 @onready var animation_player = $AnimationPlayer
 @onready var pickupArea3d = $TableWithInverseSlice/PickupArea3D
+@onready var camera_shader = $CameraShader
 
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
@@ -53,17 +54,19 @@ func _process(_delta):
 	if (state < State.MATCH and is_within_offset_position(table_slice.global_position, table.global_position, 0.5) and is_within_offset_degrees(table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10)):
 		update_state(State.MATCH)
 
-		var tween = get_tree().create_tween().set_parallel()
-		tween.tween_property(inverse_slicer, "global_position", inverse_slicer.global_position + Vector3(0, 0.65, 0), 1)
-		tween.tween_property(slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1)
-
+		var tween1 = get_tree().create_tween().set_parallel()
+		tween1.tween_property(inverse_slicer, "global_position", inverse_slicer.global_position + Vector3(0, 0.65, 0), 1)
+		tween1.tween_property(slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1)
 		await get_tree().create_timer(1).timeout
-
+		
+		tween1.stop()
+		var tween2 = get_tree().create_tween().set_parallel()
 		inverse_table_slice.visible = false
-
+		tween2.tween_method(update_red_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"), 1.6, 1)
+		tween2.tween_method(update_green_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"), 0.15, 1)
 		await get_tree().create_timer(1).timeout
-		tween.stop()
-
+		
+		tween2.stop()
 		match_cutscene()
 
 func pauseMenu():
@@ -91,6 +94,12 @@ func update_state(new_state, updated_from_autosave = true):
 		emit_signal("movable", false)
 	if updated_from_autosave:
 		emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
+
+func update_red_dither(value: float):
+	camera_shader.get_surface_override_material(0).set_shader_parameter("red_dither", value)
+
+func update_green_dither(value: float):
+	camera_shader.get_surface_override_material(0).set_shader_parameter("green_dither", value)
 
 func match_cutscene():
 	var tween1 = get_tree().create_tween().set_parallel()

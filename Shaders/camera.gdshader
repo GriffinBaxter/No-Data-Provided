@@ -2,6 +2,9 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
+uniform float red_dither : hint_range(0, 2, 0.05) = 1.6;
+uniform float green_dither : hint_range(0, 2, 0.05) = 0.15;
+uniform float blue_dither : hint_range(0, 2, 0.05) = 0.1;
 
 void vertex() {
 	POSITION = vec4(VERTEX, 1.0);
@@ -21,7 +24,7 @@ void fragment() {
 			} else {
 				dither = 0.5 * thresholds[i] + 0.5 * thresholds[i + 1];
 			}
-			ALBEDO = 0.2 * screen_color + 0.8 * vec3(dither * 1.6, dither * 0.15, dither * 0.1);
+			ALBEDO = 0.2 * screen_color + 0.8 * vec3(dither * red_dither, dither * green_dither, dither * blue_dither);
 		}
 	}
 }

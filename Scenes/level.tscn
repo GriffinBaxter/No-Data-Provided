@@ -171,6 +171,9 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
 render_priority = 0
 shader = ExtResource("3_wrwwu")
+shader_parameter/red_dither = 1.6
+shader_parameter/green_dither = 0.15
+shader_parameter/blue_dither = 0.1
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")

@@ -3,6 +3,7 @@ extends Area3D
 @onready var player = $"../../Player"
 @onready var pickup = $"../../Player/Head/Camera3D/Pickup"
 @onready var level = $"../.."
+@onready var camera_shader = $"../../CameraShader"
 
 @onready var table_with_inverse_slice = $".."
 @onready var table_slice = $"../TableSlice"
@@ -15,8 +16,12 @@ const slicer_offset_position = Vector3(0, 1.5, 0)
 const slicer_offset_rotation_degrees = 20
 
 func _on_body_entered(body):
-	if (body == player):
+	if (picked_up == false and body == player):
 		picked_up = true
+
+		var tween = get_tree().create_tween().set_parallel()
+		tween.tween_method(level.update_red_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"), 0.15, 1)
+		tween.tween_method(level.update_green_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"), 0.8, 1)
 
 func _process(delta):
 	if picked_up and level.state != level.State.MATCH:
