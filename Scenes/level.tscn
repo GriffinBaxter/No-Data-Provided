@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=42 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -133,6 +133,30 @@ albedo_texture = ExtResource("4_usu1b")
 albedo_texture_force_srgb = true
 uv1_scale = Vector3(1, 10, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cc0pc"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b86y2"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v3iw4"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nx6dd"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 6.0
+
 [sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
 size = Vector3(2.5, 0.01, 2.5)
 
@@ -227,16 +251,16 @@ material_override = ExtResource("6_tecba")
 material_override = ExtResource("4_i03hr")
 
 [node name="PlaneTopTriangle" parent="hallway" index="6"]
-material_override = ExtResource("6_tecba")
+material_override = SubResource("StandardMaterial3D_cc0pc")
 
 [node name="PlaneBottomTriangle" parent="hallway" index="7"]
-material_override = ExtResource("6_tecba")
+material_override = SubResource("StandardMaterial3D_b86y2")
 
 [node name="PlaneLeftTriangle" parent="hallway" index="8"]
-material_override = ExtResource("6_tecba")
+material_override = SubResource("StandardMaterial3D_v3iw4")
 
 [node name="PlaneRightTriangle" parent="hallway" index="9"]
-material_override = ExtResource("6_tecba")
+material_override = SubResource("StandardMaterial3D_nx6dd")
 
 [node name="BackSpotLight" type="SpotLight3D" parent="hallway"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 5, -75)
