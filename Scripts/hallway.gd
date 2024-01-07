@@ -8,6 +8,16 @@ extends Node3D
 @onready var spot_light = $BackSpotLight
 @onready var omni_light = $OmniLight3D
 
+@onready var slice_middle = $"../TableWithInverseSlice/TableSlice/SliceMiddle"
+@onready var top_light = $TopSpotLight3D
+@onready var bottom_light = $BottomSpotLight3D
+@onready var left_light = $LeftSpotLight3D
+@onready var right_light = $RightSpotLight3D
+@onready var top = $PlaneTop
+@onready var bottom = $PlaneBottom
+@onready var left = $PlaneLeft
+@onready var right = $PlaneRight
+
 var random = RandomNumberGenerator.new()
 
 func _ready():
@@ -39,3 +49,25 @@ func _ready():
 			omni_light.light_energy = 0
 
 		await get_tree().create_timer(random.randf_range(0.15, 0.3)).timeout
+
+func _process(_delta):
+	set_energy_y(top_light, top)
+	set_energy_y(bottom_light, bottom)
+	set_energy_x(left_light, left)
+	set_energy_x(right_light, right)
+
+	for light in [top_light, bottom_light, left_light, right_light]:
+		if light.light_energy <= 0:
+			light.visible = false
+		else:
+			light.visible = true
+
+func set_energy_y(light, plane):
+	light.global_position.x = slice_middle.global_position.x;
+	light.global_position.z = slice_middle.global_position.z;
+	light.light_energy = (-abs(abs(slice_middle.global_position.y) - abs(plane.global_position.y)) + 1) * 5
+
+func set_energy_x(light, plane):
+	light.global_position.y = slice_middle.global_position.y;
+	light.global_position.z = slice_middle.global_position.z;
+	light.light_energy = (-abs(slice_middle.global_position.x - plane.global_position.x) + 1) * 5

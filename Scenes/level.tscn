@@ -276,6 +276,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 48)
 light_energy = 2.0
 omni_range = 15.0
 
+[node name="TopSpotLight3D" type="SpotLight3D" parent="hallway"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5, 0)
+light_specular = 16.0
+spot_angle = 40.0
+
+[node name="BottomSpotLight3D" type="SpotLight3D" parent="hallway"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5, 0)
+light_specular = 16.0
+spot_angle = 40.0
+
+[node name="LeftSpotLight3D" type="SpotLight3D" parent="hallway"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 5, 0)
+light_specular = 16.0
+spot_angle = 40.0
+
+[node name="RightSpotLight3D" type="SpotLight3D" parent="hallway"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 5, 0)
+light_specular = 16.0
+spot_angle = 40.0
+
 [node name="TableWithSlice" type="Node3D" parent="."]
 
 [node name="Slicer" type="MeshInstance3D" parent="TableWithSlice"]
@@ -326,6 +346,9 @@ skeleton = NodePath("../..")
 script = ExtResource("7_r7jlu")
 inversed = true
 
+[node name="SliceMiddle" type="Node3D" parent="TableWithInverseSlice/TableSlice"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.275, 0.875, 0.048)
+
 [node name="PickupArea3D" type="Area3D" parent="TableWithInverseSlice"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, -29.75)
 script = ExtResource("13_utw7h")
@@ -340,7 +363,6 @@ visible = false
 script = ExtResource("11_kfi3i")
 
 [node name="CameraShader" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1.75, 0)
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_vv2av")
 surface_material_override/0 = SubResource("ShaderMaterial_d8lee")

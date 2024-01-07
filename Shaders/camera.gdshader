@@ -24,7 +24,9 @@ void fragment() {
 			} else {
 				dither = 0.5 * thresholds[i] + 0.5 * thresholds[i + 1];
 			}
-			ALBEDO = 0.2 * screen_color + 0.8 * vec3(dither * red_dither, dither * green_dither, dither * blue_dither);
+			ALBEDO = vec3(dither * red_dither, dither * green_dither, dither * blue_dither);
 		}
 	}
+
+	ALPHA = 0.8;
 }
