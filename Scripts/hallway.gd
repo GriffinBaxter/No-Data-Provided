@@ -65,9 +65,9 @@ func _process(_delta):
 func set_energy_y(light, plane):
 	light.global_position.x = slice_middle.global_position.x;
 	light.global_position.z = slice_middle.global_position.z;
-	light.light_energy = (-abs(abs(slice_middle.global_position.y) - abs(plane.global_position.y)) + 1) * 5
+	light.light_energy = -abs(abs(slice_middle.global_position.y) - abs(plane.global_position.y)) + 1
 
 func set_energy_x(light, plane):
 	light.global_position.y = slice_middle.global_position.y;
 	light.global_position.z = slice_middle.global_position.z;
-	light.light_energy = (-abs(slice_middle.global_position.x - plane.global_position.x) + 1) * 5
+	light.light_energy = -abs(slice_middle.global_position.x - plane.global_position.x) + 1
