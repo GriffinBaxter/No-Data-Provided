@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, depth_test_disabled;
+render_mode cull_disabled, depth_test_disabled, unshaded;
 uniform sampler2D _albedo: source_color;
 uniform sampler2D _noise;
 uniform mat4 slice_plane;
