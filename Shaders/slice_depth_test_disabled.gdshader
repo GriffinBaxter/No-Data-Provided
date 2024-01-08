@@ -24,5 +24,5 @@ void fragment() {
 	distance += noise * 0.1;
 
 	if (distance < 0.0) discard;
-	ALBEDO = vec3(0.01 ,0.01 ,0.1);
+	ALBEDO = vec3(0.01, 0.01, 0.1);
 }
