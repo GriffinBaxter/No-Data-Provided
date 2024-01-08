@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://dnnywparl56q7"]
+
+[ext_resource type="Shader" path="res://Shaders/slice.gdshader" id="1_4avbx"]
+[ext_resource type="Texture2D" uid="uid://b14patx2c41tm" path="res://Textures/Table.jpg" id="2_8nktu"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r7r0q"]
+frequency = 0.025
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1y8xn"]
+seamless = true
+noise = SubResource("FastNoiseLite_r7r0q")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_4avbx")
+shader_parameter/slice_plane = null
+shader_parameter/inversed = true
+shader_parameter/_albedo = ExtResource("2_8nktu")
+shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")

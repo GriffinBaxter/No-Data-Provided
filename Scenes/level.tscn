@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
 [ext_resource type="Script" path="res://Scripts/PickupArea3D.gd" id="13_utw7h"]
+[ext_resource type="Material" uid="uid://d3upuwvnikm4d" path="res://Materials/slice_material_depth_test_disabled.tres" id="16_nq7nw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
@@ -179,14 +180,6 @@ shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 [sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
 size = Vector3(0.8, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0p7yu"]
-render_priority = 0
-shader = ExtResource("5_ga2jv")
-shader_parameter/slice_plane = null
-shader_parameter/inversed = true
-shader_parameter/_albedo = ExtResource("5_ic4mh")
-shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
 radius = 1.5
 
@@ -340,7 +333,7 @@ skeleton = NodePath("../..")
 
 [node name="TableSlice" type="MeshInstance3D" parent="TableWithInverseSlice"]
 transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.199, -30)
-material_override = SubResource("ShaderMaterial_0p7yu")
+material_override = ExtResource("16_nq7nw")
 mesh = ExtResource("5_3r5t2")
 skeleton = NodePath("../..")
 script = ExtResource("7_r7jlu")
