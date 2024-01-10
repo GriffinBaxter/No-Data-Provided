@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=46 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
 [ext_resource type="Script" path="res://Scripts/PickupArea3D.gd" id="13_utw7h"]
 [ext_resource type="Material" uid="uid://d3upuwvnikm4d" path="res://Materials/slice_material_depth_test_disabled.tres" id="16_nq7nw"]
+[ext_resource type="Shader" path="res://Shaders/camera_chromatic_aberration.gdshader" id="20_msfbx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
@@ -213,8 +214,22 @@ radius = 1.5
 flip_faces = true
 size = Vector2(2, 2)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
+[sub_resource type="Gradient" id="Gradient_vf3b3"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1dyuq"]
+gradient = SubResource("Gradient_vf3b3")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(3, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qune"]
 render_priority = 0
+shader = ExtResource("20_msfbx")
+shader_parameter/offset_image = SubResource("GradientTexture2D_1dyuq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
+render_priority = 1
+next_pass = SubResource("ShaderMaterial_6qune")
 shader = ExtResource("3_wrwwu")
 shader_parameter/red_dither = 1.6
 shader_parameter/green_dither = 0.15
