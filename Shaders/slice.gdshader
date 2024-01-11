@@ -16,13 +16,13 @@ void fragment() {
 	float plane_distance = dot(plane_normal, slice_plane[3].xyz);
 	float vertex_distance = dot(plane_normal, wvtx);
 	float distance = vertex_distance - plane_distance;
-	
+
 	vec4 clip_position = PROJECTION_MATRIX * vec4(VERTEX, 1.0);
 	vec2 uv = clip_position.xy / 10.0;
 	uv += TIME * 0.03;
 	float noise = texture(_noise, uv).r;
 	distance += noise * 0.1;
-	
+
 	vec4 border_colour = vec4(1, 1, 1, 1);
 	if (distance < 0.0) discard;
 	float border_distance = smoothstep(0.0, 0.1, distance);

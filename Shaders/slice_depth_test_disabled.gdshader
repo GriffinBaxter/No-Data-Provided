@@ -16,7 +16,7 @@ void fragment() {
 	float plane_distance = dot(plane_normal, slice_plane[3].xyz);
 	float vertex_distance = dot(plane_normal, wvtx);
 	float distance = vertex_distance - plane_distance;
-	
+
 	vec4 clip_position = PROJECTION_MATRIX * vec4(VERTEX, 1.0);
 	vec2 uv = clip_position.xy / 10.0;
 	uv += TIME * 0.03;

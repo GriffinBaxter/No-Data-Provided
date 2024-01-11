@@ -1,5 +1,7 @@
 extends Node3D
 
+var random = RandomNumberGenerator.new()
+
 @onready var plane_end = $PlaneEnd
 @onready var top_triangle = $PlaneTopTriangle
 @onready var bottom_triangle = $PlaneBottomTriangle
@@ -18,7 +20,6 @@ extends Node3D
 @onready var left = $PlaneLeft
 @onready var right = $PlaneRight
 
-var random = RandomNumberGenerator.new()
 
 func _ready():
 	var materials = [
@@ -29,7 +30,7 @@ func _ready():
 		right_triangle.material_override,
 	]
 
-	while (true):
+	while true:
 		for material in materials:
 			material.emission_energy_multiplier = 6
 		spot_light.light_energy = 8
@@ -50,6 +51,7 @@ func _ready():
 
 		await get_tree().create_timer(random.randf_range(0.15, 0.3)).timeout
 
+
 func _process(_delta):
 	set_energy_y(top_light, top)
 	set_energy_y(bottom_light, bottom)
@@ -62,12 +64,16 @@ func _process(_delta):
 		else:
 			light.visible = true
 
+
 func set_energy_y(light, plane):
-	light.global_position.x = slice_middle.global_position.x;
-	light.global_position.z = slice_middle.global_position.z;
-	light.light_energy = -abs(abs(slice_middle.global_position.y) - abs(plane.global_position.y)) + 1
+	light.global_position.x = slice_middle.global_position.x
+	light.global_position.z = slice_middle.global_position.z
+	light.light_energy = (
+		-abs(abs(slice_middle.global_position.y) - abs(plane.global_position.y)) + 1
+	)
+
 
 func set_energy_x(light, plane):
-	light.global_position.y = slice_middle.global_position.y;
-	light.global_position.z = slice_middle.global_position.z;
+	light.global_position.y = slice_middle.global_position.y
+	light.global_position.z = slice_middle.global_position.z
 	light.light_energy = -abs(slice_middle.global_position.x - plane.global_position.x) + 1

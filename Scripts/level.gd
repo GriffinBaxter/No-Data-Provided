@@ -1,10 +1,23 @@
 extends Node3D
 
-@onready var pause_menu = $PauseMenu
+signal level_node_ready
+signal movable
+signal autosave
+
+enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH }
+
+const STATES_MOVEABLE = [State.AFTER_INTRO_CUTSCENE]
+const LEVEL = 0
+
+var paused = false
+var state = State.BEFORE_INTRO_CUTSCENE
+var player_entered_area = false
+var intro_cutscene_started = false
+
+@onready var pause_menu_node = $PauseMenu
 
 @onready var player = $Player
 @onready var animation_player = $AnimationPlayer
-@onready var pickupArea3d = $TableWithInverseSlice/PickupArea3D
 @onready var camera_shader = $CameraShader
 
 @onready var player_camera = $Player/Head/Camera3D
@@ -18,19 +31,6 @@ extends Node3D
 @onready var inverse_slicer = $TableWithInverseSlice/Slicer
 @onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
 
-var paused = false
-
-enum State {BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH}
-var state = State.BEFORE_INTRO_CUTSCENE
-const states_moveable = [State.AFTER_INTRO_CUTSCENE]
-signal level_node_ready
-signal movable
-signal autosave
-
-const level = 0
-
-var player_entered_area = false
-var intro_cutscene_started = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -38,72 +38,112 @@ func _ready():
 	save_load.load.connect(load_game)
 	emit_signal("level_node_ready")
 
+
 func _process(_delta):
 	if Input.is_action_just_pressed("pause"):
-		pauseMenu()
+		pause_menu()
 
-	if (state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started):
+	if state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started:
 		intro_cutscene_started = true
 
 		animation_player.play("hallway_intro")
-		
+
 		await get_tree().create_timer(5).timeout
-		
+
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
-	if (state < State.MATCH and is_within_offset_position(table_slice.global_position, table.global_position, 0.5) and is_within_offset_degrees(table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10)):
+	if (
+		state < State.MATCH
+		and is_within_offset_position(table_slice.global_position, table.global_position, 0.5)
+		and is_within_offset_degrees(
+			table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10
+		)
+	):
 		update_state(State.MATCH)
 
 		var tween1 = get_tree().create_tween().set_parallel()
-		tween1.tween_property(inverse_slicer, "global_position", inverse_slicer.global_position + Vector3(0, 0.65, 0), 1)
-		tween1.tween_property(slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1)
+		tween1.tween_property(
+			inverse_slicer,
+			"global_position",
+			inverse_slicer.global_position + Vector3(0, 0.65, 0),
+			1
+		)
+		tween1.tween_property(
+			slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1
+		)
 		await get_tree().create_timer(1).timeout
-		
+
 		tween1.stop()
 		var tween2 = get_tree().create_tween().set_parallel()
 		inverse_table_slice.visible = false
-		tween2.tween_method(update_red_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"), 1.6, 1)
-		tween2.tween_method(update_green_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"), 0.15, 1)
-		tween2.tween_method(update_blue_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"), 0.1, 1)
+		tween2.tween_method(
+			update_red_dither,
+			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
+			1.6,
+			1
+		)
+		tween2.tween_method(
+			update_green_dither,
+			camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"),
+			0.15,
+			1
+		)
+		tween2.tween_method(
+			update_blue_dither,
+			camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"),
+			0.1,
+			1
+		)
 		await get_tree().create_timer(1).timeout
-		
+
 		tween2.stop()
 		match_cutscene()
 
-func pauseMenu():
+
+func pause_menu():
 	paused = !paused
 	if paused:
-		pause_menu.show()
+		pause_menu_node.show()
 		Engine.time_scale = 0
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	else:
-		pause_menu.hide()
+		pause_menu_node.hide()
 		Engine.time_scale = 1
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+
 func load_game(save):
 	update_state(save.state, false)
-	player.position = Vector3(save.player_position[0], save.player_position[1], save.player_position[2])
+	player.position = Vector3(
+		save.player_position[0], save.player_position[1], save.player_position[2]
+	)
+
 
 func update_state(new_state, updated_from_autosave = true):
 	state = new_state
 	if state == State.MATCH and not updated_from_autosave:
 		match_cutscene()
-	if states_moveable.has(int(state)):
+	if STATES_MOVEABLE.has(int(state)):
 		emit_signal("movable", true)
 	else:
 		emit_signal("movable", false)
 	if updated_from_autosave:
-		emit_signal("autosave", level, state, [player.position.x, player.position.y, player.position.z])
+		emit_signal(
+			"autosave", LEVEL, state, [player.position.x, player.position.y, player.position.z]
+		)
+
 
 func update_red_dither(value: float):
 	camera_shader.get_surface_override_material(0).set_shader_parameter("red_dither", value)
 
+
 func update_green_dither(value: float):
 	camera_shader.get_surface_override_material(0).set_shader_parameter("green_dither", value)
 
+
 func update_blue_dither(value: float):
 	camera_shader.get_surface_override_material(0).set_shader_parameter("blue_dither", value)
+
 
 func match_cutscene():
 	var tween1 = get_tree().create_tween().set_parallel()
@@ -132,8 +172,14 @@ func match_cutscene():
 
 	valuable.visible = true
 
+
 func is_within_offset_position(from, to, offset):
-	return (to.x - offset <= from.x and from.x <= to.x + offset) and (to.y - offset <= from.y and from.y <= to.y + offset) and (to.z - offset <= from.z and from.z <= to.z + offset)
+	return (
+		(to.x - offset <= from.x and from.x <= to.x + offset)
+		and (to.y - offset <= from.y and from.y <= to.y + offset)
+		and (to.z - offset <= from.z and from.z <= to.z + offset)
+	)
+
 
 func is_within_offset_degrees(from, to, offset):
 	from = snapped(from, 1) % 360

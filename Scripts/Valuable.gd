@@ -4,6 +4,7 @@ extends Node3D
 @onready var passport = $passport
 @onready var license = $license
 
+
 func _ready():
 	while true:
 		license.visible = false
