@@ -64,6 +64,7 @@ func _process(_delta):
 		inverse_table_slice.visible = false
 		tween2.tween_method(update_red_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"), 1.6, 1)
 		tween2.tween_method(update_green_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"), 0.15, 1)
+		tween2.tween_method(update_blue_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"), 0.1, 1)
 		await get_tree().create_timer(1).timeout
 		
 		tween2.stop()
@@ -100,6 +101,9 @@ func update_red_dither(value: float):
 
 func update_green_dither(value: float):
 	camera_shader.get_surface_override_material(0).set_shader_parameter("green_dither", value)
+
+func update_blue_dither(value: float):
+	camera_shader.get_surface_override_material(0).set_shader_parameter("blue_dither", value)
 
 func match_cutscene():
 	var tween1 = get_tree().create_tween().set_parallel()

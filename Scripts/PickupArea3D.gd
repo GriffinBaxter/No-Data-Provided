@@ -20,8 +20,9 @@ func _on_body_entered(body):
 		picked_up = true
 
 		var tween = get_tree().create_tween().set_parallel()
-		tween.tween_method(level.update_red_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"), 0.15, 1)
-		tween.tween_method(level.update_green_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"), 0.8, 1)
+		tween.tween_method(level.update_red_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"), 0.6, 1)
+		tween.tween_method(level.update_green_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"), 0.1, 1)
+		tween.tween_method(level.update_blue_dither, camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"), 0.4, 1)
 
 func _process(delta):
 	if picked_up and level.state != level.State.MATCH:
