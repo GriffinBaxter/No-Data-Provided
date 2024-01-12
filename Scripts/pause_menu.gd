@@ -9,7 +9,7 @@ var main_menu = "res://Scenes/main_menu.tscn"
 
 
 func _on_resume_pressed():
-	level.pauseMenu()
+	level.pause_menu()
 
 
 func _on_save_pressed():

@@ -22,12 +22,11 @@ var intro_cutscene_started = false
 
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
-@onready var table = $TableWithSlice/Table
 @onready var valuable = $TableWithSlice/Table/Valuable
 @onready var save_load = $SaveLoad
 
 @onready var slicer = $TableWithSlice/Slicer
-@onready var table_slice = $TableWithInverseSlice/TableSlice
+@onready var table_slice = $TableWithSlice/Table
 @onready var inverse_slicer = $TableWithInverseSlice/Slicer
 @onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
 
@@ -54,28 +53,33 @@ func _process(_delta):
 
 	if (
 		state < State.MATCH
-		and is_within_offset_position(table_slice.global_position, table.global_position, 0.5)
+		and is_within_offset_position(
+			inverse_table_slice.global_position, table_slice.global_position, 0.5
+		)
 		and is_within_offset_degrees(
-			table_slice.global_rotation_degrees.y, table.global_rotation_degrees.y, 10
+			inverse_table_slice.global_rotation_degrees.y, table_slice.global_rotation_degrees.y, 10
 		)
 	):
 		update_state(State.MATCH)
 
 		var tween1 = get_tree().create_tween().set_parallel()
 		tween1.tween_property(
+			inverse_table_slice, "global_position", table_slice.global_position, 1
+		)
+		tween1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
+		await get_tree().create_timer(1).timeout
+
+		tween1.stop()
+		var tween2 = get_tree().create_tween().set_parallel()
+		tween2.tween_property(
 			inverse_slicer,
 			"global_position",
 			inverse_slicer.global_position + Vector3(0, 0.65, 0),
 			1
 		)
-		tween1.tween_property(
+		tween2.tween_property(
 			slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1
 		)
-		await get_tree().create_timer(1).timeout
-
-		tween1.stop()
-		var tween2 = get_tree().create_tween().set_parallel()
-		inverse_table_slice.visible = false
 		tween2.tween_method(
 			update_red_dither,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
@@ -97,6 +101,7 @@ func _process(_delta):
 		await get_tree().create_timer(1).timeout
 
 		tween2.stop()
+		inverse_table_slice.visible = false
 		match_cutscene()
 
 
@@ -160,13 +165,13 @@ func match_cutscene():
 	tween2.tween_property(player_camera, "global_position", Vector3(0, 1.65, -42.75), 10)
 	tween2.tween_property(player_camera, "global_rotation_degrees", Vector3(-25, 11.6, 0), 10)
 
-	table.rotation_degrees = Vector3(0, 0, 0)
+	table_slice.rotation_degrees = Vector3(0, 0, 0)
 	valuable.visible = false
 
 	await get_tree().create_timer(9.9).timeout
 
 	var table_tween = get_tree().create_tween()
-	table_tween.tween_property(table, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
+	table_tween.tween_property(table_slice, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
 
 	await get_tree().create_timer(0.1).timeout
 
