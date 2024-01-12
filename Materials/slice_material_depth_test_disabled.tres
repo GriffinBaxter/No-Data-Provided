@@ -13,7 +13,7 @@ seamless = true
 noise = SubResource("FastNoiseLite_r7r0q")
 
 [resource]
-render_priority = -1
+render_priority = 0
 next_pass = ExtResource("1_4i0li")
 shader = ExtResource("2_udw1j")
 shader_parameter/slice_plane = null
