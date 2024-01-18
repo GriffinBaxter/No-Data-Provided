@@ -367,7 +367,7 @@ visible = false
 [node name="TableWithInverseSlice" type="Node3D" parent="."]
 
 [node name="Slicer" type="MeshInstance3D" parent="TableWithInverseSlice"]
-transform = Transform3D(0.771927, -0.359955, 0.523986, 0.422618, 0.906308, 0, -0.474892, 0.221446, 0.851727, 0, 0.3, -30)
+transform = Transform3D(0.771927, -0.359955, 0.523986, 0.422618, 0.906308, -3.73445e-07, -0.474892, 0.221446, 0.851727, 0, 0.3, -30)
 visible = false
 mesh = SubResource("BoxMesh_g4dm7")
 skeleton = NodePath("../..")

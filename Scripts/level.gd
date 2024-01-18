@@ -4,9 +4,10 @@ signal level_node_ready
 signal movable
 signal autosave
 
-enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH }
+enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
 
-const STATES_MOVEABLE = [State.AFTER_INTRO_CUTSCENE]
+const STATES_MOVEABLE = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
+const STATES_SAVABLE = [State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH]
 const LEVEL = 0
 
 var paused = false
@@ -24,6 +25,7 @@ var intro_cutscene_started = false
 @onready var player_head = $Player/Head
 @onready var valuable = $TableWithSlice/Table/Valuable
 @onready var save_load = $SaveLoad
+@onready var pickup_area_3d = $TableWithInverseSlice/PickupArea3D
 
 @onready var slicer = $TableWithSlice/Slicer
 @onready var table_slice = $TableWithSlice/Table
@@ -52,7 +54,7 @@ func _process(_delta):
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
 	if (
-		state < State.MATCH
+		state < State.MATCH_ANIMATION
 		and is_within_offset_position(
 			inverse_table_slice.global_position, table_slice.global_position, 0.5
 		)
@@ -60,23 +62,18 @@ func _process(_delta):
 			inverse_table_slice.global_rotation_degrees.y, table_slice.global_rotation_degrees.y, 10
 		)
 	):
-		update_state(State.MATCH)
-
-		var tween1 = get_tree().create_tween().set_parallel()
+		update_state(State.MATCH_ANIMATION)
+		pickup_area_3d.picked_up = false
+		var tween1 = get_tree().create_tween()
 		tween1.tween_property(
-			inverse_table_slice, "global_position", table_slice.global_position, 1
-		)
-		tween1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
-		await get_tree().create_timer(1).timeout
-
-		tween1.stop()
-		var tween2 = get_tree().create_tween().set_parallel()
-		tween2.tween_property(
 			inverse_slicer,
 			"global_position",
 			inverse_slicer.global_position + Vector3(0, 0.65, 0),
 			1
 		)
+		await get_tree().create_timer(0.2).timeout
+
+		var tween2 = get_tree().create_tween().set_parallel()
 		tween2.tween_property(
 			slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1
 		)
@@ -100,9 +97,10 @@ func _process(_delta):
 		)
 		await get_tree().create_timer(1).timeout
 
+		tween1.stop()
 		tween2.stop()
 		inverse_table_slice.visible = false
-		match_cutscene()
+		update_state(State.MATCH)
 
 
 func pause_menu():
@@ -126,13 +124,13 @@ func load_game(save):
 
 func update_state(new_state, updated_from_autosave = true):
 	state = new_state
-	if state == State.MATCH and not updated_from_autosave:
+	if state == State.MATCH:
 		match_cutscene()
 	if STATES_MOVEABLE.has(int(state)):
 		emit_signal("movable", true)
 	else:
 		emit_signal("movable", false)
-	if updated_from_autosave:
+	if updated_from_autosave and STATES_SAVABLE.has(int(state)):
 		emit_signal(
 			"autosave", LEVEL, state, [player.position.x, player.position.y, player.position.z]
 		)
