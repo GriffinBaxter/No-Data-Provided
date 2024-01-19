@@ -64,19 +64,21 @@ func _process(_delta):
 	):
 		update_state(State.MATCH_ANIMATION)
 		pickup_area_3d.picked_up = false
-		var tween1 = get_tree().create_tween()
+		var tween1 = get_tree().create_tween().set_parallel()
+		tween1.tween_method(update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 5, 1)
+		tween1.tween_method(update_green_albedo, table_slice.material_override["shader_parameter/green_albedo"], 5, 1)
+		tween1.tween_method(update_blue_albedo, table_slice.material_override["shader_parameter/blue_albedo"], 5, 1)
 		tween1.tween_property(
-			inverse_slicer,
-			"global_position",
-			inverse_slicer.global_position + Vector3(0, 0.65, 0),
-			1
+			inverse_table_slice, "global_position", table_slice.global_position, 1
 		)
-		await get_tree().create_timer(0.2).timeout
+		tween1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
+		tween1.tween_property(inverse_table_slice, "rotation", table_slice.rotation, 1)
+		tween1.tween_property(inverse_slicer, "rotation", slicer.rotation, 1)
+		await get_tree().create_timer(1).timeout
 
+		inverse_table_slice.visible = false
+		slicer.global_position += Vector3(0, 0.65, 0)
 		var tween2 = get_tree().create_tween().set_parallel()
-		tween2.tween_property(
-			slicer, "global_position", slicer.global_position + Vector3(0, 0.65, 0), 1
-		)
 		tween2.tween_method(
 			update_red_dither,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
@@ -95,6 +97,9 @@ func _process(_delta):
 			0.1,
 			1
 		)
+		tween2.tween_method(update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 0, 1)
+		tween2.tween_method(update_green_albedo, table_slice.material_override["shader_parameter/green_albedo"], 0, 1)
+		tween2.tween_method(update_blue_albedo, table_slice.material_override["shader_parameter/blue_albedo"], 0, 1)
 		await get_tree().create_timer(1).timeout
 
 		tween1.stop()
@@ -147,6 +152,18 @@ func update_green_dither(value: float):
 func update_blue_dither(value: float):
 	camera_shader.get_surface_override_material(0).set_shader_parameter("blue_dither", value)
 
+
+func update_red_albedo(value: float):
+	table_slice.material_override["shader_parameter/red_albedo"] = value
+	inverse_table_slice.material_override["shader_parameter/red_albedo"] = value
+
+func update_green_albedo(value: float):
+	table_slice.material_override["shader_parameter/green_albedo"] = value
+	inverse_table_slice.material_override["shader_parameter/green_albedo"] = value
+
+func update_blue_albedo(value: float):
+	table_slice.material_override["shader_parameter/blue_albedo"] = value
+	inverse_table_slice.material_override["shader_parameter/blue_albedo"] = value
 
 func match_cutscene():
 	var tween1 = get_tree().create_tween().set_parallel()

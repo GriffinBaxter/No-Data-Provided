@@ -5,6 +5,9 @@ uniform sampler2D _noise;
 uniform mat4 slice_plane;
 uniform bool inversed;
 varying vec3 wvtx;
+uniform float red_albedo : hint_range(0, 1, 0.01) = 0.01;
+uniform float green_albedo : hint_range(0, 1, 0.01) = 0.01;
+uniform float blue_albedo : hint_range(0, 1, 0.01) = 0.1;
 
 void vertex() {
 	wvtx = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -24,5 +27,5 @@ void fragment() {
 	distance += noise * 0.1;
 
 	if (distance < 0.0) discard;
-	ALBEDO = vec3(0.01, 0.01, 0.1);
+	ALBEDO = vec3(red_albedo, green_albedo, blue_albedo);
 }

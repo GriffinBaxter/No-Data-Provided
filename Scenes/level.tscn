@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=50 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://cj6kxuuldsw1h" path="res://Blender/passport.blend" id="7_hftig"]
 [ext_resource type="Script" path="res://Scripts/Slice.gd" id="7_r7jlu"]
 [ext_resource type="PackedScene" uid="uid://l1rtbhd4qjcv" path="res://Blender/license.blend" id="8_xwh8j"]
+[ext_resource type="Shader" path="res://Shaders/slice_depth_test_disabled.gdshader" id="9_jlak1"]
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
 [ext_resource type="Script" path="res://Scripts/PickupArea3D.gd" id="13_utw7h"]
@@ -188,6 +189,22 @@ emission_energy_multiplier = 6.0
 [sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
 size = Vector3(2.5, 0.01, 2.5)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_66kq1"]
+frequency = 0.025
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rb5dv"]
+seamless = true
+noise = SubResource("FastNoiseLite_66kq1")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t4cuu"]
+render_priority = 0
+shader = ExtResource("5_ga2jv")
+shader_parameter/slice_plane = null
+shader_parameter/inversed = false
+shader_parameter/_albedo = ExtResource("5_ic4mh")
+shader_parameter/_noise = SubResource("NoiseTexture2D_rb5dv")
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_r7r0q"]
 frequency = 0.025
 fractal_type = 0
@@ -198,9 +215,13 @@ noise = SubResource("FastNoiseLite_r7r0q")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o47pw"]
 render_priority = 0
-shader = ExtResource("5_ga2jv")
+next_pass = SubResource("ShaderMaterial_t4cuu")
+shader = ExtResource("9_jlak1")
 shader_parameter/slice_plane = null
 shader_parameter/inversed = false
+shader_parameter/red_albedo = 0.01
+shader_parameter/green_albedo = 0.01
+shader_parameter/blue_albedo = 0.1
 shader_parameter/_albedo = ExtResource("5_ic4mh")
 shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 
