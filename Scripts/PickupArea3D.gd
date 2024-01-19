@@ -5,6 +5,7 @@ const SLICER_OFFSET_DEGREES = 20
 
 var picked_up = false
 var object_rotation = 0
+var can_rotate_object = false
 
 @onready var player = $"../../Player"
 @onready var pickup = $"../../Player/Head/Camera3D/Pickup"
@@ -43,10 +44,11 @@ func _on_body_entered(body):
 
 func _process(delta):
 	if picked_up and level.state != level.State.MATCH:
-		if Input.is_action_pressed("rotate_left"):
-			object_rotation += 2.5 * delta
-		if Input.is_action_pressed("rotate_right"):
-			object_rotation -= 2.5 * delta
+		if can_rotate_object:
+			if Input.is_action_pressed("rotate_left"):
+				object_rotation += 2.5 * delta
+			if Input.is_action_pressed("rotate_right"):
+				object_rotation -= 2.5 * delta
 		table_slice.position = pickup.global_position
 		slicer.position = table_slice.position + SLICER_OFFSET_POSITION
 		table_slice.rotation.y = pickup.global_rotation.y + object_rotation
