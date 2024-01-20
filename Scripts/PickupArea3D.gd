@@ -7,6 +7,9 @@ var picked_up = false
 var object_rotation = 0
 var can_rotate_object = false
 
+var timer
+var continue_pick_up_animation_loop = true
+
 @onready var player = $"../../Player"
 @onready var pickup = $"../../Player/Head/Camera3D/Pickup"
 @onready var level = $"../.."
@@ -19,7 +22,13 @@ var can_rotate_object = false
 
 func _on_body_entered(body):
 	if picked_up == false and body == player:
-		picked_up = true
+		timer = Timer.new()
+		add_child(timer)
+		timer.one_shot = true
+		timer.autostart = true
+		timer.wait_time = 0.2
+		timer.timeout.connect(_timeout)
+		timer.start()
 
 		var tween = get_tree().create_tween().set_parallel()
 		tween.tween_method(
@@ -40,6 +49,34 @@ func _on_body_entered(body):
 			0.4,
 			1
 		)
+
+		while continue_pick_up_animation_loop:
+			var time_left = timer.time_left
+			table_slice.position = Tween.interpolate_value(
+				table_slice.position,
+				pickup.global_position - table_slice.position,
+				0.2 - time_left,
+				0.2,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN
+			)
+			slicer.position = table_slice.position + SLICER_OFFSET_POSITION
+			table_slice.rotation.y = Tween.interpolate_value(
+				table_slice.rotation.y,
+				pickup.global_rotation.y - table_slice.rotation.y,
+				0.2 - time_left,
+				0.2,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN
+			)
+			slicer.rotation_degrees.y = table_slice.rotation_degrees.y + SLICER_OFFSET_DEGREES
+			await get_tree().create_timer(0.001).timeout
+
+		picked_up = true
+
+
+func _timeout():
+	continue_pick_up_animation_loop = false
 
 
 func _process(delta):
