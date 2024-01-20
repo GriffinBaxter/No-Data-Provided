@@ -50,7 +50,7 @@ func _on_body_entered(body):
 			1
 		)
 
-		while continue_pick_up_animation_loop:
+		while continue_pick_up_animation_loop:  # TODO: move this to _process to avoid create_timer on loop
 			var time_left = timer.time_left
 			table_slice.position = Tween.interpolate_value(
 				table_slice.position,
