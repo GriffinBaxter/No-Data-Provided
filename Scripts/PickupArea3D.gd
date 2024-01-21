@@ -49,28 +49,7 @@ func _on_body_entered(body):
 			0.4,
 			1
 		)
-
-		while continue_pick_up_animation_loop:  # TODO: move this to _process to avoid create_timer on loop
-			var time_left = timer.time_left
-			table_slice.position = Tween.interpolate_value(
-				table_slice.position,
-				pickup.global_position - table_slice.position,
-				0.2 - time_left,
-				0.2,
-				Tween.TRANS_LINEAR,
-				Tween.EASE_IN
-			)
-			slicer.position = table_slice.position + SLICER_OFFSET_POSITION
-			table_slice.rotation.y = Tween.interpolate_value(
-				table_slice.rotation.y,
-				pickup.global_rotation.y - table_slice.rotation.y,
-				0.2 - time_left,
-				0.2,
-				Tween.TRANS_LINEAR,
-				Tween.EASE_IN
-			)
-			slicer.rotation_degrees.y = table_slice.rotation_degrees.y + SLICER_OFFSET_DEGREES
-			await get_tree().create_timer(0.001).timeout
+		await get_tree().create_timer(0.2).timeout
 
 		picked_up = true
 
@@ -89,4 +68,25 @@ func _process(delta):
 		table_slice.position = pickup.global_position
 		slicer.position = table_slice.position + SLICER_OFFSET_POSITION
 		table_slice.rotation.y = pickup.global_rotation.y + object_rotation
+		slicer.rotation_degrees.y = table_slice.rotation_degrees.y + SLICER_OFFSET_DEGREES
+
+	if timer and continue_pick_up_animation_loop:
+		var time_left = timer.time_left
+		table_slice.position = Tween.interpolate_value(
+			table_slice.position,
+			pickup.global_position - table_slice.position,
+			0.2 - time_left,
+			0.2,
+			Tween.TRANS_LINEAR,
+			Tween.EASE_IN
+		)
+		slicer.position = table_slice.position + SLICER_OFFSET_POSITION
+		table_slice.rotation.y = Tween.interpolate_value(
+			table_slice.rotation.y,
+			pickup.global_rotation.y - table_slice.rotation.y,
+			0.2 - time_left,
+			0.2,
+			Tween.TRANS_LINEAR,
+			Tween.EASE_IN
+		)
 		slicer.rotation_degrees.y = table_slice.rotation_degrees.y + SLICER_OFFSET_DEGREES
