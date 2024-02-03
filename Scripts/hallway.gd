@@ -45,9 +45,13 @@ func _ready():
 			material_index_2 = random.randi_range(0, 4)
 		var tween2 = get_tree().create_tween().set_parallel()
 		var fade_duration_2 = random.randf_range(0.01, 0.05)
-		tween2.tween_property(materials[material_index_1], "emission_energy_multiplier", 0, fade_duration_2)
+		tween2.tween_property(
+			materials[material_index_1], "emission_energy_multiplier", 0, fade_duration_2
+		)
 		if material_index_2:
-			tween2.tween_property(materials[material_index_2], "emission_energy_multiplier", 0, fade_duration_2)
+			tween2.tween_property(
+				materials[material_index_2], "emission_energy_multiplier", 0, fade_duration_2
+			)
 		if material_index_1 == 0 or material_index_2 == 0:
 			tween2.tween_property(spot_light, "light_energy", 0, fade_duration_2)
 		if material_index_1 in [1, 2, 3, 4] or material_index_2 in [1, 2, 3, 4]:
