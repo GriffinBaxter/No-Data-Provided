@@ -31,25 +31,37 @@ func _ready():
 	]
 
 	while true:
+		var tween1 = get_tree().create_tween().set_parallel()
+		var fade_duration_1 = random.randf_range(0.01, 0.05)
 		for material in materials:
-			material.emission_energy_multiplier = 6
-		spot_light.light_energy = 8
-		omni_light.light_energy = 2
+			tween1.tween_property(material, "emission_energy_multiplier", 6, fade_duration_1)
+		tween1.tween_property(spot_light, "light_energy", 8, fade_duration_1)
+		tween1.tween_property(omni_light, "light_energy", 2, fade_duration_1)
 		await get_tree().create_timer(random.randf_range(2, 10)).timeout
 
 		var material_index_1 = random.randi_range(0, 4)
 		var material_index_2 = null
 		if random.randi_range(0, 1):
 			material_index_2 = random.randi_range(0, 4)
-		materials[material_index_1].emission_energy_multiplier = 0
+		var tween2 = get_tree().create_tween().set_parallel()
+		var fade_duration_2 = random.randf_range(0.01, 0.05)
+		tween2.tween_property(materials[material_index_1], "emission_energy_multiplier", 0, fade_duration_2)
 		if material_index_2:
-			materials[material_index_2].emission_energy_multiplier = 0
+			tween2.tween_property(materials[material_index_2], "emission_energy_multiplier", 0, fade_duration_2)
 		if material_index_1 == 0 or material_index_2 == 0:
-			spot_light.light_energy = 0
+			tween2.tween_property(spot_light, "light_energy", 0, fade_duration_2)
 		if material_index_1 in [1, 2, 3, 4] or material_index_2 in [1, 2, 3, 4]:
-			omni_light.light_energy = 0
-
+			tween2.tween_property(omni_light, "light_energy", 0, fade_duration_2)
 		await get_tree().create_timer(random.randf_range(0.15, 0.3)).timeout
+
+		tween2.stop()
+
+
+func set_light(material, energy, emission = false):
+	if emission:
+		material.emission_energy_multiplier = energy
+	else:
+		material.light_energy = energy
 
 
 func _process(_delta):
