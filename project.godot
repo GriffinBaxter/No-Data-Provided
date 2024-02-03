@@ -10,10 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Project2023"
+config/name="No Data Provided"
 run/main_scene="res://Scenes/main_menu.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="Project2023"
+config/custom_user_dir_name="Last Medium/No Data Provided"
 config/features=PackedStringArray("4.2", "Forward Plus")
 
 [display]

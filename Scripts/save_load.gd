@@ -2,6 +2,7 @@ extends Node
 
 signal load
 
+const SAVE_DIRECTORY = "user://01.save"
 const DEFAULT_SAVE = {
 	"level": 0,
 	"state": 0,
@@ -39,15 +40,15 @@ func save_game_player_position(player_position):
 
 
 func save_game_to_file(save):
-	var current_save = FileAccess.open("user://01.save", FileAccess.WRITE)
+	var current_save = FileAccess.open(SAVE_DIRECTORY, FileAccess.WRITE)
 	var json_string = JSON.stringify(save)
 	current_save.store_line(json_string)
 	current_save.close()
 
 
 func load_game():
-	if FileAccess.file_exists("user://01.save"):
-		var current_save = FileAccess.open("user://01.save", FileAccess.READ)
+	if FileAccess.file_exists(SAVE_DIRECTORY):
+		var current_save = FileAccess.open(SAVE_DIRECTORY, FileAccess.READ)
 		var json_string = current_save.get_line()
 		var json = JSON.new()
 		json.parse(json_string)
