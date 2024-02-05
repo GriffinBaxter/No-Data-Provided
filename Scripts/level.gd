@@ -20,6 +20,8 @@ var intro_cutscene_started = false
 @onready var player = $Player
 @onready var animation_player = $AnimationPlayer
 @onready var camera_shader = $CameraShader
+@onready var text_control = $TextControl
+@onready var text_label = $TextControl/MarginContainer/VBoxContainer/RichTextLabel
 
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
@@ -31,7 +33,7 @@ var intro_cutscene_started = false
 @onready var table_slice = $TableWithSlice/Table
 @onready var inverse_slicer = $TableWithInverseSlice/Slicer
 @onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
-@onready var wall_closing_dust_particles = $WallClosingDustParticles
+@onready var wall_closing_dust_particles = $hallway/WallClosingDustParticles
 
 
 func _ready():
@@ -47,6 +49,17 @@ func _process(_delta):
 
 	if state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started:
 		intro_cutscene_started = true
+		text_control.visible = true
+		player_camera.global_position = Vector3(0, 0, 1)
+		player_camera.global_rotation_degrees = Vector3(70, 0, 0)
+		await get_tree().create_timer(5).timeout
+
+		text_label.text = "no data provided|"
+		player_camera.global_position = Vector3(0, 3, -47.5)
+		player_camera.global_rotation_degrees = Vector3(0, 180, 0)
+		await get_tree().create_timer(5).timeout
+
+		text_control.visible = false
 		animation_player.play("hallway_intro")
 		await get_tree().create_timer(4.75).timeout
 
