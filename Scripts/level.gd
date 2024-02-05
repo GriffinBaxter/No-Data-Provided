@@ -31,6 +31,7 @@ var intro_cutscene_started = false
 @onready var table_slice = $TableWithSlice/Table
 @onready var inverse_slicer = $TableWithInverseSlice/Slicer
 @onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
+@onready var wall_closing_dust_particles = $WallClosingDustParticles
 
 
 func _ready():
@@ -46,10 +47,11 @@ func _process(_delta):
 
 	if state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started:
 		intro_cutscene_started = true
-
 		animation_player.play("hallway_intro")
+		await get_tree().create_timer(4.75).timeout
 
-		await get_tree().create_timer(5).timeout
+		wall_closing_dust_particles.emitting = true
+		await get_tree().create_timer(0.25).timeout
 
 		update_state(State.AFTER_INTRO_CUTSCENE)
 

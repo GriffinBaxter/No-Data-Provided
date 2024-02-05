@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=62 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -185,6 +185,47 @@ albedo_color = Color(0, 0, 0, 1)
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 6.0
+
+[sub_resource type="Gradient" id="Gradient_snv8h"]
+offsets = PackedFloat32Array(0, 0.25, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0.12549, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1ktry"]
+gradient = SubResource("Gradient_snv8h")
+
+[sub_resource type="Curve" id="Curve_ijn0p"]
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5sgyy"]
+curve = SubResource("Curve_ijn0p")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a2ogi"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(2.5, 0, 2.5)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 4.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -10.0
+linear_accel_max = -5.0
+radial_accel_min = -0.2
+radial_accel_max = 0.2
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_5sgyy")
+color_ramp = SubResource("GradientTexture1D_1ktry")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tp6pe"]
+render_priority = 2
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.32549, 0.32549, 0.32549, 0.501961)
+
+[sub_resource type="SphereMesh" id="SphereMesh_qpgk0"]
+material = SubResource("StandardMaterial3D_tp6pe")
 
 [sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
 size = Vector3(2.5, 0.01, 2.5)
@@ -386,6 +427,15 @@ spot_angle = 40.0
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 5, 0)
 visible = false
 spot_angle = 40.0
+
+[node name="WallClosingDustParticles" type="GPUParticles3D" parent="hallway"]
+transform = Transform3D(2, 0, 0, 0, -8.74228e-08, 2, 0, -2, -8.74228e-08, 0, 5, 50.5)
+emitting = false
+amount = 250
+lifetime = 2.0
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_a2ogi")
+draw_pass_1 = SubResource("SphereMesh_qpgk0")
 
 [node name="TableWithSlice" type="Node3D" parent="."]
 
