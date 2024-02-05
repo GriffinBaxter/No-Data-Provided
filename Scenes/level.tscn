@@ -228,34 +228,6 @@ shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
 [sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
 size = Vector3(0.8, 1, 1)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
-radius = 1.5
-
-[sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
-flip_faces = true
-size = Vector2(2, 2)
-
-[sub_resource type="Gradient" id="Gradient_vf3b3"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_1dyuq"]
-gradient = SubResource("Gradient_vf3b3")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(3, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qune"]
-render_priority = 0
-shader = ExtResource("20_msfbx")
-shader_parameter/offset_image = SubResource("GradientTexture2D_1dyuq")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
-render_priority = 1
-next_pass = SubResource("ShaderMaterial_6qune")
-shader = ExtResource("3_wrwwu")
-shader_parameter/red_dither = 1.6
-shader_parameter/green_dither = 0.15
-shader_parameter/blue_dither = 0.1
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x23bt"]
 transparency = 1
 vertex_color_use_as_albedo = true
@@ -289,6 +261,36 @@ color_ramp = SubResource("GradientTexture1D_mufij")
 [sub_resource type="SphereMesh" id="SphereMesh_pgjxy"]
 radius = 0.015
 height = 0.03
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
+radius = 1.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="Gradient" id="Gradient_vf3b3"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1dyuq"]
+gradient = SubResource("Gradient_vf3b3")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(3, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qune"]
+render_priority = 0
+shader = ExtResource("20_msfbx")
+shader_parameter/offset_image = SubResource("GradientTexture2D_1dyuq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
+render_priority = 1
+next_pass = SubResource("ShaderMaterial_6qune")
+shader = ExtResource("3_wrwwu")
+shader_parameter/red_dither = 1.6
+shader_parameter/green_dither = 0.15
+shader_parameter/blue_dither = 0.1
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
@@ -419,6 +421,15 @@ visible = false
 [node name="license" parent="TableWithSlice/Table/Valuable" instance=ExtResource("8_xwh8j")]
 visible = false
 
+[node name="DustParticles" type="GPUParticles3D" parent="TableWithSlice"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
+material_override = SubResource("StandardMaterial3D_x23bt")
+cast_shadow = 0
+amount = 25
+lifetime = 10.0
+process_material = SubResource("ParticleProcessMaterial_vl5dg")
+draw_pass_1 = SubResource("SphereMesh_pgjxy")
+
 [node name="TableWithInverseSlice" type="Node3D" parent="."]
 
 [node name="Slicer" type="MeshInstance3D" parent="TableWithInverseSlice"]
@@ -455,15 +466,6 @@ script = ExtResource("11_kfi3i")
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_vv2av")
 surface_material_override/0 = SubResource("ShaderMaterial_d8lee")
-
-[node name="DustParticles" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
-material_override = SubResource("StandardMaterial3D_x23bt")
-cast_shadow = 0
-amount = 25
-lifetime = 10.0
-process_material = SubResource("ParticleProcessMaterial_vl5dg")
-draw_pass_1 = SubResource("SphereMesh_pgjxy")
 
 [connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
 
