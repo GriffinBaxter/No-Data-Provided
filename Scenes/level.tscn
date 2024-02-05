@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=55 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -256,6 +256,40 @@ shader_parameter/red_dither = 1.6
 shader_parameter/green_dither = 0.15
 shader_parameter/blue_dither = 0.1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x23bt"]
+transparency = 1
+vertex_color_use_as_albedo = true
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 32.0
+
+[sub_resource type="Gradient" id="Gradient_mptdd"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.501961, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mufij"]
+gradient = SubResource("Gradient_mptdd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vl5dg"]
+emission_shape_scale = Vector3(2, 2, 2)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = -720.0
+angle_max = 720.0
+gravity = Vector3(0, -0.1, 0)
+linear_accel_min = -0.5
+linear_accel_max = 0.5
+radial_accel_min = -0.5
+radial_accel_max = 0.5
+tangential_accel_min = -0.5
+tangential_accel_max = 0.5
+scale_min = 0.5
+color_ramp = SubResource("GradientTexture1D_mufij")
+
+[sub_resource type="SphereMesh" id="SphereMesh_pgjxy"]
+radius = 0.015
+height = 0.03
+
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
 
@@ -421,6 +455,15 @@ script = ExtResource("11_kfi3i")
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_vv2av")
 surface_material_override/0 = SubResource("ShaderMaterial_d8lee")
+
+[node name="DustParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
+material_override = SubResource("StandardMaterial3D_x23bt")
+cast_shadow = 0
+amount = 25
+lifetime = 10.0
+process_material = SubResource("ParticleProcessMaterial_vl5dg")
+draw_pass_1 = SubResource("SphereMesh_pgjxy")
 
 [connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
 
