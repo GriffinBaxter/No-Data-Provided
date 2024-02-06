@@ -20,8 +20,8 @@ var intro_cutscene_started = false
 @onready var player = $Player
 @onready var animation_player = $AnimationPlayer
 @onready var camera_shader = $CameraShader
-@onready var text_control = $TextControl
-@onready var text_label = $TextControl/MarginContainer/VBoxContainer/RichTextLabel
+@onready var last_medium_presents = $LastMediumPresentsLabel3D
+@onready var no_data_provided = $NoDataProvidedLabel3D
 
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
@@ -49,24 +49,28 @@ func _process(_delta):
 
 	if state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started:
 		intro_cutscene_started = true
-		text_control.visible = true
-		player_camera.global_position = Vector3(0, 0, 1)
+		player_camera.global_position = Vector3(0, -1, 1)
 		player_camera.global_rotation_degrees = Vector3(70, 0, 0)
-		text_label.text = ""
+		last_medium_presents.visible = true
+		last_medium_presents.text = ""
+		no_data_provided.visible = true
+		no_data_provided.text = ""
+		player_camera.fov = 50
 		await get_tree().create_timer(1.75).timeout
 
-		letter_by_letter("last medium presents")
+		letter_by_letter(last_medium_presents, "last medium presents")
 		await get_tree().create_timer(5).timeout
 
-		player_camera.global_position = Vector3(0, 3, -47.5)
-		player_camera.global_rotation_degrees = Vector3(0, 180, 0)
-		text_label.text = ""
+		player_camera.global_position = Vector3(1.75, 3, -48.5)
+		player_camera.global_rotation_degrees = Vector3(0, 150, 0)
 		await get_tree().create_timer(1.5).timeout
 
-		letter_by_letter("no data provided")
+		last_medium_presents.visible = false
+		letter_by_letter(no_data_provided, "no data provided")
 		await get_tree().create_timer(5).timeout
 
-		text_control.visible = false
+		no_data_provided.visible = false
+		player_camera.fov = 80
 		animation_player.play("hallway_intro")
 		await get_tree().create_timer(4.75).timeout
 
@@ -181,18 +185,18 @@ func update_state(new_state, updated_from_autosave = true):
 		)
 
 
-func letter_by_letter(text):
-	text_label.text = "|"
+func letter_by_letter(label, text):
+	label.text = "|"
 	await get_tree().create_timer(0.1).timeout
 	var current_text = ""
 	for letter in text:
 		current_text += letter
-		text_label.text = current_text + "|"
+		label.text = current_text + "|"
 		await get_tree().create_timer(0.1).timeout
 	for _n in 3:
-		text_label.text = text
+		label.text = text
 		await get_tree().create_timer(0.5).timeout
-		text_label.text = text + "|"
+		label.text = text + "|"
 		await get_tree().create_timer(0.5).timeout
 
 

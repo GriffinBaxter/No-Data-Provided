@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=63 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -309,10 +309,6 @@ rings = 8
 [sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
 radius = 1.5
 
-[sub_resource type="Theme" id="Theme_pa1hw"]
-default_font = ExtResource("19_clhhf")
-default_font_size = 100
-
 [sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
 flip_faces = true
 size = Vector2(2, 2)
@@ -511,38 +507,23 @@ script = ExtResource("13_utw7h")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TableWithInverseSlice/PickupArea3D"]
 shape = SubResource("SphereShape3D_xg647")
 
-[node name="TextControl" type="Control" parent="."]
+[node name="LastMediumPresentsLabel3D" type="Label3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, -2.4, 4.999, -1.5)
 visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="TextControl"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -633.0
-offset_top = -79.0
-offset_right = 639.0
-offset_bottom = 77.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="TextControl/MarginContainer"]
-layout_mode = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="TextControl/MarginContainer/VBoxContainer"]
-clip_contents = false
-layout_mode = 2
-size_flags_vertical = 3
-theme = SubResource("Theme_pa1hw")
+render_priority = 2
 text = "last medium presents|"
+font = ExtResource("19_clhhf")
+font_size = 310
+horizontal_alignment = 0
+
+[node name="NoDataProvidedLabel3D" type="Label3D" parent="."]
+transform = Transform3D(-1.09278e-08, 0, 0.25, 0, 0.25, 0, -0.25, 0, -1.09278e-08, -2.499, 2.5, -43)
+visible = false
+render_priority = 2
+text = "no data provided|"
+font = ExtResource("19_clhhf")
+font_size = 310
+horizontal_alignment = 0
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_g66hf")]
 visible = false
