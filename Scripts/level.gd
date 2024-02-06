@@ -52,11 +52,18 @@ func _process(_delta):
 		text_control.visible = true
 		player_camera.global_position = Vector3(0, 0, 1)
 		player_camera.global_rotation_degrees = Vector3(70, 0, 0)
+		text_label.text = ""
+		await get_tree().create_timer(1.75).timeout
+
+		letter_by_letter("last medium presents")
 		await get_tree().create_timer(5).timeout
 
-		text_label.text = "no data provided|"
 		player_camera.global_position = Vector3(0, 3, -47.5)
 		player_camera.global_rotation_degrees = Vector3(0, 180, 0)
+		text_label.text = ""
+		await get_tree().create_timer(1.5).timeout
+
+		letter_by_letter("no data provided")
 		await get_tree().create_timer(5).timeout
 
 		text_control.visible = false
@@ -172,6 +179,21 @@ func update_state(new_state, updated_from_autosave = true):
 		emit_signal(
 			"autosave", LEVEL, state, [player.position.x, player.position.y, player.position.z]
 		)
+
+
+func letter_by_letter(text):
+	text_label.text = "|"
+	await get_tree().create_timer(0.1).timeout
+	var current_text = ""
+	for letter in text:
+		current_text += letter
+		text_label.text = current_text + "|"
+		await get_tree().create_timer(0.1).timeout
+	for _n in 3:
+		text_label.text = text
+		await get_tree().create_timer(0.5).timeout
+		text_label.text = text + "|"
+		await get_tree().create_timer(0.5).timeout
 
 
 func update_red_dither(value: float):
