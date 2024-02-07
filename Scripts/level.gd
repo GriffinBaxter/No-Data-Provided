@@ -52,22 +52,14 @@ func _process(_delta):
 		player_camera.global_position = Vector3(0, -1, 1)
 		player_camera.global_rotation_degrees = Vector3(70, 0, 0)
 		last_medium_presents.visible = true
-		last_medium_presents.text = ""
-		no_data_provided.visible = true
-		no_data_provided.text = ""
 		player_camera.fov = 50
-		await get_tree().create_timer(1.75).timeout
-
-		letter_by_letter(last_medium_presents, "last medium presents")
-		await get_tree().create_timer(5).timeout
+		await letter_by_letter(last_medium_presents, "last medium presents")
 
 		player_camera.global_position = Vector3(1.75, 3, -48.5)
 		player_camera.global_rotation_degrees = Vector3(0, 150, 0)
-		await get_tree().create_timer(1.5).timeout
-
 		last_medium_presents.visible = false
-		letter_by_letter(no_data_provided, "no data provided")
-		await get_tree().create_timer(5).timeout
+		no_data_provided.visible = true
+		await letter_by_letter(no_data_provided, "no data provided")
 
 		no_data_provided.visible = false
 		player_camera.fov = 80
@@ -186,17 +178,22 @@ func update_state(new_state, updated_from_autosave = true):
 
 
 func letter_by_letter(label, text):
-	label.text = "|"
-	await get_tree().create_timer(0.1).timeout
+	await blink_text_with_caret(false, 2, label)
 	var current_text = ""
 	for letter in text:
 		current_text += letter
 		label.text = current_text + "|"
 		await get_tree().create_timer(0.1).timeout
-	for _n in 3:
-		label.text = text
+	await blink_text_with_caret(false, 3, label, text)
+
+
+func blink_text_with_caret(caret_first, n, label, text = ""):
+	var caret_1 = "|" if caret_first else ""
+	var caret_2 = "" if caret_first else "|"
+	for _n in n:
+		label.text = text + caret_1
 		await get_tree().create_timer(0.5).timeout
-		label.text = text + "|"
+		label.text = text + caret_2
 		await get_tree().create_timer(0.5).timeout
 
 
