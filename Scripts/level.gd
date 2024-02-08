@@ -224,29 +224,46 @@ func update_blue_albedo(value: float):
 	inverse_table_slice.material_override["shader_parameter/blue_albedo"] = value
 
 
+func interpolate_value(n, final, initial):
+	return n * final + (1 - n) * initial
+
+
 func match_cutscene():
-	var tween1 = get_tree().create_tween().set_parallel()
-
-	tween1.tween_property(player_camera, "global_position", Vector3(0.4, 1.65, -10), 5)
-	tween1.tween_property(player_camera, "global_rotation_degrees", Vector3(-55, 11.6, 0), 5)
-
-	await get_tree().create_timer(5).timeout
-	tween1.stop()
+	const FINAL_POS = Vector3(0.4, 1.65, -10)
+	const FINAL_ROT = Vector3(-55, 11.6, 0)
+	var initial_pos = player_camera.global_position
+	var initial_rot = player_camera.global_rotation_degrees
+	for n in [
+		[1. / 10., 2. / 10.],
+		[3. / 10., 4. / 10.],
+		[5. / 10., 6. / 10.],
+		[7. / 10., 8. / 10.],
+		[9. / 10., 1]
+	]:
+		var tween = get_tree().create_tween().set_parallel()
+		tween.tween_property(
+			player_camera, "global_position", interpolate_value(n[0], FINAL_POS, initial_pos), 0.5
+		)
+		tween.tween_property(
+			player_camera,
+			"global_rotation_degrees",
+			interpolate_value(n[0], FINAL_ROT, initial_rot),
+			0.5
+		)
+		await get_tree().create_timer(0.5).timeout
+		player_camera.global_position = interpolate_value(n[1], FINAL_POS, initial_pos)
+		player_camera.global_rotation_degrees = interpolate_value(n[1], FINAL_ROT, initial_rot)
 
 	animation_player.play("hallway_outro")
-
 	var tween2 = get_tree().create_tween().set_parallel()
 	tween2.tween_property(player_camera, "global_position", Vector3(0, 1.65, -42.75), 10)
 	tween2.tween_property(player_camera, "global_rotation_degrees", Vector3(-25, 11.6, 0), 10)
-
 	table_slice.rotation_degrees = Vector3(0, 0, 0)
 	valuable.visible = false
-
 	await get_tree().create_timer(9.9).timeout
 
 	var table_tween = get_tree().create_tween()
 	table_tween.tween_property(table_slice, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
-
 	await get_tree().create_timer(0.1).timeout
 
 	valuable.visible = true
