@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://gfsgxg5mavtk"]
+
+[ext_resource type="Shader" path="res://Shaders/timeline.gdshader" id="1_36b3j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t61wm"]
+render_priority = 0
+shader = ExtResource("1_36b3j")
+shader_parameter/progress = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_vn43f"]
+size = Vector3(0.5, 0.025, 0.01)
+
+[node name="Timeline" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_t61wm")
+mesh = SubResource("BoxMesh_vn43f")

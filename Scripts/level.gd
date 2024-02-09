@@ -23,6 +23,7 @@ var intro_cutscene_started = false
 @onready var last_medium_presents = $LastMediumPresentsLabel3D
 @onready var no_data_provided = $NoDataProvidedLabel3D
 
+@onready var timeline = $Player/Head/Camera3D/Timeline
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
 @onready var valuable = $TableWithSlice/Table/Valuable
@@ -229,8 +230,8 @@ func interpolate_value(n, final, initial):
 
 
 func match_cutscene():
-	const FINAL_POS = Vector3(0.4, 1.65, -10)
-	const FINAL_ROT = Vector3(-55, 11.6, 0)
+	const FINAL_POS = Vector3(0.4, 0.5, -10)
+	const FINAL_ROT = Vector3(55, 11.6, 0)
 	var initial_pos = player_camera.global_position
 	var initial_rot = player_camera.global_rotation_degrees
 	for n in [
@@ -251,22 +252,13 @@ func match_cutscene():
 			0.5
 		)
 		await get_tree().create_timer(0.5).timeout
+
+		tween.stop()
+		player_camera.fov -= 6
 		player_camera.global_position = interpolate_value(n[1], FINAL_POS, initial_pos)
 		player_camera.global_rotation_degrees = interpolate_value(n[1], FINAL_ROT, initial_rot)
 
-	animation_player.play("hallway_outro")
-	var tween2 = get_tree().create_tween().set_parallel()
-	tween2.tween_property(player_camera, "global_position", Vector3(0, 1.65, -42.75), 10)
-	tween2.tween_property(player_camera, "global_rotation_degrees", Vector3(-25, 11.6, 0), 10)
-	table_slice.rotation_degrees = Vector3(0, 0, 0)
-	valuable.visible = false
-	await get_tree().create_timer(9.9).timeout
-
-	var table_tween = get_tree().create_tween()
-	table_tween.tween_property(table_slice, "rotation_degrees", Vector3(0, 11.6, 0), 0.1)
-	await get_tree().create_timer(0.1).timeout
-
-	valuable.visible = true
+	timeline.visible = true
 
 
 func is_within_offset_position(from, to, offset):
