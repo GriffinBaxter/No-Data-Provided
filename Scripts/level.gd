@@ -2,6 +2,7 @@ extends Node3D
 
 signal level_node_ready
 signal movable
+signal timeline_adjustable
 signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
@@ -258,6 +259,7 @@ func match_cutscene():
 		player_camera.global_position = interpolate_value(n[1], FINAL_POS, initial_pos)
 		player_camera.global_rotation_degrees = interpolate_value(n[1], FINAL_ROT, initial_rot)
 
+	emit_signal("timeline_adjustable", true)
 	timeline.visible = true
 
 

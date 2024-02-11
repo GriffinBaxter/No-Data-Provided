@@ -8,9 +8,11 @@ const SENSITIVITY = 0.002
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var can_move = false
+var can_use_timeline = false
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
+@onready var timeline = $Head/Camera3D/Timeline
 @onready var level = $".."
 
 
@@ -49,6 +51,15 @@ func _physics_process(delta):
 		else:
 			velocity.x = lerp(velocity.x, direction.x * adjusted_speed, delta * 2.0)
 			velocity.z = lerp(velocity.z, direction.z * adjusted_speed, delta * 2.0)
+	elif can_use_timeline:
+		var timeline_material = timeline.get_child(0).material_override
+		var current_progress = timeline_material.get_shader_parameter("progress")
+		if Input.is_action_pressed("left") and Input.is_action_pressed("right"):
+			pass
+		elif Input.is_action_pressed("left") and current_progress > 0:
+			timeline_material.set_shader_parameter("progress", current_progress - 0.002)
+		elif Input.is_action_pressed("right") and current_progress < 1:
+			timeline_material.set_shader_parameter("progress", current_progress + 0.002)
 
 
 func _process(_delta):
@@ -57,7 +68,12 @@ func _process(_delta):
 
 func _ready():
 	level.movable.connect(update_can_move)
+	level.timeline_adjustable.connect(update_can_use_timeline)
 
 
 func update_can_move(movable):
 	can_move = movable
+
+
+func update_can_use_timeline(timeline_adjustable):
+	can_use_timeline = timeline_adjustable

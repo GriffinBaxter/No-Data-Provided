@@ -12,6 +12,6 @@ size = Vector3(0.5, 0.025, 0.01)
 
 [node name="Timeline" type="Node3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="TimelineMesh" type="MeshInstance3D" parent="."]
 material_override = SubResource("ShaderMaterial_t61wm")
 mesh = SubResource("BoxMesh_vn43f")
