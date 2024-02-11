@@ -5,7 +5,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t61wm"]
 render_priority = 0
 shader = ExtResource("1_36b3j")
-shader_parameter/progress = 0.5
+shader_parameter/progress = 0.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_vn43f"]
 size = Vector3(0.5, 0.025, 0.01)

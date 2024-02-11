@@ -53,17 +53,28 @@ func _physics_process(delta):
 		else:
 			velocity.x = lerp(velocity.x, direction.x * adjusted_speed, delta * 2.0)
 			velocity.z = lerp(velocity.z, direction.z * adjusted_speed, delta * 2.0)
-	elif can_use_timeline:
+
+
+func _process(delta):
+	move_and_slide()  # Not ideal, should move out of _process eventually
+
+	if can_use_timeline:
 		var timeline_material = timeline.get_child(0).material_override
 		var current_progress = timeline_material.get_shader_parameter("progress")
 		if Input.is_action_pressed("left") and Input.is_action_pressed("right"):
 			timeline_rotation(0)
-		elif Input.is_action_pressed("left") and current_progress > 0:
-			timeline_material.set_shader_parameter("progress", current_progress - 0.002)
+		elif Input.is_action_pressed("left"):
 			timeline_rotation(-0.2)
-		elif Input.is_action_pressed("right") and current_progress < 1:
-			timeline_material.set_shader_parameter("progress", current_progress + 0.002)
+			if current_progress > 0:
+				var updated_progress = current_progress - 0.15 * delta
+				timeline_material.set_shader_parameter("progress", updated_progress)
+				timeline_move_camera(updated_progress)
+		elif Input.is_action_pressed("right"):
 			timeline_rotation(0.2)
+			if current_progress < 1:
+				var updated_progress = current_progress + 0.15 * delta
+				timeline_material.set_shader_parameter("progress", updated_progress)
+				timeline_move_camera(updated_progress)
 		else:
 			timeline_rotation(0)
 
@@ -78,8 +89,15 @@ func timeline_rotation(rotation_y):
 	)
 
 
-func _process(_delta):
-	move_and_slide()  # Not ideal, should move out of _process eventually
+func timeline_move_camera(progress):
+	const TIMELINE_FINAL_POS = Vector3(0, 1.75, -42)
+	const TIMELINE_FINAL_ROT = Vector3(0, 0, 0)
+	const TIMELINE_INITIAL_POS = Vector3(0.4, 0.5, -10)
+	const TIMELINE_INITIAL_ROT = Vector3(55, 11.6, 0)
+	camera.global_position = progress * TIMELINE_FINAL_POS + (1 - progress) * TIMELINE_INITIAL_POS
+	camera.global_rotation_degrees = (
+		progress * TIMELINE_FINAL_ROT + (1 - progress) * TIMELINE_INITIAL_ROT
+	)
 
 
 func _ready():
