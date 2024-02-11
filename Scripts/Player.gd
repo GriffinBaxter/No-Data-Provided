@@ -10,6 +10,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var can_move = false
 var can_use_timeline = false
 
+var timeline_tween
+
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var timeline = $Head/Camera3D/Timeline
@@ -55,11 +57,25 @@ func _physics_process(delta):
 		var timeline_material = timeline.get_child(0).material_override
 		var current_progress = timeline_material.get_shader_parameter("progress")
 		if Input.is_action_pressed("left") and Input.is_action_pressed("right"):
-			pass
+			timeline_rotation(0)
 		elif Input.is_action_pressed("left") and current_progress > 0:
 			timeline_material.set_shader_parameter("progress", current_progress - 0.002)
+			timeline_rotation(-0.2)
 		elif Input.is_action_pressed("right") and current_progress < 1:
 			timeline_material.set_shader_parameter("progress", current_progress + 0.002)
+			timeline_rotation(0.2)
+		else:
+			timeline_rotation(0)
+
+
+func timeline_rotation(rotation_y):
+	timeline_tween = get_tree().create_tween()
+	(
+		timeline_tween
+		. tween_property(timeline, "rotation", Vector3(0, rotation_y, 0), 0.75)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_SINE)
+	)
 
 
 func _process(_delta):
