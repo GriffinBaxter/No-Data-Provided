@@ -27,7 +27,6 @@ var intro_cutscene_started = false
 @onready var timeline = $Player/Head/Camera3D/Timeline
 @onready var player_camera = $Player/Head/Camera3D
 @onready var player_head = $Player/Head
-@onready var valuable = $TableWithSlice/Table/Valuable
 @onready var save_load = $SaveLoad
 @onready var pickup_area_3d = $TableWithInverseSlice/PickupArea3D
 
@@ -35,6 +34,7 @@ var intro_cutscene_started = false
 @onready var table_slice = $TableWithSlice/Table
 @onready var inverse_slicer = $TableWithInverseSlice/Slicer
 @onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
+@onready var identification = $Identification
 @onready var wall_closing_dust_particles = $hallway/WallClosingDustParticles
 
 
@@ -261,6 +261,7 @@ func match_cutscene():
 
 	emit_signal("timeline_adjustable", true)
 	timeline.visible = true
+	identification.visible = true
 
 
 func is_within_offset_position(from, to, offset):

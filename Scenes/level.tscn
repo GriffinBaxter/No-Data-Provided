@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=61 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -19,6 +19,7 @@
 [ext_resource type="Material" uid="uid://d3upuwvnikm4d" path="res://Materials/slice_material_depth_test_disabled.tres" id="16_nq7nw"]
 [ext_resource type="FontFile" uid="uid://bu7vykn7473bi" path="res://Fonts/RobotoMono-SemiBold.ttf" id="19_clhhf"]
 [ext_resource type="Shader" path="res://Shaders/camera_chromatic_aberration.gdshader" id="20_msfbx"]
+[ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
 [ext_resource type="PackedScene" uid="uid://gfsgxg5mavtk" path="res://Scenes/timeline.tscn" id="24_xbjqi"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
@@ -494,6 +495,10 @@ script = ExtResource("13_utw7h")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TableWithInverseSlice/PickupArea3D"]
 shape = SubResource("SphereShape3D_xg647")
+
+[node name="Identification" parent="." instance=ExtResource("21_s6ck1")]
+transform = Transform3D(0.68404, -1.5395, -1.07797, 0, 1.14715, -1.6383, 1.87939, 0.560333, 0.392349, 2.345, 0.134, -33.5)
+visible = false
 
 [node name="LastMediumPresentsLabel3D" type="Label3D" parent="."]
 transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, -2.4, 4.999, -1.5)
