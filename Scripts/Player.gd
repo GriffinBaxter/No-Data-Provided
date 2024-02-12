@@ -92,11 +92,17 @@ func timeline_rotation(rotation_y):
 func timeline_move_camera(progress):
 	const TIMELINE_FINAL_POS = Vector3(0, 1.75, -42)
 	const TIMELINE_FINAL_ROT = Vector3(0, 0, 0)
+	const TIMELINE_MID_ROT = Vector3(-30, -50, 5)
 	const TIMELINE_INITIAL_POS = Vector3(0.4, 0.5, -10)
 	const TIMELINE_INITIAL_ROT = Vector3(55, 11.6, 0)
 	camera.global_position = progress * TIMELINE_FINAL_POS + (1 - progress) * TIMELINE_INITIAL_POS
 	camera.global_rotation_degrees = (
-		progress * TIMELINE_FINAL_ROT + (1 - progress) * TIMELINE_INITIAL_ROT
+		(progress * 2 * TIMELINE_MID_ROT + (1 - progress * 2) * TIMELINE_INITIAL_ROT)
+		if progress <= 0.5
+		else (
+			(progress - 0.5) * 2 * TIMELINE_FINAL_ROT
+			+ (1 - (progress - 0.5) * 2) * TIMELINE_MID_ROT
+		)
 	)
 
 
