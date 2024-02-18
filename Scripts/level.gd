@@ -7,45 +7,47 @@ signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
 
-const STATES_MOVEABLE = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
-const STATES_SAVABLE = [State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH]
-const LEVEL = 0
+const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
+const STATES_SAVABLE: Array[State] = [
+	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
+]
+const LEVEL: int = 0
 
-var paused = false
-var state = State.BEFORE_INTRO_CUTSCENE
-var player_entered_area = false
-var intro_cutscene_started = false
+var paused: bool = false
+var state: State = State.BEFORE_INTRO_CUTSCENE
+var player_entered_area: bool = false
+var intro_cutscene_started: bool = false
 
-@onready var pause_menu_node = $PauseMenu
+@onready var pause_menu_node: Control = $PauseMenu
 
-@onready var player = $Player
-@onready var animation_player = $AnimationPlayer
-@onready var camera_shader = $CameraShader
-@onready var last_medium_presents = $LastMediumPresentsLabel3D
-@onready var no_data_provided = $NoDataProvidedLabel3D
+@onready var player: CharacterBody3D = $Player
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var camera_shader: MeshInstance3D = $CameraShader
+@onready var last_medium_presents: Label3D = $LastMediumPresentsLabel3D
+@onready var no_data_provided: Label3D = $NoDataProvidedLabel3D
 
-@onready var timeline = $Player/Head/Camera3D/Timeline
-@onready var player_camera = $Player/Head/Camera3D
-@onready var player_head = $Player/Head
-@onready var save_load = $SaveLoad
-@onready var pickup_area_3d = $TableWithInverseSlice/PickupArea3D
+@onready var timeline: Node3D = $Player/Head/Camera3D/Timeline
+@onready var player_camera: Camera3D = $Player/Head/Camera3D
+@onready var player_head: Node3D = $Player/Head
+@onready var save_load: Node = $SaveLoad
+@onready var pickup_area_3d: Area3D = $TableWithInverseSlice/PickupArea3D
 
-@onready var slicer = $TableWithSlice/Slicer
-@onready var table_slice = $TableWithSlice/Table
-@onready var inverse_slicer = $TableWithInverseSlice/Slicer
-@onready var inverse_table_slice = $TableWithInverseSlice/TableSlice
-@onready var identification = $Identification
-@onready var wall_closing_dust_particles = $hallway/WallClosingDustParticles
+@onready var slicer: MeshInstance3D = $TableWithSlice/Slicer
+@onready var table_slice: MeshInstance3D = $TableWithSlice/Table
+@onready var inverse_slicer: MeshInstance3D = $TableWithInverseSlice/Slicer
+@onready var inverse_table_slice: MeshInstance3D = $TableWithInverseSlice/TableSlice
+@onready var identification: Node3D = $Identification
+@onready var wall_closing_dust_particles: GPUParticles3D = $hallway/WallClosingDustParticles
 
 
-func _ready():
+func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	Engine.time_scale = 1
 	save_load.load.connect(load_game)
 	emit_signal("level_node_ready")
 
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		pause_menu()
 
@@ -84,69 +86,69 @@ func _process(_delta):
 	):
 		update_state(State.MATCH_ANIMATION)
 		pickup_area_3d.picked_up = false
-		var tween1 = get_tree().create_tween().set_parallel()
-		tween1.tween_method(
+		var tween_1: Tween = get_tree().create_tween().set_parallel()
+		tween_1.tween_method(
 			update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 5, 1
 		)
-		tween1.tween_method(
+		tween_1.tween_method(
 			update_green_albedo,
 			table_slice.material_override["shader_parameter/green_albedo"],
 			5,
 			1
 		)
-		tween1.tween_method(
+		tween_1.tween_method(
 			update_blue_albedo, table_slice.material_override["shader_parameter/blue_albedo"], 5, 1
 		)
-		tween1.tween_property(
+		tween_1.tween_property(
 			inverse_table_slice, "global_position", table_slice.global_position, 1
 		)
-		tween1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
-		tween1.tween_property(inverse_table_slice, "rotation", table_slice.rotation, 1)
-		tween1.tween_property(inverse_slicer, "rotation", slicer.rotation, 1)
+		tween_1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
+		tween_1.tween_property(inverse_table_slice, "rotation", table_slice.rotation, 1)
+		tween_1.tween_property(inverse_slicer, "rotation", slicer.rotation, 1)
 		await get_tree().create_timer(1).timeout
 
 		inverse_table_slice.visible = false
 		slicer.global_position += Vector3(0, 0.65, 0)
-		var tween2 = get_tree().create_tween().set_parallel()
-		tween2.tween_method(
+		var tween_2: Tween = get_tree().create_tween().set_parallel()
+		tween_2.tween_method(
 			update_red_dither,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
 			1.6,
 			1
 		)
-		tween2.tween_method(
+		tween_2.tween_method(
 			update_green_dither,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"),
 			0.15,
 			1
 		)
-		tween2.tween_method(
+		tween_2.tween_method(
 			update_blue_dither,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"),
 			0.1,
 			1
 		)
-		tween2.tween_method(
+		tween_2.tween_method(
 			update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 0, 1
 		)
-		tween2.tween_method(
+		tween_2.tween_method(
 			update_green_albedo,
 			table_slice.material_override["shader_parameter/green_albedo"],
 			0,
 			1
 		)
-		tween2.tween_method(
+		tween_2.tween_method(
 			update_blue_albedo, table_slice.material_override["shader_parameter/blue_albedo"], 0, 1
 		)
 		await get_tree().create_timer(1).timeout
 
-		tween1.stop()
-		tween2.stop()
+		tween_1.stop()
+		tween_2.stop()
 		inverse_table_slice.visible = false
 		update_state(State.MATCH)
 
 
-func pause_menu():
+func pause_menu() -> void:
 	paused = !paused
 	if paused:
 		pause_menu_node.show()
@@ -158,14 +160,14 @@ func pause_menu():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
-func load_game(save):
+func load_game(save: Dictionary) -> void:
 	update_state(save.state, false)
 	player.position = Vector3(
 		save.player_position[0], save.player_position[1], save.player_position[2]
 	)
 
 
-func update_state(new_state, updated_from_autosave = true):
+func update_state(new_state: State, updated_from_autosave: bool = true) -> void:
 	state = new_state
 	if state == State.MATCH:
 		match_cutscene()
@@ -179,9 +181,9 @@ func update_state(new_state, updated_from_autosave = true):
 		)
 
 
-func letter_by_letter(label, text):
+func letter_by_letter(label: Label3D, text: String) -> void:
 	await blink_text_with_caret(false, 2, label)
-	var current_text = ""
+	var current_text: String = ""
 	for letter in text:
 		current_text += letter
 		label.text = current_text + "|"
@@ -189,60 +191,60 @@ func letter_by_letter(label, text):
 	await blink_text_with_caret(false, 3, label, text)
 
 
-func blink_text_with_caret(caret_first, n, label, text = ""):
-	var caret_1 = "|" if caret_first else ""
-	var caret_2 = "" if caret_first else "|"
-	for _n in n:
+func blink_text_with_caret(caret_first: bool, n: int, label: Label3D, text: String = "") -> void:
+	var caret_1: String = "|" if caret_first else ""
+	var caret_2: String = "" if caret_first else "|"
+	for _n: int in n:
 		label.text = text + caret_1
 		await get_tree().create_timer(0.5).timeout
 		label.text = text + caret_2
 		await get_tree().create_timer(0.5).timeout
 
 
-func update_red_dither(value: float):
+func update_red_dither(value: float) -> void:
 	camera_shader.get_surface_override_material(0).set_shader_parameter("red_dither", value)
 
 
-func update_green_dither(value: float):
+func update_green_dither(value: float) -> void:
 	camera_shader.get_surface_override_material(0).set_shader_parameter("green_dither", value)
 
 
-func update_blue_dither(value: float):
+func update_blue_dither(value: float) -> void:
 	camera_shader.get_surface_override_material(0).set_shader_parameter("blue_dither", value)
 
 
-func update_red_albedo(value: float):
+func update_red_albedo(value: float) -> void:
 	table_slice.material_override["shader_parameter/red_albedo"] = value
 	inverse_table_slice.material_override["shader_parameter/red_albedo"] = value
 
 
-func update_green_albedo(value: float):
+func update_green_albedo(value: float) -> void:
 	table_slice.material_override["shader_parameter/green_albedo"] = value
 	inverse_table_slice.material_override["shader_parameter/green_albedo"] = value
 
 
-func update_blue_albedo(value: float):
+func update_blue_albedo(value: float) -> void:
 	table_slice.material_override["shader_parameter/blue_albedo"] = value
 	inverse_table_slice.material_override["shader_parameter/blue_albedo"] = value
 
 
-func interpolate_value(n, final, initial):
+func interpolate_value(n: float, final: Vector3, initial: Vector3) -> Vector3:
 	return n * final + (1 - n) * initial
 
 
-func match_cutscene():
-	const FINAL_POS = Vector3(0.4, 0.5, -10)
-	const FINAL_ROT = Vector3(55, 11.6, 0)
-	var initial_pos = player_camera.global_position
-	var initial_rot = player_camera.global_rotation_degrees
-	for n in [
+func match_cutscene() -> void:
+	const FINAL_POS: Vector3 = Vector3(0.4, 0.5, -10)
+	const FINAL_ROT: Vector3 = Vector3(55, 11.6, 0)
+	var initial_pos: Vector3 = player_camera.global_position
+	var initial_rot: Vector3 = player_camera.global_rotation_degrees
+	for n: PackedFloat64Array in [
 		[1. / 10., 2. / 10.],
 		[3. / 10., 4. / 10.],
 		[5. / 10., 6. / 10.],
 		[7. / 10., 8. / 10.],
 		[9. / 10., 1]
 	]:
-		var tween = get_tree().create_tween().set_parallel()
+		var tween: Tween = get_tree().create_tween().set_parallel()
 		tween.tween_property(
 			player_camera, "global_position", interpolate_value(n[0], FINAL_POS, initial_pos), 0.5
 		)
@@ -264,7 +266,7 @@ func match_cutscene():
 	identification.visible = true
 
 
-func is_within_offset_position(from, to, offset):
+func is_within_offset_position(from: Vector3, to: Vector3, offset: float) -> bool:
 	return (
 		(to.x - offset <= from.x and from.x <= to.x + offset)
 		and (to.y - offset <= from.y and from.y <= to.y + offset)
@@ -272,7 +274,7 @@ func is_within_offset_position(from, to, offset):
 	)
 
 
-func is_within_offset_degrees(from, to, offset):
+func is_within_offset_degrees(from: float, to: float, offset: float) -> bool:
 	from = snapped(from, 1) % 360
 	to = snapped(to, 1) % 360
 	return to - offset <= from and from <= to + offset

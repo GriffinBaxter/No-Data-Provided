@@ -1,32 +1,32 @@
 extends CharacterBody3D
 
-const SPEED = 6.0
-const JUMP_VELOCITY = 4.5
-const SENSITIVITY = 0.002
+const SPEED: float = 6.0
+const JUMP_VELOCITY: float = 4.5
+const SENSITIVITY: float = 0.002
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-var can_move = false
-var can_use_timeline = false
+var can_move: bool = false
+var can_use_timeline: bool = false
 
-var timeline_tween
+var timeline_tween: Tween
 
-@onready var head = $Head
-@onready var camera = $Head/Camera3D
-@onready var identification = $"../Identification"
-@onready var timeline = $Head/Camera3D/Timeline
-@onready var level = $".."
+@onready var head: Node3D = $Head
+@onready var camera: Camera3D = $Head/Camera3D
+@onready var identification: Node3D = $"../Identification"
+@onready var timeline: Node3D = $Head/Camera3D/Timeline
+@onready var level: Node3D = $".."
 
 
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	if can_move and event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-60), deg_to_rad(60))
 
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	if can_move:
 		# Add the gravity.
 		if not is_on_floor():
@@ -37,13 +37,15 @@ func _physics_process(delta):
 			velocity.y = JUMP_VELOCITY
 
 		# Handle Slow.
-		var adjusted_speed = SPEED
+		var adjusted_speed: float = SPEED
 		if Input.is_action_pressed("slow"):
 			adjusted_speed = adjusted_speed * 0.25
 
 		# Get the input direction and handle the movement/deceleration.
-		var input_dir = Input.get_vector("left", "right", "forward", "backward")
-		var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
+		var direction: Vector3 = (
+			(head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		)
 		if is_on_floor():
 			if direction:
 				velocity.x = direction.x * adjusted_speed
@@ -56,21 +58,21 @@ func _physics_process(delta):
 			velocity.z = lerp(velocity.z, direction.z * adjusted_speed, delta * 2.0)
 
 
-func _process(delta):
+func _process(delta: float) -> void:
 	move_and_slide()  # Not ideal, should move out of _process eventually
 
 	if can_use_timeline:
-		var timeline_material = timeline.get_child(0).material_override
-		var current_progress = timeline_material.get_shader_parameter("progress")
+		var timeline_material: ShaderMaterial = timeline.get_child(0).material_override
+		var current_progress: float = timeline_material.get_shader_parameter("progress")
 		if Input.is_action_pressed("left") and Input.is_action_pressed("right"):
 			timeline_rotation(0)
 		elif Input.is_action_pressed("left"):
 			timeline_rotation(-0.2)
-			var updated_progress = current_progress - 0.15 * delta
-			timeline_move(timeline_material, updated_progress if updated_progress >= 0 else 0)
+			var updated_progress: float = current_progress - 0.15 * delta
+			timeline_move(timeline_material, updated_progress if updated_progress >= 0 else 0.)
 		elif Input.is_action_pressed("right"):
 			timeline_rotation(0.2)
-			var updated_progress = current_progress + 0.15 * delta
+			var updated_progress: float = current_progress + 0.15 * delta
 			timeline_move(
 				timeline_material,
 				updated_progress if updated_progress <= 1. - 10. ** -15. else 1. - 10. ** -15.
@@ -79,7 +81,7 @@ func _process(delta):
 			timeline_rotation(0)
 
 
-func timeline_rotation(rotation_y):
+func timeline_rotation(rotation_y: float) -> void:
 	timeline_tween = get_tree().create_tween()
 	(
 		timeline_tween
@@ -89,7 +91,7 @@ func timeline_rotation(rotation_y):
 	)
 
 
-func timeline_move(timeline_material, updated_progress: float) -> void:
+func timeline_move(timeline_material: ShaderMaterial, updated_progress: float) -> void:
 	timeline_material.set_shader_parameter("progress", updated_progress)
 	timeline_move_camera(updated_progress)
 	timeline_move_identification(updated_progress)
@@ -137,14 +139,14 @@ func piecewise_linear_interpolation(vectors: PackedVector3Array, progress: float
 	return x0
 
 
-func _ready():
+func _ready() -> void:
 	level.movable.connect(update_can_move)
 	level.timeline_adjustable.connect(update_can_use_timeline)
 
 
-func update_can_move(movable):
+func update_can_move(movable: bool) -> void:
 	can_move = movable
 
 
-func update_can_use_timeline(timeline_adjustable):
+func update_can_use_timeline(timeline_adjustable: bool) -> void:
 	can_use_timeline = timeline_adjustable
