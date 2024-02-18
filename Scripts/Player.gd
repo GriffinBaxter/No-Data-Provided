@@ -14,6 +14,7 @@ var timeline_tween
 
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
+@onready var identification = $"../Identification"
 @onready var timeline = $Head/Camera3D/Timeline
 @onready var level = $".."
 
@@ -65,16 +66,15 @@ func _process(delta):
 			timeline_rotation(0)
 		elif Input.is_action_pressed("left"):
 			timeline_rotation(-0.2)
-			if current_progress > 0:
-				var updated_progress = current_progress - 0.15 * delta
-				timeline_material.set_shader_parameter("progress", updated_progress)
-				timeline_move_camera(updated_progress)
+			var updated_progress = current_progress - 0.15 * delta
+			timeline_move(timeline_material, updated_progress if updated_progress >= 0 else 0)
 		elif Input.is_action_pressed("right"):
 			timeline_rotation(0.2)
-			if current_progress < 1:
-				var updated_progress = current_progress + 0.15 * delta
-				timeline_material.set_shader_parameter("progress", updated_progress)
-				timeline_move_camera(updated_progress)
+			var updated_progress = current_progress + 0.15 * delta
+			timeline_move(
+				timeline_material,
+				updated_progress if updated_progress <= 1. - 10. ** -15. else 1. - 10. ** -15.
+			)
 		else:
 			timeline_rotation(0)
 
@@ -89,21 +89,52 @@ func timeline_rotation(rotation_y):
 	)
 
 
-func timeline_move_camera(progress):
-	const TIMELINE_FINAL_POS = Vector3(0, 1.75, -42)
-	const TIMELINE_FINAL_ROT = Vector3(0, 0, 0)
-	const TIMELINE_MID_ROT = Vector3(-30, -50, 5)
-	const TIMELINE_INITIAL_POS = Vector3(0.4, 0.5, -10)
-	const TIMELINE_INITIAL_ROT = Vector3(55, 11.6, 0)
-	camera.global_position = progress * TIMELINE_FINAL_POS + (1 - progress) * TIMELINE_INITIAL_POS
-	camera.global_rotation_degrees = (
-		(progress * 2 * TIMELINE_MID_ROT + (1 - progress * 2) * TIMELINE_INITIAL_ROT)
-		if progress <= 0.5
-		else (
-			(progress - 0.5) * 2 * TIMELINE_FINAL_ROT
-			+ (1 - (progress - 0.5) * 2) * TIMELINE_MID_ROT
-		)
+func timeline_move(timeline_material, updated_progress: float) -> void:
+	timeline_material.set_shader_parameter("progress", updated_progress)
+	timeline_move_camera(updated_progress)
+	timeline_move_identification(updated_progress)
+
+
+func timeline_move_camera(progress: float) -> void:
+	camera.global_position = piecewise_linear_interpolation(
+		[Vector3(0.4, 0.5, -10), Vector3(0, 1.75, -42)], progress
 	)
+	camera.global_rotation_degrees = piecewise_linear_interpolation(
+		[Vector3(55, 11.6, 0), Vector3(-30, -50, 5), Vector3(0, 0, 0)], progress
+	)
+
+
+func timeline_move_identification(progress: float) -> void:
+	identification.global_position = piecewise_linear_interpolation(
+		[
+			Vector3(0, 0, 0),
+			Vector3(0.5, 1, -20),
+			Vector3(2.345, 0.134, -33.5),
+			Vector3(2.345, 0.134, -33.5)
+		],
+		progress
+	)
+	identification.global_rotation_degrees = piecewise_linear_interpolation(
+		[Vector3(55, -750, 0), Vector3(55, -750, 0), Vector3(55, -70, 0), Vector3(55, -70, 0)],
+		progress
+	)
+
+
+func piecewise_linear_interpolation(vectors: PackedVector3Array, progress: float) -> Vector3:
+	var n: int = vectors.size()
+	var t: float = progress
+	var ix: int
+	var x0: Vector3
+	var x1: Vector3
+	t *= (n - 1)
+	ix = floori(t)
+	t -= ix
+	x0 = vectors[ix]
+	ix += 1
+	if ix < n:
+		x1 = vectors[ix]
+		return x0 + (x1 - x0) * t
+	return x0
 
 
 func _ready():
