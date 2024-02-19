@@ -16,6 +16,11 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="Last Medium/No Data Provided"
 config/features=PackedStringArray("4.2", "Forward Plus")
 
+[debug]
+
+gdscript/warnings/untyped_declaration=1
+gdscript/warnings/unsafe_call_argument=1
+
 [display]
 
 window/size/viewport_width=1920

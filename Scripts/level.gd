@@ -161,9 +161,11 @@ func pause_menu() -> void:
 
 
 func load_game(save: Dictionary) -> void:
-	update_state(save.state, false)
+	update_state(save.state as State, false)
 	player.position = Vector3(
-		save.player_position[0], save.player_position[1], save.player_position[2]
+		save.player_position[0] as float,
+		save.player_position[1] as float,
+		save.player_position[2] as float
 	)
 
 

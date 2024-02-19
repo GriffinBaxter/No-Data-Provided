@@ -21,8 +21,8 @@ var timeline_tween: Tween
 
 func _unhandled_input(event: InputEvent) -> void:
 	if can_move and event is InputEventMouseMotion:
-		head.rotate_y(-event.relative.x * SENSITIVITY)
-		camera.rotate_x(-event.relative.y * SENSITIVITY)
+		head.rotate_y(-event.relative.x as float * SENSITIVITY)
+		camera.rotate_x(-event.relative.y as float * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-60), deg_to_rad(60))
 
 

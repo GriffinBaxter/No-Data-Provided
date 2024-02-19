@@ -22,7 +22,7 @@ var random: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
 func _ready() -> void:
-	var materials: Array[Material] = [
+	var materials: Array[StandardMaterial3D] = [
 		plane_end.material_override,
 		top_triangle.material_override,
 		bottom_triangle.material_override,
@@ -33,7 +33,7 @@ func _ready() -> void:
 	while true:
 		var tween_1: Tween = get_tree().create_tween().set_parallel()
 		var fade_duration_1: float = random.randf_range(0.01, 0.05)
-		for material in materials:
+		for material: StandardMaterial3D in materials:
 			tween_1.tween_property(material, "emission_energy_multiplier", 6, fade_duration_1)
 		tween_1.tween_property(spot_light, "light_energy", 8, fade_duration_1)
 		tween_1.tween_property(omni_light, "light_energy", 2, fade_duration_1)

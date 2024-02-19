@@ -32,19 +32,19 @@ func _on_body_entered(body: Node3D) -> void:
 
 		var tween: Tween = get_tree().create_tween().set_parallel()
 		tween.tween_method(
-			level.update_red_dither,
+			level.update_red_dither as Callable,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
 			0.6,
 			1
 		)
 		tween.tween_method(
-			level.update_green_dither,
+			level.update_green_dither as Callable,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"),
 			0.1,
 			1
 		)
 		tween.tween_method(
-			level.update_blue_dither,
+			level.update_blue_dither as Callable,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"),
 			0.4,
 			1
