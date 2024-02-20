@@ -1,14 +1,14 @@
 extends CharacterBody3D
 
-const SPEED: float = 6.0
-const JUMP_VELOCITY: float = 4.5
-const SENSITIVITY: float = 0.002
+const SPEED := 6.0
+const JUMP_VELOCITY := 4.5
+const SENSITIVITY := 0.002
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-var can_move: bool = false
-var can_use_timeline: bool = false
+var can_move := false
+var can_use_timeline := false
 
 var timeline_tween: Tween
 
@@ -42,10 +42,8 @@ func _physics_process(delta: float) -> void:
 			adjusted_speed = adjusted_speed * 0.25
 
 		# Get the input direction and handle the movement/deceleration.
-		var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
-		var direction: Vector3 = (
-			(head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-		)
+		var input_dir := Input.get_vector("left", "right", "forward", "backward")
+		var direction := (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		if is_on_floor():
 			if direction:
 				velocity.x = direction.x * adjusted_speed
@@ -68,11 +66,11 @@ func _process(delta: float) -> void:
 			timeline_rotation(0)
 		elif Input.is_action_pressed("left"):
 			timeline_rotation(-0.2)
-			var updated_progress: float = current_progress - 0.15 * delta
+			var updated_progress := current_progress - 0.15 * delta
 			timeline_move(timeline_material, updated_progress if updated_progress >= 0 else 0.)
 		elif Input.is_action_pressed("right"):
 			timeline_rotation(0.2)
-			var updated_progress: float = current_progress + 0.15 * delta
+			var updated_progress := current_progress + 0.15 * delta
 			timeline_move(
 				timeline_material,
 				updated_progress if updated_progress <= 1. - 10. ** -15. else 1. - 10. ** -15.
@@ -123,8 +121,8 @@ func timeline_move_identification(progress: float) -> void:
 
 
 func piecewise_linear_interpolation(vectors: PackedVector3Array, progress: float) -> Vector3:
-	var n: int = vectors.size()
-	var t: float = progress
+	var n := vectors.size()
+	var t := progress
 	var ix: int
 	var x0: Vector3
 	var x1: Vector3

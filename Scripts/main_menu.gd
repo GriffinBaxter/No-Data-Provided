@@ -1,8 +1,8 @@
 extends Control
 
-const LEVEL: String = "res://Scenes/level.tscn"
+const LEVEL := "res://Scenes/level.tscn"
 
-var save_exists: bool = false
+var save_exists := false
 
 @onready var continue_button: Button = $MarginContainer/VBoxContainer/Continue
 

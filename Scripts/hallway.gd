@@ -1,6 +1,6 @@
 extends Node3D
 
-var random: RandomNumberGenerator = RandomNumberGenerator.new()
+var random := RandomNumberGenerator.new()
 
 @onready var plane_end: MeshInstance3D = $PlaneEnd
 @onready var top_triangle: MeshInstance3D = $PlaneTopTriangle
@@ -31,8 +31,8 @@ func _ready() -> void:
 	]
 
 	while true:
-		var tween_1: Tween = get_tree().create_tween().set_parallel()
-		var fade_duration_1: float = random.randf_range(0.01, 0.05)
+		var tween_1 := get_tree().create_tween().set_parallel()
+		var fade_duration_1 := random.randf_range(0.01, 0.05)
 		for material: StandardMaterial3D in materials:
 			tween_1.tween_property(material, "emission_energy_multiplier", 6, fade_duration_1)
 		tween_1.tween_property(spot_light, "light_energy", 8, fade_duration_1)
@@ -40,12 +40,12 @@ func _ready() -> void:
 		await get_tree().create_timer(random.randf_range(2, 10)).timeout
 
 		tween_1.stop()
-		var material_index_1: int = random.randi_range(0, 4)
-		var material_index_2: int = -1
+		var material_index_1 := random.randi_range(0, 4)
+		var material_index_2 := -1
 		if random.randi_range(0, 1):
 			material_index_2 = random.randi_range(0, 4)
-		var tween_2: Tween = get_tree().create_tween().set_parallel()
-		var fade_duration_2: float = random.randf_range(0.01, 0.05)
+		var tween_2 := get_tree().create_tween().set_parallel()
+		var fade_duration_2 := random.randf_range(0.01, 0.05)
 		tween_2.tween_property(
 			materials[material_index_1], "emission_energy_multiplier", 0, fade_duration_2
 		)

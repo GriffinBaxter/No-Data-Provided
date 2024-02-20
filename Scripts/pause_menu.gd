@@ -2,7 +2,7 @@ extends Control
 
 signal save_player_position
 
-const MAIN_MENU: String = "res://Scenes/main_menu.tscn"
+const MAIN_MENU := "res://Scenes/main_menu.tscn"
 
 @onready var level: Node3D = $".."
 @onready var player: CharacterBody3D = $"../Player"
@@ -13,7 +13,7 @@ func _on_resume_pressed() -> void:
 
 
 func _on_save_pressed() -> void:
-	emit_signal("save_player_position", [player.position.x, player.position.y, player.position.z])
+	emit_signal("save_player_position", player.position)
 
 
 func _on_return_to_menu_pressed() -> void:

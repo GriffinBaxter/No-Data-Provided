@@ -11,12 +11,12 @@ const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_A
 const STATES_SAVABLE: Array[State] = [
 	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
 ]
-const LEVEL: int = 0
+const LEVEL := 0
 
-var paused: bool = false
+var paused := false
 var state: State = State.BEFORE_INTRO_CUTSCENE
-var player_entered_area: bool = false
-var intro_cutscene_started: bool = false
+var player_entered_area := false
+var intro_cutscene_started := false
 
 @onready var pause_menu_node: Control = $PauseMenu
 
@@ -86,7 +86,7 @@ func _process(_delta: float) -> void:
 	):
 		update_state(State.MATCH_ANIMATION)
 		pickup_area_3d.picked_up = false
-		var tween_1: Tween = get_tree().create_tween().set_parallel()
+		var tween_1 := get_tree().create_tween().set_parallel()
 		tween_1.tween_method(
 			update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 5, 1
 		)
@@ -109,7 +109,7 @@ func _process(_delta: float) -> void:
 
 		inverse_table_slice.visible = false
 		slicer.global_position += Vector3(0, 0.65, 0)
-		var tween_2: Tween = get_tree().create_tween().set_parallel()
+		var tween_2 := get_tree().create_tween().set_parallel()
 		tween_2.tween_method(
 			update_red_dither,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
@@ -162,11 +162,7 @@ func pause_menu() -> void:
 
 func load_game(save: Dictionary) -> void:
 	update_state(save.state as State, false)
-	player.position = Vector3(
-		save.player_position[0] as float,
-		save.player_position[1] as float,
-		save.player_position[2] as float
-	)
+	player.position = save.player_position
 
 
 func update_state(new_state: State, updated_from_autosave: bool = true) -> void:
@@ -178,14 +174,12 @@ func update_state(new_state: State, updated_from_autosave: bool = true) -> void:
 	else:
 		emit_signal("movable", false)
 	if updated_from_autosave and STATES_SAVABLE.has(int(state)):
-		emit_signal(
-			"autosave", LEVEL, state, [player.position.x, player.position.y, player.position.z]
-		)
+		emit_signal("autosave", LEVEL, state, player.position)
 
 
 func letter_by_letter(label: Label3D, text: String) -> void:
 	await blink_text_with_caret(false, 2, label)
-	var current_text: String = ""
+	var current_text := ""
 	for letter in text:
 		current_text += letter
 		label.text = current_text + "|"
@@ -194,8 +188,8 @@ func letter_by_letter(label: Label3D, text: String) -> void:
 
 
 func blink_text_with_caret(caret_first: bool, n: int, label: Label3D, text: String = "") -> void:
-	var caret_1: String = "|" if caret_first else ""
-	var caret_2: String = "" if caret_first else "|"
+	var caret_1 := "|" if caret_first else ""
+	var caret_2 := "" if caret_first else "|"
 	for _n: int in n:
 		label.text = text + caret_1
 		await get_tree().create_timer(0.5).timeout
@@ -235,10 +229,10 @@ func interpolate_value(n: float, final: Vector3, initial: Vector3) -> Vector3:
 
 
 func match_cutscene() -> void:
-	const FINAL_POS: Vector3 = Vector3(0.4, 0.5, -10)
-	const FINAL_ROT: Vector3 = Vector3(55, 11.6, 0)
-	var initial_pos: Vector3 = player_camera.global_position
-	var initial_rot: Vector3 = player_camera.global_rotation_degrees
+	const FINAL_POS := Vector3(0.4, 0.5, -10)
+	const FINAL_ROT := Vector3(55, 11.6, 0)
+	var initial_pos := player_camera.global_position
+	var initial_rot := player_camera.global_rotation_degrees
 	for n: PackedFloat64Array in [
 		[1. / 10., 2. / 10.],
 		[3. / 10., 4. / 10.],
@@ -246,7 +240,7 @@ func match_cutscene() -> void:
 		[7. / 10., 8. / 10.],
 		[9. / 10., 1]
 	]:
-		var tween: Tween = get_tree().create_tween().set_parallel()
+		var tween := get_tree().create_tween().set_parallel()
 		tween.tween_property(
 			player_camera, "global_position", interpolate_value(n[0], FINAL_POS, initial_pos), 0.5
 		)

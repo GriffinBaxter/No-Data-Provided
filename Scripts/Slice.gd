@@ -1,7 +1,7 @@
 @tool
 extends MeshInstance3D
 
-@export var inversed: bool = false
+@export var inversed := false
 
 @onready var slicer: MeshInstance3D = $"../Slicer"
 

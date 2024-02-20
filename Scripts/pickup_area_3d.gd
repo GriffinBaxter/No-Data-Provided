@@ -1,14 +1,14 @@
 extends Area3D
 
-const SLICER_OFFSET_POSITION: Vector3 = Vector3(0, 1.5, 0)
-const SLICER_OFFSET_DEGREES: int = 20
+const SLICER_OFFSET_POSITION := Vector3(0, 1.5, 0)
+const SLICER_OFFSET_DEGREES := 20
 
-var picked_up: bool = false
-var object_rotation: float = 0
-var can_rotate_object: bool = false
+var picked_up := false
+var object_rotation := 0.
+var can_rotate_object := false
 
 var timer: Timer
-var continue_pick_up_animation_loop: bool = true
+var continue_pick_up_animation_loop := true
 
 @onready var player: CharacterBody3D = $"../../Player"
 @onready var pickup: Node3D = $"../../Player/Head/Camera3D/Pickup"
@@ -30,7 +30,7 @@ func _on_body_entered(body: Node3D) -> void:
 		timer.timeout.connect(_timeout)
 		timer.start()
 
-		var tween: Tween = get_tree().create_tween().set_parallel()
+		var tween := get_tree().create_tween().set_parallel()
 		tween.tween_method(
 			level.update_red_dither as Callable,
 			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
@@ -71,7 +71,7 @@ func _process(delta: float) -> void:
 		slicer.rotation_degrees.y = table_slice.rotation_degrees.y + SLICER_OFFSET_DEGREES
 
 	if timer and continue_pick_up_animation_loop:
-		var time_left: float = timer.time_left
+		var time_left := timer.time_left
 		table_slice.position = Tween.interpolate_value(
 			table_slice.position,
 			pickup.global_position - table_slice.position,
