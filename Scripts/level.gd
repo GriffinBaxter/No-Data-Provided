@@ -7,6 +7,7 @@ signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
 
+const UTILS := preload("res://Scripts/utils.gd")
 const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
 const STATES_SAVABLE: Array[State] = [
 	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
@@ -77,10 +78,10 @@ func _process(_delta: float) -> void:
 
 	if (
 		state < State.MATCH_ANIMATION
-		and is_within_offset_position(
+		and UTILS.is_within_offset_position(
 			inverse_table_slice.global_position, table_slice.global_position, 0.5
 		)
-		and is_within_offset_degrees(
+		and UTILS.is_within_offset_degrees(
 			inverse_table_slice.global_rotation_degrees.y, table_slice.global_rotation_degrees.y, 10
 		)
 	):
@@ -260,17 +261,3 @@ func match_cutscene() -> void:
 	emit_signal("timeline_adjustable", true)
 	timeline.visible = true
 	identification.visible = true
-
-
-func is_within_offset_position(from: Vector3, to: Vector3, offset: float) -> bool:
-	return (
-		(to.x - offset <= from.x and from.x <= to.x + offset)
-		and (to.y - offset <= from.y and from.y <= to.y + offset)
-		and (to.z - offset <= from.z and from.z <= to.z + offset)
-	)
-
-
-func is_within_offset_degrees(from: float, to: float, offset: float) -> bool:
-	from = snapped(from, 1) % 360
-	to = snapped(to, 1) % 360
-	return to - offset <= from and from <= to + offset

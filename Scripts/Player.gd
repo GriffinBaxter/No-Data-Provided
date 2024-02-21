@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+const UTILS := preload("res://Scripts/utils.gd")
 const SPEED := 6.0
 const JUMP_VELOCITY := 4.5
 const SENSITIVITY := 0.002
@@ -96,16 +97,16 @@ func timeline_move(timeline_material: ShaderMaterial, updated_progress: float) -
 
 
 func timeline_move_camera(progress: float) -> void:
-	camera.global_position = piecewise_linear_interpolation(
+	camera.global_position = UTILS.piecewise_linear_interpolation(
 		[Vector3(0.4, 0.5, -10), Vector3(0, 1.75, -42)], progress
 	)
-	camera.global_rotation_degrees = piecewise_linear_interpolation(
+	camera.global_rotation_degrees = UTILS.piecewise_linear_interpolation(
 		[Vector3(55, 11.6, 0), Vector3(-30, -50, 5), Vector3(0, 0, 0)], progress
 	)
 
 
 func timeline_move_identification(progress: float) -> void:
-	identification.global_position = piecewise_linear_interpolation(
+	identification.global_position = UTILS.piecewise_linear_interpolation(
 		[
 			Vector3(0, 0, 0),
 			Vector3(0.5, 1, -20),
@@ -114,27 +115,10 @@ func timeline_move_identification(progress: float) -> void:
 		],
 		progress
 	)
-	identification.global_rotation_degrees = piecewise_linear_interpolation(
+	identification.global_rotation_degrees = UTILS.piecewise_linear_interpolation(
 		[Vector3(55, -750, 0), Vector3(55, -750, 0), Vector3(55, -70, 0), Vector3(55, -70, 0)],
 		progress
 	)
-
-
-func piecewise_linear_interpolation(vectors: PackedVector3Array, progress: float) -> Vector3:
-	var n := vectors.size()
-	var t := progress
-	var ix: int
-	var x0: Vector3
-	var x1: Vector3
-	t *= (n - 1)
-	ix = floori(t)
-	t -= ix
-	x0 = vectors[ix]
-	ix += 1
-	if ix < n:
-		x1 = vectors[ix]
-		return x0 + (x1 - x0) * t
-	return x0
 
 
 func _ready() -> void:
