@@ -106,18 +106,33 @@ func timeline_move_camera(progress: float) -> void:
 
 
 func timeline_move_identification(progress: float) -> void:
-	identification.global_position = UTILS.piecewise_linear_interpolation(
-		[
-			Vector3(0, 0, 0),
-			Vector3(0.5, 1, -20),
-			Vector3(2.345, 0.134, -33.5),
-			Vector3(2.345, 0.134, -33.5)
-		],
-		progress
+	identification.global_position = (
+		UTILS
+		. piecewise_linear_interpolation(
+			[
+				Vector3(0, 0, 0),
+				Vector3(0, 0, 0),
+				Vector3(0.5, 1, -20),
+				Vector3(2.345, 0.134, -34),
+				Vector3(2.325, 1.5, -47.5),
+				Vector3(2.3, 0.075, -46),
+			],
+			progress
+		)
 	)
-	identification.global_rotation_degrees = UTILS.piecewise_linear_interpolation(
-		[Vector3(55, -750, 0), Vector3(55, -750, 0), Vector3(55, -70, 0), Vector3(55, -70, 0)],
-		progress
+	identification.global_rotation_degrees = (
+		UTILS
+		. piecewise_linear_interpolation(
+			[
+				Vector3(300, -350, 100),
+				Vector3(300, -350, 100),
+				Vector3(300, -350, 100),
+				Vector3(55, -70, 0),
+				Vector3(55, -70, 180),
+				Vector3(25, -100, 220),
+			],
+			progress
+		)
 	)
 
 
