@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=63 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
 [ext_resource type="Script" path="res://Scripts/pickup_area_3d.gd" id="13_utw7h"]
 [ext_resource type="Material" uid="uid://d3upuwvnikm4d" path="res://Materials/slice_material_depth_test_disabled.tres" id="16_nq7nw"]
+[ext_resource type="Script" path="res://Scripts/viewport.gd" id="18_n24nl"]
 [ext_resource type="FontFile" uid="uid://bu7vykn7473bi" path="res://Fonts/RobotoMono-SemiBold.ttf" id="19_clhhf"]
 [ext_resource type="Shader" path="res://Shaders/camera_chromatic_aberration.gdshader" id="20_msfbx"]
 [ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
@@ -307,6 +308,12 @@ rings = 8
 [sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
 radius = 1.5
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1slep"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.458824)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
 [sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
 flip_faces = true
 size = Vector2(2, 2)
@@ -518,6 +525,44 @@ font = ExtResource("19_clhhf")
 font_size = 310
 horizontal_alignment = 0
 
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+script = ExtResource("18_n24nl")
+
+[node name="IdentificationNoShader" parent="Control/SubViewportContainer/SubViewport" instance=ExtResource("21_s6ck1")]
+transform = Transform3D(0.68404, -1.5395, -1.07797, 0, 1.14715, -1.6383, 1.87939, 0.560333, 0.392349, 2.345, 0.134, -33.5)
+visible = false
+
+[node name="Cube" parent="Control/SubViewportContainer/SubViewport/IdentificationNoShader" index="0"]
+material_override = SubResource("StandardMaterial3D_1slep")
+
+[node name="Camera3DNoShader" type="Camera3D" parent="Control/SubViewportContainer/SubViewport"]
+fov = 80.0
+
 [node name="PauseMenu" parent="." instance=ExtResource("10_g66hf")]
 visible = false
 
@@ -532,3 +577,4 @@ surface_material_override/0 = SubResource("ShaderMaterial_d8lee")
 [connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
 
 [editable path="hallway"]
+[editable path="Control/SubViewportContainer/SubViewport/IdentificationNoShader"]
