@@ -10,6 +10,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var can_move := false
 var can_use_timeline := false
+var timeline_stopped := true
 
 var timeline_tween: Tween
 
@@ -88,6 +89,7 @@ func timeline_rotation(rotation_y: float) -> void:
 		. set_ease(Tween.EASE_OUT)
 		. set_trans(Tween.TRANS_SINE)
 	)
+	timeline_stopped = rotation_y == 0
 
 
 func timeline_move(timeline_material: ShaderMaterial, updated_progress: float) -> void:
