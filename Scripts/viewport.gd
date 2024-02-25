@@ -10,14 +10,14 @@ extends SubViewport
 
 
 func _ready() -> void:
-	const IDENTIFICATION_COLOURS := [Color(1, 1, 1, 0), Color(1, 1, 1, 0.5)]
+	const TRANSPARENCIES := [0, 0.5]
 	var alternate := false
 	while true:
 		var tween := get_tree().create_tween()
 		tween.tween_method(
 			update_identification_transparency,
-			IDENTIFICATION_COLOURS[1] if alternate else IDENTIFICATION_COLOURS[0],
-			IDENTIFICATION_COLOURS[0] if alternate else IDENTIFICATION_COLOURS[1],
+			TRANSPARENCIES[1] if alternate else TRANSPARENCIES[0],
+			TRANSPARENCIES[0] if alternate else TRANSPARENCIES[1],
 			1
 		)
 		await get_tree().create_timer(1).timeout
@@ -34,8 +34,8 @@ func _process(_delta: float) -> void:
 		match_movement(viewport, to_match)
 
 
-func update_identification_transparency(value: Color) -> void:
-	viewport_identification_mesh.material_override.albedo_color = value
+func update_identification_transparency(value: float) -> void:
+	viewport_identification_mesh.material_override.albedo_color = Color(1, 1, 1, value)
 
 
 func match_movement(viewport: Variant, to_match: Variant) -> void:
