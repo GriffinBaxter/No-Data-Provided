@@ -19,6 +19,12 @@ var timeline_tween: Tween
 @onready var identification: Node3D = $"../Identification"
 @onready var timeline: Node3D = $Head/Camera3D/Timeline
 @onready var level: Node3D = $".."
+@onready var viewport: SubViewport = $"../Control/SubViewportContainer/SubViewport"
+
+
+func _ready() -> void:
+	level.movable.connect(update_can_move)
+	level.timeline_adjustable.connect(update_can_use_timeline)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -79,6 +85,8 @@ func _process(delta: float) -> void:
 			)
 		else:
 			timeline_rotation(0)
+		if viewport.identification_selectable and Input.is_action_just_pressed("interact"):
+			print("Interaction Pressed")
 
 
 func timeline_rotation(rotation_y: float) -> void:
@@ -136,11 +144,6 @@ func timeline_move_identification(progress: float) -> void:
 			progress
 		)
 	)
-
-
-func _ready() -> void:
-	level.movable.connect(update_can_move)
-	level.timeline_adjustable.connect(update_can_use_timeline)
 
 
 func update_can_move(movable: bool) -> void:
