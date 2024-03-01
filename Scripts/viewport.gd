@@ -15,6 +15,9 @@ var timeline_stopped_duration := 0.
 
 @onready var player: CharacterBody3D = $"../../../Player"
 
+@onready var timeline: Node3D = $"../../../Player/Head/Camera3D/Timeline"
+@onready var interact_label: Label3D = $"../../../Player/Head/Camera3D/Timeline/InteractLabel3D"
+
 
 func _process(delta: float) -> void:
 	match_movement_camera()
@@ -23,7 +26,12 @@ func _process(delta: float) -> void:
 		var to_match: Variant = objects[1]
 		match_movement(viewport, to_match)
 
-	hightlight_identification_when_timeline_stopped(delta)
+	handle_identification_selection(delta)
+
+
+func match_movement_camera() -> void:
+	match_movement(viewport_camera, player_camera)
+	viewport_camera.fov = player_camera.fov
 
 
 func match_movement(viewport: Variant, to_match: Variant) -> void:
@@ -32,14 +40,21 @@ func match_movement(viewport: Variant, to_match: Variant) -> void:
 	viewport.visible = to_match.visible
 
 
-func match_movement_camera() -> void:
-	match_movement(viewport_camera, player_camera)
-	viewport_camera.fov = player_camera.fov
+func handle_identification_selection(delta: float) -> void:
+	var progress: float = timeline.get_child(0).material_override.get_shader_parameter("progress")
+	var identification_selectable := can_select_identification(progress)
+	hightlight_identification(identification_selectable, delta)
+	show_interact_label(identification_selectable)
 
 
-func hightlight_identification_when_timeline_stopped(delta: float) -> void:
-	timeline_stopped_duration = timeline_stopped_duration + delta if player.timeline_stopped else 0.
+func can_select_identification(progress: float) -> bool:
+	return player.timeline_stopped and 0.475 < progress and progress < 0.6
 
+
+func hightlight_identification(identification_selectable: bool, delta: float) -> void:
+	timeline_stopped_duration = (
+		timeline_stopped_duration + delta if identification_selectable else 0.
+	)
 	if (
 		!identification_tween_in_progress
 		and (timeline_stopped_duration >= 0.25 or !increase_highlight)
@@ -61,3 +76,7 @@ func hightlight_identification_when_timeline_stopped(delta: float) -> void:
 
 func update_identification_alpha(value: float) -> void:
 	viewport_identification_mesh.material_override.albedo_color = Color(1, 1, 1, value)
+
+
+func show_interact_label(identification_selectable: bool) -> void:
+	interact_label.visible = identification_selectable
