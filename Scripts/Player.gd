@@ -11,6 +11,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var can_move := false
 var can_use_timeline := false
 var timeline_stopped := true
+var has_interacted := false
 
 var timeline_tween: Tween
 
@@ -101,7 +102,11 @@ func _process(delta: float) -> void:
 			)
 		else:
 			timeline_rotation(0)
-		if viewport.identification_selectable and Input.is_action_just_pressed("interact"):
+		if (
+			Input.is_action_just_pressed("interact")
+			and viewport.identification_selectable
+			and !has_interacted
+		):
 			handle_interact(progress)
 
 
@@ -141,6 +146,8 @@ func timeline_move_identification(progress: float) -> void:
 
 
 func handle_interact(progress: float) -> void:
+	has_interacted = true
+	can_use_timeline = false
 	timeline_identification_position = [
 		Vector3(0, 0, 0),
 		Vector3(0, 0, 0),
@@ -157,7 +164,6 @@ func handle_interact(progress: float) -> void:
 		Vector3(25, -25, 25),
 		Vector3(0, -100, 0),
 	]
-	can_use_timeline = false
 	var tween := get_tree().create_tween().set_parallel()
 	tween.tween_property(
 		identification,

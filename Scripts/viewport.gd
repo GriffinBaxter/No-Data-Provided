@@ -38,7 +38,9 @@ func handle_identification_selection(delta: float) -> void:
 
 
 func can_select_identification(progress: float) -> bool:
-	return player.timeline_stopped and 0.475 < progress and progress < 0.6
+	return (
+		player.timeline_stopped and !player.has_interacted and 0.475 < progress and progress < 0.6
+	)
 
 
 func hightlight_identification(delta: float) -> void:
