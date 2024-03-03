@@ -225,10 +225,6 @@ func update_blue_albedo(value: float) -> void:
 	inverse_table_slice.material_override["shader_parameter/blue_albedo"] = value
 
 
-func interpolate_value(n: float, final: Vector3, initial: Vector3) -> Vector3:
-	return n * final + (1 - n) * initial
-
-
 func match_cutscene() -> void:
 	const FINAL_POS := Vector3(0.4, 0.5, -10)
 	const FINAL_ROT := Vector3(55, 11.6, 0)
@@ -243,20 +239,25 @@ func match_cutscene() -> void:
 	]:
 		var tween := get_tree().create_tween().set_parallel()
 		tween.tween_property(
-			player_camera, "global_position", interpolate_value(n[0], FINAL_POS, initial_pos), 0.5
+			player_camera,
+			"global_position",
+			UTILS.interpolate_vector(n[0], FINAL_POS, initial_pos),
+			0.5
 		)
 		tween.tween_property(
 			player_camera,
 			"global_rotation_degrees",
-			interpolate_value(n[0], FINAL_ROT, initial_rot),
+			UTILS.interpolate_vector(n[0], FINAL_ROT, initial_rot),
 			0.5
 		)
 		await get_tree().create_timer(0.5).timeout
 
 		tween.stop()
 		player_camera.fov -= 6
-		player_camera.global_position = interpolate_value(n[1], FINAL_POS, initial_pos)
-		player_camera.global_rotation_degrees = interpolate_value(n[1], FINAL_ROT, initial_rot)
+		player_camera.global_position = UTILS.interpolate_vector(n[1], FINAL_POS, initial_pos)
+		player_camera.global_rotation_degrees = UTILS.interpolate_vector(
+			n[1], FINAL_ROT, initial_rot
+		)
 
 	emit_signal("timeline_adjustable", true)
 	timeline.visible = true

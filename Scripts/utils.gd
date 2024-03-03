@@ -30,3 +30,7 @@ static func piecewise_linear_interpolation(vectors: PackedVector3Array, progress
 		x1 = vectors[ix]
 		return x0 + (x1 - x0) * t
 	return x0
+
+
+static func interpolate_vector(n: float, final: Vector3, initial: Vector3) -> Vector3:
+	return n * final + (1 - n) * initial
