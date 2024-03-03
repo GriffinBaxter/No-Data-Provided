@@ -31,7 +31,7 @@ func _process(delta: float) -> void:
 
 
 func handle_identification_selection(delta: float) -> void:
-	var progress: float = timeline.get_child(0).material_override.get_shader_parameter("progress")
+	var progress: float = player.progress
 	identification_selectable = can_select_identification(progress)
 	hightlight_identification(delta)
 	show_interact_label()

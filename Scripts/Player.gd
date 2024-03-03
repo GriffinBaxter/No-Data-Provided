@@ -4,6 +4,7 @@ const UTILS := preload("res://Scripts/utils.gd")
 const SPEED := 6.0
 const JUMP_VELOCITY := 4.5
 const SENSITIVITY := 0.002
+const JUST_UNDER_ONE := 1. - 10. ** -15.
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -12,6 +13,7 @@ var can_move := false
 var can_use_timeline := false
 var timeline_stopped := true
 var has_interacted := false
+var progress := 0.
 
 var timeline_tween: Tween
 
@@ -87,19 +89,18 @@ func _process(delta: float) -> void:
 
 	if can_use_timeline:
 		var timeline_material: ShaderMaterial = timeline.get_child(0).material_override
-		var progress: float = timeline_material.get_shader_parameter("progress")
 		if Input.is_action_pressed("left") and Input.is_action_pressed("right"):
 			timeline_rotation(0)
 		elif Input.is_action_pressed("left"):
 			timeline_rotation(-0.2)
-			progress -= 0.15 * delta
-			timeline_move(timeline_material, progress if progress >= 0 else 0.)
+			var new_progress := progress - 0.15 * delta
+			progress = new_progress if new_progress >= 0 else 0.
+			timeline_move(timeline_material)
 		elif Input.is_action_pressed("right"):
 			timeline_rotation(0.2)
-			progress += 0.15 * delta
-			timeline_move(
-				timeline_material, progress if progress <= 1. - 10. ** -15. else 1. - 10. ** -15.
-			)
+			var new_progress := progress + 0.15 * delta
+			progress = new_progress if new_progress <= JUST_UNDER_ONE else JUST_UNDER_ONE
+			timeline_move(timeline_material)
 		else:
 			timeline_rotation(0)
 		if (
@@ -107,7 +108,7 @@ func _process(delta: float) -> void:
 			and viewport.identification_selectable
 			and !has_interacted
 		):
-			handle_interact(progress)
+			handle_interact()
 
 
 func timeline_rotation(rotation_y: float) -> void:
@@ -121,13 +122,13 @@ func timeline_rotation(rotation_y: float) -> void:
 	timeline_stopped = rotation_y == 0
 
 
-func timeline_move(timeline_material: ShaderMaterial, updated_progress: float) -> void:
-	timeline_material.set_shader_parameter("progress", updated_progress)
-	timeline_move_camera(updated_progress)
-	timeline_move_identification(updated_progress)
+func timeline_move(timeline_material: ShaderMaterial) -> void:
+	timeline_material.set_shader_parameter("progress", progress)
+	timeline_move_camera()
+	timeline_move_identification()
 
 
-func timeline_move_camera(progress: float) -> void:
+func timeline_move_camera() -> void:
 	camera.global_position = UTILS.piecewise_linear_interpolation(
 		[Vector3(0.4, 0.5, -10), Vector3(0, 1.75, -42)], progress
 	)
@@ -136,7 +137,7 @@ func timeline_move_camera(progress: float) -> void:
 	)
 
 
-func timeline_move_identification(progress: float) -> void:
+func timeline_move_identification() -> void:
 	identification.global_position = (UTILS.piecewise_linear_interpolation(
 		timeline_identification_position, progress
 	))
@@ -145,7 +146,7 @@ func timeline_move_identification(progress: float) -> void:
 	))
 
 
-func handle_interact(progress: float) -> void:
+func handle_interact() -> void:
 	has_interacted = true
 	can_use_timeline = false
 	timeline_identification_position = [
@@ -180,6 +181,7 @@ func handle_interact(progress: float) -> void:
 	await get_tree().create_timer(1).timeout
 
 	can_use_timeline = true
+	level.interacted_with_identification = true
 
 
 func update_can_move(movable: bool) -> void:

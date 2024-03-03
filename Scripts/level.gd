@@ -18,6 +18,7 @@ var paused := false
 var state: State = State.BEFORE_INTRO_CUTSCENE
 var player_entered_area := false
 var intro_cutscene_started := false
+var interacted_with_identification := false
 
 @onready var pause_menu_node: Control = $PauseMenu
 
@@ -148,6 +149,9 @@ func _process(_delta: float) -> void:
 		inverse_table_slice.visible = false
 		update_state(State.MATCH)
 
+	if interacted_with_identification and player.progress >= player.JUST_UNDER_ONE:
+		end_cutscene()
+
 
 func pause_menu() -> void:
 	paused = !paused
@@ -262,3 +266,8 @@ func match_cutscene() -> void:
 	emit_signal("timeline_adjustable", true)
 	timeline.visible = true
 	identification.visible = true
+
+
+func end_cutscene() -> void:
+	emit_signal("timeline_adjustable", false)
+	timeline.visible = false
