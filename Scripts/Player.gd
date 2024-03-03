@@ -14,6 +14,23 @@ var timeline_stopped := true
 
 var timeline_tween: Tween
 
+var timeline_identification_position := [
+	Vector3(0, 0, 0),
+	Vector3(0, 0, 0),
+	Vector3(0.5, 1, -20),
+	Vector3(2.345, 0.134, -34),
+	Vector3(2.325, 1.5, -47.5),
+	Vector3(2.3, 0.075, -46),
+]
+var timeline_identification_rotation := [
+	Vector3(300, -350, 100),
+	Vector3(300, -350, 100),
+	Vector3(300, -350, 100),
+	Vector3(55, -70, 0),
+	Vector3(55, -70, 180),
+	Vector3(25, -100, 220),
+]
+
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var identification: Node3D = $"../Identification"
@@ -69,24 +86,23 @@ func _process(delta: float) -> void:
 
 	if can_use_timeline:
 		var timeline_material: ShaderMaterial = timeline.get_child(0).material_override
-		var current_progress: float = timeline_material.get_shader_parameter("progress")
+		var progress: float = timeline_material.get_shader_parameter("progress")
 		if Input.is_action_pressed("left") and Input.is_action_pressed("right"):
 			timeline_rotation(0)
 		elif Input.is_action_pressed("left"):
 			timeline_rotation(-0.2)
-			var updated_progress := current_progress - 0.15 * delta
-			timeline_move(timeline_material, updated_progress if updated_progress >= 0 else 0.)
+			progress -= 0.15 * delta
+			timeline_move(timeline_material, progress if progress >= 0 else 0.)
 		elif Input.is_action_pressed("right"):
 			timeline_rotation(0.2)
-			var updated_progress := current_progress + 0.15 * delta
+			progress += 0.15 * delta
 			timeline_move(
-				timeline_material,
-				updated_progress if updated_progress <= 1. - 10. ** -15. else 1. - 10. ** -15.
+				timeline_material, progress if progress <= 1. - 10. ** -15. else 1. - 10. ** -15.
 			)
 		else:
 			timeline_rotation(0)
 		if viewport.identification_selectable and Input.is_action_just_pressed("interact"):
-			print("Interaction Pressed")
+			handle_interact(progress)
 
 
 func timeline_rotation(rotation_y: float) -> void:
@@ -116,34 +132,48 @@ func timeline_move_camera(progress: float) -> void:
 
 
 func timeline_move_identification(progress: float) -> void:
-	identification.global_position = (
-		UTILS
-		. piecewise_linear_interpolation(
-			[
-				Vector3(0, 0, 0),
-				Vector3(0, 0, 0),
-				Vector3(0.5, 1, -20),
-				Vector3(2.345, 0.134, -34),
-				Vector3(2.325, 1.5, -47.5),
-				Vector3(2.3, 0.075, -46),
-			],
-			progress
-		)
+	identification.global_position = (UTILS.piecewise_linear_interpolation(
+		timeline_identification_position, progress
+	))
+	identification.global_rotation_degrees = (UTILS.piecewise_linear_interpolation(
+		timeline_identification_rotation, progress
+	))
+
+
+func handle_interact(progress: float) -> void:
+	timeline_identification_position = [
+		Vector3(0, 0, 0),
+		Vector3(0, 0, 0),
+		Vector3(0, 0.5, -20),
+		Vector3(0, 0.5, -28),
+		Vector3(-.2, 1.25, -34),
+		Vector3(0, 1.5, -43.25),
+	]
+	timeline_identification_rotation = [
+		Vector3(300, -350, 100),
+		Vector3(300, -350, 100),
+		Vector3(300, -350, 100),
+		Vector3(55, -70, 50),
+		Vector3(25, -25, 25),
+		Vector3(0, -100, 0),
+	]
+	can_use_timeline = false
+	var tween := get_tree().create_tween().set_parallel()
+	tween.tween_property(
+		identification,
+		"global_position",
+		UTILS.piecewise_linear_interpolation(timeline_identification_position, progress),
+		1
 	)
-	identification.global_rotation_degrees = (
-		UTILS
-		. piecewise_linear_interpolation(
-			[
-				Vector3(300, -350, 100),
-				Vector3(300, -350, 100),
-				Vector3(300, -350, 100),
-				Vector3(55, -70, 0),
-				Vector3(55, -70, 180),
-				Vector3(25, -100, 220),
-			],
-			progress
-		)
+	tween.tween_property(
+		identification,
+		"global_rotation_degrees",
+		UTILS.piecewise_linear_interpolation(timeline_identification_rotation, progress),
+		1
 	)
+	await get_tree().create_timer(1).timeout
+
+	can_use_timeline = true
 
 
 func update_can_move(movable: bool) -> void:
