@@ -155,7 +155,7 @@ func handle_interact() -> void:
 		Vector3(0, 0.5, -20),
 		Vector3(0, 0.5, -28),
 		Vector3(-.2, 1.25, -34),
-		Vector3(0, 1.5, -43.25),
+		Vector3(0, 1.5, -43.5),
 	]
 	timeline_identification_rotation = [
 		Vector3(300, -350, 100),

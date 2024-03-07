@@ -271,3 +271,6 @@ func match_cutscene() -> void:
 func end_cutscene() -> void:
 	emit_signal("timeline_adjustable", false)
 	timeline.visible = false
+	var tween := get_tree().create_tween().set_parallel()
+	tween.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 2.5)
+	tween.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 2.5)
