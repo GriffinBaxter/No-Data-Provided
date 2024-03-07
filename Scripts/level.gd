@@ -27,7 +27,8 @@ var interacted_with_identification := false
 @onready var camera_shader: MeshInstance3D = $CameraShader
 @onready var last_medium_presents: Label3D = $LastMediumPresentsLabel3D
 @onready var no_data_provided: Label3D = $NoDataProvidedLabel3D
-@onready var colour_rect: ColorRect = $Control2/ColorRect
+@onready var fade_in_out: Control = $FadeInOut
+@onready var colour_rect: ColorRect = $FadeInOut/ColorRect
 
 @onready var timeline: Node3D = $Player/Head/Camera3D/Timeline
 @onready var player_camera: Camera3D = $Player/Head/Camera3D
@@ -60,6 +61,14 @@ func _process(_delta: float) -> void:
 		player_camera.global_rotation_degrees = Vector3(70, 0, 0)
 		last_medium_presents.visible = true
 		player_camera.fov = 50
+		fade_in_out.visible = true
+		colour_rect.color = Color(0, 0, 0, 1)
+		var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
+		tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
+		blink_text_with_caret(false, 3, last_medium_presents)
+		await get_tree().create_timer(3).timeout
+
+		fade_in_out.visible = false
 		await letter_by_letter(last_medium_presents, "last medium presents")
 
 		player_camera.global_position = Vector3(1.75, 3, -48.5)
@@ -272,7 +281,7 @@ func match_cutscene() -> void:
 func end_cutscene() -> void:
 	emit_signal("timeline_adjustable", false)
 	timeline.visible = false
-	colour_rect.get_parent().visible = true
+	fade_in_out.visible = true
 	var tween_1 := get_tree().create_tween().set_parallel()
 	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 4)
 	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 4)
