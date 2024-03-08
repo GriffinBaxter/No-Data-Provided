@@ -27,6 +27,8 @@ var interacted_with_identification := false
 @onready var camera_shader: MeshInstance3D = $CameraShader
 @onready var last_medium_presents: Label3D = $LastMediumPresentsLabel3D
 @onready var no_data_provided: Label3D = $NoDataProvidedLabel3D
+@onready var chapter_one: Label3D = $TableWithSlice/Table/ChapterLabel3D
+@onready var deduce: Label3D = $TableWithSlice/Table/ChapterTitleLabel3D
 @onready var fade_in_out: Control = $FadeInOut
 @onready var colour_rect: ColorRect = $FadeInOut/ColorRect
 
@@ -282,6 +284,8 @@ func end_cutscene() -> void:
 	emit_signal("timeline_adjustable", false)
 	timeline.visible = false
 	fade_in_out.visible = true
+	deduce.visible = true
+	chapter_one.visible = true
 	var tween_1 := get_tree().create_tween().set_parallel()
 	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 4)
 	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 4)

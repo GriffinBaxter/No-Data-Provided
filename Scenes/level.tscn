@@ -476,6 +476,24 @@ script = ExtResource("7_r7jlu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.4, 0)
 shape = SubResource("BoxShape3D_fpbco")
 
+[node name="ChapterLabel3D" type="Label3D" parent="TableWithSlice/Table"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, 0.08, 0, -0.08, -3.49691e-09, -0.41, 0.901, -0.08)
+visible = false
+render_priority = 1
+text = "Chapter One"
+font = ExtResource("19_clhhf")
+font_size = 310
+horizontal_alignment = 0
+
+[node name="ChapterTitleLabel3D" type="Label3D" parent="TableWithSlice/Table"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, 0.08, 0, -0.08, -3.49691e-09, -0.215, 0.901, 0.08)
+visible = false
+render_priority = 1
+text = "Deduce"
+font = ExtResource("19_clhhf")
+font_size = 310
+horizontal_alignment = 0
+
 [node name="DustParticles" type="GPUParticles3D" parent="TableWithSlice"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
 material_override = SubResource("StandardMaterial3D_x23bt")
