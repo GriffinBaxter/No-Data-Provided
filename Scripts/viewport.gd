@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 func handle_identification_selection(delta: float) -> void:
 	var progress: float = player.progress
 	identification_selectable = can_select_identification(progress)
-	hightlight_identification(delta)
+	hightlight(delta)
 
 
 func can_select_identification(progress: float) -> bool:
@@ -44,7 +44,7 @@ func can_select_identification(progress: float) -> bool:
 	)
 
 
-func hightlight_identification(delta: float) -> void:
+func hightlight(delta: float) -> void:
 	timeline_stopped_duration = (
 		timeline_stopped_duration + delta if identification_selectable else 0.
 	)
