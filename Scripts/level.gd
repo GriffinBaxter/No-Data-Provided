@@ -19,6 +19,7 @@ var state: State = State.BEFORE_INTRO_CUTSCENE
 var player_entered_area := false
 var intro_cutscene_started := false
 var interacted_with_identification := false
+var end_cutscene_started := false
 
 @onready var pause_menu_node: Control = $PauseMenu
 
@@ -67,7 +68,7 @@ func _process(_delta: float) -> void:
 		colour_rect.color = Color(0, 0, 0, 1)
 		var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
 		tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
-		blink_text_with_caret(false, 3, last_medium_presents)
+		blink_text_with_caret(3, last_medium_presents)
 		await get_tree().create_timer(3).timeout
 
 		fade_in_out.visible = false
@@ -161,7 +162,11 @@ func _process(_delta: float) -> void:
 		inverse_table_slice.visible = false
 		update_state(State.MATCH)
 
-	if interacted_with_identification and player.progress >= player.JUST_UNDER_ONE:
+	if (
+		!end_cutscene_started
+		and interacted_with_identification
+		and player.progress >= player.JUST_UNDER_ONE
+	):
 		end_cutscene()
 
 
@@ -195,23 +200,23 @@ func update_state(new_state: State, updated_from_autosave: bool = true) -> void:
 
 
 func letter_by_letter(label: Label3D, text: String) -> void:
-	await blink_text_with_caret(false, 2, label)
+	await blink_text_with_caret(2, label)
 	var current_text := ""
 	for letter in text:
 		current_text += letter
 		label.text = current_text + "|"
 		await get_tree().create_timer(0.1).timeout
-	await blink_text_with_caret(false, 3, label, text)
+	await blink_text_with_caret(3, label, text)
 
 
-func blink_text_with_caret(caret_first: bool, n: int, label: Label3D, text: String = "") -> void:
-	var caret_1 := "|" if caret_first else ""
-	var caret_2 := "" if caret_first else "|"
+func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
+	var caret := "|"
 	for _n: int in n:
-		label.text = text + caret_1
+		label.text = text
 		await get_tree().create_timer(0.5).timeout
-		label.text = text + caret_2
+		label.text = text + caret
 		await get_tree().create_timer(0.5).timeout
+	label.text = text
 
 
 func update_red_dither(value: float) -> void:
@@ -281,15 +286,19 @@ func match_cutscene() -> void:
 
 
 func end_cutscene() -> void:
+	end_cutscene_started = true
 	emit_signal("timeline_adjustable", false)
 	timeline.visible = false
 	fade_in_out.visible = true
-	deduce.visible = true
-	chapter_one.visible = true
 	var tween_1 := get_tree().create_tween().set_parallel()
-	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 4)
-	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 4)
-	await get_tree().create_timer(1).timeout
+	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 12)
+	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 12)
+	deduce.visible = true
+	await letter_by_letter(deduce, "deduce")
+
+	chapter_one.visible = true
+	letter_by_letter(chapter_one, "chapter one")
+	await get_tree().create_timer(2).timeout
 
 	var tween_2 := get_tree().create_tween().set_ease(Tween.EASE_IN)
-	tween_2.tween_property(colour_rect, "color", Color(0, 0, 0, 1), 3)
+	tween_2.tween_property(colour_rect, "color", Color(0, 0, 0, 1), 4.1)
