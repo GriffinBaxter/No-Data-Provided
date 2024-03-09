@@ -16,8 +16,8 @@ var identification_selectable := false
 
 @onready var player: CharacterBody3D = $"../../../Player"
 
-@onready var timeline: Node3D = $"../../../Player/Head/Camera3D/Timeline"
-@onready var interact_label: Label3D = $"../../../Player/Head/Camera3D/Timeline/InteractLabel3D"
+@onready var timeline: Node3D = $Camera3DNoShader/Timeline
+@onready var interact_label: Label3D = $Camera3DNoShader/Timeline/InteractLabel3D
 
 
 func _process(delta: float) -> void:

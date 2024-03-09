@@ -33,7 +33,7 @@ var end_cutscene_started := false
 @onready var fade_in_out: Control = $FadeInOut
 @onready var colour_rect: ColorRect = $FadeInOut/ColorRect
 
-@onready var timeline: Node3D = $Player/Head/Camera3D/Timeline
+@onready var timeline: Node3D = $Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline
 @onready var player_camera: Camera3D = $Player/Head/Camera3D
 @onready var player_head: Node3D = $Player/Head
 @onready var save_load: Node = $SaveLoad

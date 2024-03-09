@@ -4,8 +4,6 @@ uniform float progress : hint_range(0, 1) = 0;
 
 void fragment() {
 	if (UV.x < progress / 3.) {
-		ALBEDO = vec3(1, 1, 1);
-	} else {
-		ALBEDO = vec3(0, 0, 0);
+		EMISSION = vec3(1, 1, 1);
 	}
 }

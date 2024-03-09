@@ -358,18 +358,6 @@ fov = 80.0
 [node name="Pickup" type="Node3D" parent="Player/Head/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3)
 
-[node name="Timeline" parent="Player/Head/Camera3D" instance=ExtResource("24_xbjqi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.5)
-visible = false
-
-[node name="InteractLabel3D" type="Label3D" parent="Player/Head/Camera3D/Timeline"]
-transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, -0.05, -0.5)
-visible = false
-render_priority = 1
-text = "F to Interact"
-font = ExtResource("19_clhhf")
-font_size = 310
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_d8wt3")
@@ -588,6 +576,18 @@ material_override = SubResource("StandardMaterial3D_1slep")
 
 [node name="Camera3DNoShader" type="Camera3D" parent="Viewport/SubViewportContainer/SubViewport"]
 fov = 80.0
+
+[node name="Timeline" parent="Viewport/SubViewportContainer/SubViewport/Camera3DNoShader" instance=ExtResource("24_xbjqi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.45)
+visible = false
+
+[node name="InteractLabel3D" type="Label3D" parent="Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline"]
+transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, -0.05, -0.5)
+visible = false
+render_priority = 1
+text = "F to Interact"
+font = ExtResource("19_clhhf")
+font_size = 310
 
 [node name="FadeInOut" type="Control" parent="."]
 visible = false
