@@ -37,7 +37,8 @@ var timeline_identification_rotation := [
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 @onready var identification: Node3D = $"../Identification"
-@onready var timeline: Node3D = $"../Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline"
+@onready
+var timeline: Node3D = $"../Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline"
 @onready var level: Node3D = $".."
 @onready var sub_viewport: SubViewport = $"../Viewport/SubViewportContainer/SubViewport"
 
