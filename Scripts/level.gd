@@ -280,14 +280,31 @@ func match_cutscene() -> void:
 		)
 
 	emit_signal("timeline_adjustable", true)
-	timeline.visible = true
+	timeline_out_in_animation(false)
 	identification.visible = true
+
+
+func timeline_out_in_animation(out: bool) -> void:
+	const OUT_POS = Vector3(0, -0.25, -0.45)
+	const IN_POS = Vector3(0, -0.15, -0.45)
+	var timeline_tween := get_tree().create_tween()
+	if out:
+		timeline_tween.tween_property(timeline, "position", OUT_POS, 0.5)
+		await get_tree().create_timer(0.5).timeout
+
+		timeline.visible = false
+	else:
+		timeline.position = OUT_POS
+		timeline.visible = true
+		timeline_tween.tween_property(timeline, "position", IN_POS, 0.5)
+		await get_tree().create_timer(0.5).timeout
+	timeline_tween.stop()
 
 
 func end_cutscene() -> void:
 	end_cutscene_started = true
 	emit_signal("timeline_adjustable", false)
-	timeline.visible = false
+	timeline_out_in_animation(true)
 	fade_in_out.visible = true
 	var tween_1 := get_tree().create_tween().set_parallel()
 	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 13)
