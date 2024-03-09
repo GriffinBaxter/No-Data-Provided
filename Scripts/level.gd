@@ -252,37 +252,42 @@ func match_cutscene() -> void:
 	var initial_pos := player_camera.global_position
 	var initial_rot := player_camera.global_rotation_degrees
 	for n: PackedFloat64Array in [
-		[1. / 10., 2. / 10.],
-		[3. / 10., 4. / 10.],
-		[5. / 10., 6. / 10.],
-		[7. / 10., 8. / 10.],
-		[9. / 10., 1]
+		[1. / 9., 2. / 9.],
+		[3. / 9., 4. / 9.],
+		[5. / 9., 6. / 9.],
+		[7. / 9., 8. / 9.],
 	]:
-		var tween := get_tree().create_tween().set_parallel()
-		tween.tween_property(
-			player_camera,
-			"global_position",
-			UTILS.interpolate_vector(n[0], FINAL_POS, initial_pos),
-			0.5
-		)
-		tween.tween_property(
-			player_camera,
-			"global_rotation_degrees",
-			UTILS.interpolate_vector(n[0], FINAL_ROT, initial_rot),
-			0.5
-		)
-		await get_tree().create_timer(0.5).timeout
+		await match_tweens(n[0], FINAL_POS, initial_pos, FINAL_ROT, initial_rot)
 
-		tween.stop()
 		player_camera.fov -= 6
 		player_camera.global_position = UTILS.interpolate_vector(n[1], FINAL_POS, initial_pos)
 		player_camera.global_rotation_degrees = UTILS.interpolate_vector(
 			n[1], FINAL_ROT, initial_rot
 		)
 
+	await match_tweens(1, FINAL_POS, initial_pos, FINAL_ROT, initial_rot)
+
 	emit_signal("timeline_adjustable", true)
 	timeline_out_in_animation(false)
 	identification.visible = true
+
+
+func match_tweens(
+	n: float, final_pos: Vector3, initial_pos: Vector3, final_rot: Vector3, initial_rot: Vector3
+) -> void:
+	var tween := get_tree().create_tween().set_parallel()
+	tween.tween_property(
+		player_camera, "global_position", UTILS.interpolate_vector(n, final_pos, initial_pos), 0.5
+	)
+	tween.tween_property(
+		player_camera,
+		"global_rotation_degrees",
+		UTILS.interpolate_vector(n, final_rot, initial_rot),
+		0.5
+	)
+	await get_tree().create_timer(0.5).timeout
+
+	tween.stop()
 
 
 func timeline_out_in_animation(out: bool) -> void:
