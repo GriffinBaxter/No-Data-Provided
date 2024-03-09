@@ -294,6 +294,7 @@ func end_cutscene() -> void:
 	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 13)
 	recall.visible = true
 	await letter_by_letter(recall, "recall")
+
 	await get_tree().create_timer(1).timeout
 
 	chapter_one.visible = true
