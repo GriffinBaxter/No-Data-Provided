@@ -39,7 +39,7 @@ var timeline_identification_rotation := [
 @onready var identification: Node3D = $"../Identification"
 @onready var timeline: Node3D = $Head/Camera3D/Timeline
 @onready var level: Node3D = $".."
-@onready var viewport: SubViewport = $"../Control/SubViewportContainer/SubViewport"
+@onready var sub_viewport: SubViewport = $"../Viewport/SubViewportContainer/SubViewport"
 
 
 func _ready() -> void:
@@ -105,7 +105,7 @@ func _process(delta: float) -> void:
 			timeline_rotation(0)
 		if (
 			Input.is_action_just_pressed("interact")
-			and viewport.identification_selectable
+			and sub_viewport.identification_selectable
 			and !has_interacted
 		):
 			handle_interact()
