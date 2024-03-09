@@ -618,7 +618,6 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0)
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_g66hf")]
-process_priority = 6
 visible = false
 
 [node name="SaveLoad" type="Node" parent="."]
