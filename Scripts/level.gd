@@ -172,6 +172,7 @@ func _process(_delta: float) -> void:
 
 func pause_menu() -> void:
 	paused = !paused
+	player_camera.attributes.dof_blur_far_enabled = !paused
 	if paused:
 		pause_menu_node.show()
 		Engine.time_scale = 0
