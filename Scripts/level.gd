@@ -29,7 +29,7 @@ var end_cutscene_started := false
 @onready var last_medium_presents: Label3D = $LastMediumPresentsLabel3D
 @onready var no_data_provided: Label3D = $NoDataProvidedLabel3D
 @onready var chapter_one: Label3D = $TableWithSlice/Table/ChapterLabel3D
-@onready var deduce: Label3D = $TableWithSlice/Table/ChapterTitleLabel3D
+@onready var recall: Label3D = $TableWithSlice/Table/ChapterTitleLabel3D
 @onready var fade_in_out: Control = $FadeInOut
 @onready var colour_rect: ColorRect = $FadeInOut/ColorRect
 
@@ -210,11 +210,10 @@ func letter_by_letter(label: Label3D, text: String) -> void:
 
 
 func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
-	var caret := "|"
 	for _n: int in n:
 		label.text = text
 		await get_tree().create_timer(0.5).timeout
-		label.text = text + caret
+		label.text = text + "|"
 		await get_tree().create_timer(0.5).timeout
 	label.text = text
 
@@ -291,10 +290,11 @@ func end_cutscene() -> void:
 	timeline.visible = false
 	fade_in_out.visible = true
 	var tween_1 := get_tree().create_tween().set_parallel()
-	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 12)
-	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 12)
-	deduce.visible = true
-	await letter_by_letter(deduce, "deduce")
+	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 13)
+	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 13)
+	recall.visible = true
+	await letter_by_letter(recall, "recall")
+	await get_tree().create_timer(1).timeout
 
 	chapter_one.visible = true
 	letter_by_letter(chapter_one, "chapter one")
