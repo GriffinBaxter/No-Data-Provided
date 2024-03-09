@@ -17,7 +17,7 @@ var identification_selectable := false
 @onready var player: CharacterBody3D = $"../../../Player"
 
 @onready var timeline: Node3D = $Camera3DNoShader/Timeline
-@onready var interact_label: Label3D = $Camera3DNoShader/Timeline/InteractLabel3D
+@onready var interact_label: Label3D = $Camera3DNoShader/InteractLabel3D
 
 
 func _process(delta: float) -> void:
@@ -29,12 +29,13 @@ func _process(delta: float) -> void:
 		var to_match: Variant = objects[1]
 		match_movement(viewport, to_match)
 
+	move_interact_label_with_identification()
+
 
 func handle_identification_selection(delta: float) -> void:
 	var progress: float = player.progress
 	identification_selectable = can_select_identification(progress)
 	hightlight_identification(delta)
-	show_interact_label()
 
 
 func can_select_identification(progress: float) -> bool:
@@ -52,14 +53,21 @@ func hightlight_identification(delta: float) -> void:
 		and (timeline_stopped_duration >= 0.25 or !increase_highlight)
 	):
 		identification_tween_in_progress = true
-		var tween := get_tree().create_tween()
+		var duration := 1. if increase_highlight else 0.5
+		var tween := get_tree().create_tween().set_parallel()
 		tween.tween_method(
 			update_identification_alpha,
 			ALPHA_VALUES[0] if increase_highlight else ALPHA_VALUES[1],
 			ALPHA_VALUES[1] if increase_highlight else ALPHA_VALUES[0],
-			1
+			duration
 		)
-		await get_tree().create_timer(1).timeout
+		tween.tween_property(
+			interact_label,
+			"modulate",
+			Color(1, 1, 1, 1) if increase_highlight else Color(1, 1, 1, 0),
+			duration
+		)
+		await get_tree().create_timer(duration).timeout
 
 		tween.stop()
 		increase_highlight = !increase_highlight
@@ -70,8 +78,8 @@ func update_identification_alpha(value: float) -> void:
 	viewport_identification_mesh.material_override.albedo_color = Color(1, 1, 1, value)
 
 
-func show_interact_label() -> void:
-	interact_label.visible = identification_selectable
+func move_interact_label_with_identification() -> void:
+	interact_label.global_position = identification.global_position + Vector3(0, 0.2, 0)
 
 
 func match_movement_camera() -> void:

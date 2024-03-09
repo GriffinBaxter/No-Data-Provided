@@ -583,10 +583,11 @@ fov = 80.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.45)
 visible = false
 
-[node name="InteractLabel3D" type="Label3D" parent="Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline"]
-transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, -0.05, -0.5)
-visible = false
+[node name="InteractLabel3D" type="Label3D" parent="Viewport/SubViewportContainer/SubViewport/Camera3DNoShader"]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
 render_priority = 1
+modulate = Color(1, 1, 1, 0)
+outline_modulate = Color(0, 0, 0, 0)
 text = "F to Interact"
 font = ExtResource("19_clhhf")
 font_size = 310
