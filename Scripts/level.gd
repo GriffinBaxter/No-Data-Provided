@@ -79,7 +79,7 @@ func _process(_delta: float) -> void:
 
 		last_medium_presents.visible = false
 		no_data_provided.visible = true
-		setup_motion_cutscene("Hallway/no_data_provided.bvh")
+		setup_motion_cutscene("Hallway/no_data_provided.bvh", 6.6)
 		no_data_provided_motion = true
 		await letter_by_letter(no_data_provided, "no data provided")
 
@@ -240,8 +240,10 @@ func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
 	label.text = text
 
 
-func setup_motion_cutscene(path: String) -> void:
+func setup_motion_cutscene(path: String, custom_time: float = 0) -> void:
 	bvh_object = UTILS.get_bvh_object(path)
+	if custom_time:
+		bvh_object.time = custom_time
 	setup_timer(bvh_object.time as float)
 
 
