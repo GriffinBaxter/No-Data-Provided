@@ -20,6 +20,9 @@ var player_entered_area := false
 var intro_cutscene_started := false
 var interacted_with_identification := false
 var end_cutscene_started := false
+var no_data_provided_motion := false
+var timer: Timer
+var bvh_object: Dictionary
 
 @onready var pause_menu_node: Control = $PauseMenu
 
@@ -74,12 +77,13 @@ func _process(_delta: float) -> void:
 		fade_in_out.visible = false
 		await letter_by_letter(last_medium_presents, "last medium presents")
 
-		player_camera.global_position = Vector3(1.75, 3, -48.5)
-		player_camera.global_rotation_degrees = Vector3(0, 150, 0)
 		last_medium_presents.visible = false
 		no_data_provided.visible = true
+		setup_motion_cutscene("Hallway/no_data_provided.bvh")
+		no_data_provided_motion = true
 		await letter_by_letter(no_data_provided, "no data provided")
 
+		no_data_provided_motion = false
 		no_data_provided.visible = false
 		player_camera.fov = 80
 		animation_player.play("hallway_intro")
@@ -89,6 +93,23 @@ func _process(_delta: float) -> void:
 		await get_tree().create_timer(0.25).timeout
 
 		update_state(State.AFTER_INTRO_CUTSCENE)
+
+	if no_data_provided_motion:
+		var progress: float = (bvh_object.time - timer.time_left) / bvh_object.time
+		player_camera.global_position = (
+			UTILS.piecewise_linear_interpolation(
+				bvh_object.position as PackedVector3Array, progress
+			)
+			- bvh_object.position[-1]
+			+ Vector3(1.5, 2.75, -48.5)
+		)
+		player_camera.global_rotation_degrees = (
+			UTILS.piecewise_linear_interpolation(
+				bvh_object.rotation as PackedVector3Array, progress
+			)
+			- bvh_object.rotation[-1]
+			+ Vector3(0, 150, 0)
+		)
 
 	if (
 		state < State.MATCH_ANIMATION
@@ -217,6 +238,20 @@ func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
 		label.text = text + "|"
 		await get_tree().create_timer(0.5).timeout
 	label.text = text
+
+
+func setup_motion_cutscene(path: String) -> void:
+	bvh_object = UTILS.get_bvh_object(path)
+	setup_timer(bvh_object.time as float)
+
+
+func setup_timer(wait_time: float) -> void:
+	timer = Timer.new()
+	add_child(timer)
+	timer.one_shot = true
+	timer.autostart = true
+	timer.wait_time = wait_time
+	timer.start()
 
 
 func update_red_dither(value: float) -> void:

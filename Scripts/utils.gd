@@ -36,8 +36,8 @@ static func interpolate_vector(n: float, final: Vector3, initial: Vector3) -> Ve
 	return n * final + (1 - n) * initial
 
 
-static func convert_point_bvh_file_to_vector_arrays(bvh_strings: PackedStringArray) -> Dictionary:
-	var vector_arrays := {"position": [], "rotation": []}
+static func convert_point_bvh_file_to_object(bvh_strings: PackedStringArray) -> Dictionary:
+	var bvh_object := {"position": [], "rotation": []}
 	var motion_string_index := bvh_strings.find("MOTION")
 	var frames := bvh_strings.slice(motion_string_index + 3, -1)
 	for frame in frames:
@@ -45,10 +45,18 @@ static func convert_point_bvh_file_to_vector_arrays(bvh_strings: PackedStringArr
 		var float_channels: PackedFloat32Array = []
 		for channel in channels:
 			float_channels.append(float(channel))
-		vector_arrays.position.append(
-			Vector3(float_channels[0], float_channels[1], float_channels[2])
-		)
-		vector_arrays.rotation.append(
-			Vector3(float_channels[3], float_channels[4], float_channels[5])
-		)
-	return vector_arrays
+		bvh_object.position.append(Vector3(float_channels[0], float_channels[1], float_channels[2]))
+		bvh_object.rotation.append(Vector3(float_channels[3], float_channels[4], float_channels[5]))
+	var num_frames := int(bvh_strings[motion_string_index + 1].substr(8))
+	var frame_time := float(bvh_strings[motion_string_index + 2].substr(12))
+	bvh_object.time = num_frames * frame_time
+	return bvh_object
+
+
+static func get_bvh_object(path: String) -> Dictionary:
+	var motion_file := FileAccess.open("res://Motion/" + path, FileAccess.READ)
+	var motion_strings: PackedStringArray = []
+	while not motion_file.eof_reached():
+		motion_strings.append(motion_file.get_line())
+	motion_file.close()
+	return convert_point_bvh_file_to_object(motion_strings)
