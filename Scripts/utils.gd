@@ -34,3 +34,21 @@ static func piecewise_linear_interpolation(vectors: PackedVector3Array, progress
 
 static func interpolate_vector(n: float, final: Vector3, initial: Vector3) -> Vector3:
 	return n * final + (1 - n) * initial
+
+
+static func convert_point_bvh_file_to_vector_arrays(bvh_strings: PackedStringArray) -> Dictionary:
+	var vector_arrays := {"position": [], "rotation": []}
+	var motion_string_index := bvh_strings.find("MOTION")
+	var frames := bvh_strings.slice(motion_string_index + 3, -1)
+	for frame in frames:
+		var channels := frame.split(", ")
+		var float_channels: PackedFloat32Array = []
+		for channel in channels:
+			float_channels.append(float(channel))
+		vector_arrays.position.append(
+			Vector3(float_channels[0], float_channels[1], float_channels[2])
+		)
+		vector_arrays.rotation.append(
+			Vector3(float_channels[3], float_channels[4], float_channels[5])
+		)
+	return vector_arrays
