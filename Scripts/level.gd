@@ -6,23 +6,29 @@ signal timeline_adjustable
 signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
+enum Motion { NONE, LAST_MEDIUM_PRESENTS, NO_DATA_PROVIDED }
 
 const UTILS := preload("res://Scripts/utils.gd")
 const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
 const STATES_SAVABLE: Array[State] = [
 	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
 ]
+const MOTION_FINAL_POS_AND_ROT := {
+	Motion.LAST_MEDIUM_PRESENTS: [Vector3(0, -1, 1), Vector3(70, 0, 0)],
+	Motion.NO_DATA_PROVIDED: [Vector3(1.5, 2.75, -48.5), Vector3(0, 150, 0)],
+}
 const LEVEL := 0
 
 var paused := false
 var state: State = State.BEFORE_INTRO_CUTSCENE
+var current_motion: Motion = Motion.NONE
 var player_entered_area := false
-var intro_cutscene_started := false
 var interacted_with_identification := false
-var end_cutscene_started := false
-var no_data_provided_motion := false
 var timer: Timer
 var bvh_object: Dictionary
+
+var intro_cutscene_started := false
+var end_cutscene_started := false
 
 @onready var pause_menu_node: Control = $PauseMenu
 
@@ -63,8 +69,6 @@ func _process(_delta: float) -> void:
 
 	if state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started:
 		intro_cutscene_started = true
-		player_camera.global_position = Vector3(0, -1, 1)
-		player_camera.global_rotation_degrees = Vector3(70, 0, 0)
 		last_medium_presents.visible = true
 		player_camera.fov = 50
 		fade_in_out.visible = true
@@ -72,6 +76,7 @@ func _process(_delta: float) -> void:
 		var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
 		tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
 		blink_text_with_caret(3, last_medium_presents)
+		setup_motion_cutscene("Hallway/last_medium_presents.bvh", Motion.LAST_MEDIUM_PRESENTS, 10)
 		await get_tree().create_timer(3).timeout
 
 		fade_in_out.visible = false
@@ -79,11 +84,9 @@ func _process(_delta: float) -> void:
 
 		last_medium_presents.visible = false
 		no_data_provided.visible = true
-		setup_motion_cutscene("Hallway/no_data_provided.bvh", 6.6)
-		no_data_provided_motion = true
+		setup_motion_cutscene("Hallway/no_data_provided.bvh", Motion.NO_DATA_PROVIDED, 6.6)
 		await letter_by_letter(no_data_provided, "no data provided")
 
-		no_data_provided_motion = false
 		no_data_provided.visible = false
 		player_camera.fov = 80
 		animation_player.play("hallway_intro")
@@ -94,21 +97,10 @@ func _process(_delta: float) -> void:
 
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
-	if no_data_provided_motion:
-		var progress: float = (bvh_object.time - timer.time_left) / bvh_object.time
-		player_camera.global_position = (
-			UTILS.piecewise_linear_interpolation(
-				bvh_object.position as PackedVector3Array, progress
-			)
-			- bvh_object.position[-1]
-			+ Vector3(1.5, 2.75, -48.5)
-		)
-		player_camera.global_rotation_degrees = (
-			UTILS.piecewise_linear_interpolation(
-				bvh_object.rotation as PackedVector3Array, progress
-			)
-			- bvh_object.rotation[-1]
-			+ Vector3(0, 150, 0)
+	if current_motion != Motion.NONE:
+		update_camera_with_motion(
+			MOTION_FINAL_POS_AND_ROT[current_motion][0] as Vector3,
+			MOTION_FINAL_POS_AND_ROT[current_motion][1] as Vector3,
 		)
 
 	if (
@@ -240,11 +232,12 @@ func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
 	label.text = text
 
 
-func setup_motion_cutscene(path: String, custom_time: float = 0) -> void:
+func setup_motion_cutscene(path: String, motion: Motion, custom_time: float = 0) -> void:
 	bvh_object = UTILS.get_bvh_object(path)
 	if custom_time:
 		bvh_object.time = custom_time
 	setup_timer(bvh_object.time as float)
+	current_motion = motion
 
 
 func setup_timer(wait_time: float) -> void:
@@ -254,6 +247,27 @@ func setup_timer(wait_time: float) -> void:
 	timer.autostart = true
 	timer.wait_time = wait_time
 	timer.start()
+
+
+func update_camera_with_motion(final_position: Vector3, final_rotation: Vector3) -> void:
+	if timer.time_left <= 0 and current_motion != Motion.NONE:
+		current_motion = Motion.NONE
+	else:
+		var progress: float = (bvh_object.time - timer.time_left) / bvh_object.time
+		player_camera.global_position = (
+			UTILS.piecewise_linear_interpolation(
+				bvh_object.position as PackedVector3Array, progress
+			)
+			- bvh_object.position[-1]
+			+ final_position
+		)
+		player_camera.global_rotation_degrees = (
+			UTILS.piecewise_linear_interpolation(
+				bvh_object.rotation as PackedVector3Array, progress
+			)
+			- bvh_object.rotation[-1]
+			+ final_rotation
+		)
 
 
 func update_red_dither(value: float) -> void:
