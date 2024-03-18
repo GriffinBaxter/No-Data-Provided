@@ -14,6 +14,7 @@ var can_use_timeline := false
 var timeline_stopped := true
 var has_interacted := false
 var progress := 0.
+var timeline_bvh: Dictionary
 
 var timeline_tween: Tween
 
@@ -46,6 +47,7 @@ var timeline: Node3D = $"../Viewport/SubViewportContainer/SubViewport/Camera3DNo
 func _ready() -> void:
 	level.movable.connect(update_can_move)
 	level.timeline_adjustable.connect(update_can_use_timeline)
+	timeline_bvh = UTILS.get_bvh_dictionary("Hallway/timeline.bvh")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -130,11 +132,15 @@ func timeline_move(timeline_material: ShaderMaterial) -> void:
 
 
 func timeline_move_camera() -> void:
-	camera.global_position = UTILS.piecewise_linear_interpolation(
-		[Vector3(0.4, 0.5, -10), Vector3(0, 1.75, -42)], progress
+	camera.global_position = (
+		UTILS.piecewise_linear_interpolation(timeline_bvh.position as PackedVector3Array, progress)
+		- timeline_bvh.position[-1]
+		+ Vector3(0, 1.75, -10)
+		+ progress * Vector3(0, 0, -32)
 	)
-	camera.global_rotation_degrees = UTILS.piecewise_linear_interpolation(
-		[Vector3(55, 11.6, 0), Vector3(-30, -50, 5), Vector3(0, 0, 0)], progress
+	camera.global_rotation_degrees = (
+		UTILS.piecewise_linear_interpolation(timeline_bvh.rotation as PackedVector3Array, progress)
+		- timeline_bvh.rotation[-1]
 	)
 
 

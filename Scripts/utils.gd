@@ -53,7 +53,7 @@ static func convert_point_bvh_file_to_object(bvh_strings: PackedStringArray) -> 
 	return bvh_object
 
 
-static func get_bvh_object(path: String) -> Dictionary:
+static func get_bvh_dictionary(path: String) -> Dictionary:
 	var motion_file := FileAccess.open("res://Motion/" + path, FileAccess.READ)
 	var motion_strings: PackedStringArray = []
 	while not motion_file.eof_reached():

@@ -6,16 +6,17 @@ signal timeline_adjustable
 signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
-enum Motion { NONE, LAST_MEDIUM_PRESENTS, NO_DATA_PROVIDED }
+enum Motion { NONE, LAST_MEDIUM_PRESENTS, NO_DATA_PROVIDED, HALLWAY_INTRO }
 
 const UTILS := preload("res://Scripts/utils.gd")
 const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
 const STATES_SAVABLE: Array[State] = [
 	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
 ]
-const MOTION_FINAL_POS_AND_ROT := {
+const MOTION_FINAL_AND_INITIAL_DELTA := {
 	Motion.LAST_MEDIUM_PRESENTS: [Vector3(0, -1, 1), Vector3(70, 0, 0)],
 	Motion.NO_DATA_PROVIDED: [Vector3(1.5, 2.75, -48.5), Vector3(0, 150, 0)],
+	Motion.HALLWAY_INTRO: [Vector3(0, 1.75, 0), Vector3(0, -180, 0), Vector3(0, 0, -6)],
 }
 const LEVEL := 0
 
@@ -25,7 +26,7 @@ var current_motion: Motion = Motion.NONE
 var player_entered_area := false
 var interacted_with_identification := false
 var timer: Timer
-var bvh_object: Dictionary
+var bvh: Dictionary
 
 var intro_cutscene_started := false
 var end_cutscene_started := false
@@ -90,6 +91,7 @@ func _process(_delta: float) -> void:
 		no_data_provided.visible = false
 		player_camera.fov = 80
 		animation_player.play("hallway_intro")
+		setup_motion_cutscene("Hallway/intro.bvh", Motion.HALLWAY_INTRO, 4.75)
 		await get_tree().create_timer(4.75).timeout
 
 		wall_closing_dust_particles.emitting = true
@@ -99,8 +101,18 @@ func _process(_delta: float) -> void:
 
 	if current_motion != Motion.NONE:
 		update_camera_with_motion(
-			MOTION_FINAL_POS_AND_ROT[current_motion][0] as Vector3,
-			MOTION_FINAL_POS_AND_ROT[current_motion][1] as Vector3,
+			MOTION_FINAL_AND_INITIAL_DELTA[current_motion][0] as Vector3,
+			MOTION_FINAL_AND_INITIAL_DELTA[current_motion][1] as Vector3,
+			(
+				MOTION_FINAL_AND_INITIAL_DELTA[current_motion][2] as Vector3
+				if MOTION_FINAL_AND_INITIAL_DELTA[current_motion].size() >= 3
+				else Vector3(0, 0, 0)
+			),
+			(
+				MOTION_FINAL_AND_INITIAL_DELTA[current_motion][3] as Vector3
+				if MOTION_FINAL_AND_INITIAL_DELTA[current_motion].size() >= 4
+				else Vector3(0, 0, 0)
+			),
 		)
 
 	if (
@@ -233,10 +245,10 @@ func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
 
 
 func setup_motion_cutscene(path: String, motion: Motion, custom_time: float = 0) -> void:
-	bvh_object = UTILS.get_bvh_object(path)
+	bvh = UTILS.get_bvh_dictionary(path)
 	if custom_time:
-		bvh_object.time = custom_time
-	setup_timer(bvh_object.time as float)
+		bvh.time = custom_time
+	setup_timer(bvh.time as float)
 	current_motion = motion
 
 
@@ -249,24 +261,27 @@ func setup_timer(wait_time: float) -> void:
 	timer.start()
 
 
-func update_camera_with_motion(final_position: Vector3, final_rotation: Vector3) -> void:
+func update_camera_with_motion(
+	final_position: Vector3,
+	final_rotation: Vector3,
+	initial_position_delta: Vector3,
+	initial_rotation_delta: Vector3,
+) -> void:
 	if timer.time_left <= 0 and current_motion != Motion.NONE:
 		current_motion = Motion.NONE
 	else:
-		var progress: float = (bvh_object.time - timer.time_left) / bvh_object.time
+		var progress: float = (bvh.time - timer.time_left) / bvh.time
 		player_camera.global_position = (
-			UTILS.piecewise_linear_interpolation(
-				bvh_object.position as PackedVector3Array, progress
-			)
-			- bvh_object.position[-1]
+			UTILS.piecewise_linear_interpolation(bvh.position as PackedVector3Array, progress)
+			- bvh.position[-1]
 			+ final_position
+			+ (1 - progress) * initial_position_delta
 		)
 		player_camera.global_rotation_degrees = (
-			UTILS.piecewise_linear_interpolation(
-				bvh_object.rotation as PackedVector3Array, progress
-			)
-			- bvh_object.rotation[-1]
+			UTILS.piecewise_linear_interpolation(bvh.rotation as PackedVector3Array, progress)
+			- bvh.rotation[-1]
 			+ final_rotation
+			+ (1 - progress) * initial_rotation_delta
 		)
 
 
@@ -298,8 +313,11 @@ func update_blue_albedo(value: float) -> void:
 
 
 func match_cutscene() -> void:
-	const FINAL_POS := Vector3(0.4, 0.5, -10)
-	const FINAL_ROT := Vector3(55, 11.6, 0)
+	var timeline_bvh := UTILS.get_bvh_dictionary("Hallway/timeline.bvh")
+	var final_pos := (
+		timeline_bvh.position[0] - timeline_bvh.position[-1] + Vector3(0, 1.75, -10) as Vector3
+	)
+	var final_rot := timeline_bvh.rotation[0] - timeline_bvh.rotation[-1] as Vector3
 	var initial_pos := player_camera.global_position
 	var initial_rot := player_camera.global_rotation_degrees
 	for n: PackedFloat64Array in [
@@ -308,15 +326,15 @@ func match_cutscene() -> void:
 		[5. / 9., 6. / 9.],
 		[7. / 9., 8. / 9.],
 	]:
-		await match_tweens(n[0], FINAL_POS, initial_pos, FINAL_ROT, initial_rot)
+		await match_tweens(n[0], final_pos, initial_pos, final_rot, initial_rot)
 
 		player_camera.fov -= 6
-		player_camera.global_position = UTILS.interpolate_vector(n[1], FINAL_POS, initial_pos)
+		player_camera.global_position = UTILS.interpolate_vector(n[1], final_pos, initial_pos)
 		player_camera.global_rotation_degrees = UTILS.interpolate_vector(
-			n[1], FINAL_ROT, initial_rot
+			n[1], final_rot, initial_rot
 		)
 
-	await match_tweens(1, FINAL_POS, initial_pos, FINAL_ROT, initial_rot)
+	await match_tweens(1, final_pos, initial_pos, final_rot, initial_rot)
 
 	emit_signal("timeline_adjustable", true)
 	timeline_out_in_animation(false)
