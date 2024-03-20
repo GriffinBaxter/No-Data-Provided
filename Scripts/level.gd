@@ -91,7 +91,7 @@ func _process(_delta: float) -> void:
 		no_data_provided.visible = false
 		player_camera.fov = 80
 		animation_player.play("hallway_intro")
-		setup_motion_cutscene("Hallway/intro.bvh", Motion.HALLWAY_INTRO, 4.75)
+		setup_motion_cutscene("Hallway/intro.bvh", Motion.HALLWAY_INTRO, 4.75, 0.1)
 		await get_tree().create_timer(4.75).timeout
 
 		wall_closing_dust_particles.emitting = true
@@ -244,10 +244,10 @@ func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
 	label.text = text
 
 
-func setup_motion_cutscene(path: String, motion: Motion, custom_time: float = 0) -> void:
-	bvh = UTILS.get_bvh_dictionary(path)
-	if custom_time:
-		bvh.time = custom_time
+func setup_motion_cutscene(
+	path: String, motion: Motion, custom_time: float = 0, resolution: float = 1
+) -> void:
+	bvh = UTILS.get_bvh_dictionary(path, custom_time, resolution)
 	setup_timer(bvh.time as float)
 	current_motion = motion
 

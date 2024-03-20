@@ -36,27 +36,36 @@ static func interpolate_vector(n: float, final: Vector3, initial: Vector3) -> Ve
 	return n * final + (1 - n) * initial
 
 
-static func convert_point_bvh_file_to_object(bvh_strings: PackedStringArray) -> Dictionary:
+static func convert_point_bvh_file_to_object(
+	bvh_strings: PackedStringArray, custom_time: float = 0, resolution: float = 1
+) -> Dictionary:
 	var bvh_object := {"position": [], "rotation": []}
 	var motion_string_index := bvh_strings.find("MOTION")
 	var frames := bvh_strings.slice(motion_string_index + 3, -1)
-	for frame in frames:
-		var channels := frame.split(", ")
-		var float_channels: PackedFloat32Array = []
-		for channel in channels:
-			float_channels.append(float(channel))
-		bvh_object.position.append(Vector3(float_channels[0], float_channels[1], float_channels[2]))
-		bvh_object.rotation.append(Vector3(float_channels[3], float_channels[4], float_channels[5]))
-	var num_frames := int(bvh_strings[motion_string_index + 1].substr(8))
-	var frame_time := float(bvh_strings[motion_string_index + 2].substr(12))
-	bvh_object.time = num_frames * frame_time
+	for frame_index in frames.size():
+		if frame_index % snappedi(1 / resolution, 1) == 0:
+			var channels := frames[frame_index].split(", ")
+			bvh_object.position.append(
+				Vector3(float(channels[0]), float(channels[1]), float(channels[2]))
+			)
+			bvh_object.rotation.append(
+				Vector3(float(channels[3]), float(channels[4]), float(channels[5]))
+			)
+	if custom_time:
+		bvh_object.time = custom_time
+	else:
+		var num_frames := int(bvh_strings[motion_string_index + 1].substr(8))
+		var frame_time := float(bvh_strings[motion_string_index + 2].substr(12))
+		bvh_object.time = num_frames * frame_time
 	return bvh_object
 
 
-static func get_bvh_dictionary(path: String) -> Dictionary:
+static func get_bvh_dictionary(
+	path: String, custom_time: float = 0, resolution: float = 1
+) -> Dictionary:
 	var motion_file := FileAccess.open("res://Motion/" + path, FileAccess.READ)
 	var motion_strings: PackedStringArray = []
 	while not motion_file.eof_reached():
 		motion_strings.append(motion_file.get_line())
 	motion_file.close()
-	return convert_point_bvh_file_to_object(motion_strings)
+	return convert_point_bvh_file_to_object(motion_strings, custom_time, resolution)
