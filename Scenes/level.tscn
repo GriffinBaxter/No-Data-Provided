@@ -26,10 +26,14 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_kd552"]
+auto_exposure_enabled = true
+auto_exposure_speed = 2.0
 dof_blur_far_enabled = true
 dof_blur_far_distance = 15.0
 dof_blur_far_transition = 50.0
 dof_blur_amount = 0.05
+auto_exposure_min_sensitivity = 75.0
+auto_exposure_max_sensitivity = 350.0
 
 [sub_resource type="Animation" id="Animation_5plsx"]
 length = 0.001
