@@ -271,6 +271,7 @@ shader = ExtResource("3_wrwwu")
 shader_parameter/red_dither = 1.6
 shader_parameter/green_dither = 0.15
 shader_parameter/blue_dither = 0.1
+shader_parameter/amount = 0.8
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
