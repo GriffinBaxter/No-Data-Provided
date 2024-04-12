@@ -90,6 +90,9 @@ func _process(_delta: float) -> void:
 
 		no_data_provided.visible = false
 		player_camera.fov = 80
+		update_red_dither(1.6)
+		update_green_dither(0.15)
+		update_blue_dither(0.1)
 		animation_player.play("hallway_intro")
 		setup_motion_cutscene("Hallway/intro.bvh", Motion.HALLWAY_INTRO, 4.75, 0.1)
 		await get_tree().create_timer(4.75).timeout
@@ -150,23 +153,41 @@ func _process(_delta: float) -> void:
 		inverse_table_slice.visible = false
 		slicer.global_position += Vector3(0, 0.65, 0)
 		var tween_2 := get_tree().create_tween().set_parallel()
-		tween_2.tween_method(
-			update_red_dither,
-			camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
-			1.6,
-			1
+		(
+			tween_2
+			. tween_method(
+				update_red_dither,
+				camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
+				2,
+				1,
+			)
 		)
-		tween_2.tween_method(
-			update_green_dither,
-			camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"),
-			0.15,
-			1
+		(
+			tween_2
+			. tween_method(
+				update_green_dither,
+				camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"),
+				2,
+				1,
+			)
 		)
-		tween_2.tween_method(
-			update_blue_dither,
-			camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"),
-			0.1,
-			1
+		(
+			tween_2
+			. tween_method(
+				update_blue_dither,
+				camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"),
+				2,
+				1,
+			)
+		)
+		(
+			tween_2
+			. tween_method(
+				update_dither_amount,
+				camera_shader.get_surface_override_material(0).get_shader_parameter("amount"),
+				0.05,
+				1,
+			)
 		)
 		tween_2.tween_method(
 			update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 0, 1
@@ -295,6 +316,10 @@ func update_green_dither(value: float) -> void:
 
 func update_blue_dither(value: float) -> void:
 	camera_shader.get_surface_override_material(0).set_shader_parameter("blue_dither", value)
+
+
+func update_dither_amount(value: float) -> void:
+	camera_shader.get_surface_override_material(0).set_shader_parameter("amount", value)
 
 
 func update_red_albedo(value: float) -> void:

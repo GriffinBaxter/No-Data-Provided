@@ -2,9 +2,9 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
-uniform float red_dither : hint_range(0, 2, 0.05) = 1.6;
-uniform float green_dither : hint_range(0, 2, 0.05) = 0.15;
-uniform float blue_dither : hint_range(0, 2, 0.05) = 0.1;
+uniform float red_dither : hint_range(0, 2, 0.05) = 0.1;
+uniform float green_dither : hint_range(0, 2, 0.05) = 0.35;
+uniform float blue_dither : hint_range(0, 2, 0.05) = 1.5;
 uniform float amount : hint_range(0, 1, 0.05) = 0.8;
 
 void vertex() {
