@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=64 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
@@ -21,6 +21,7 @@
 [ext_resource type="FontFile" uid="uid://bu7vykn7473bi" path="res://Fonts/RobotoMono-SemiBold.ttf" id="19_clhhf"]
 [ext_resource type="Shader" path="res://Shaders/camera_chromatic_aberration.gdshader" id="20_msfbx"]
 [ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
+[ext_resource type="Script" path="res://Scripts/state_animations.gd" id="21_t4yfa"]
 [ext_resource type="PackedScene" uid="uid://gfsgxg5mavtk" path="res://Scenes/timeline.tscn" id="24_xbjqi"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
@@ -550,6 +551,9 @@ visible = false
 
 [node name="SaveLoad" type="Node" parent="."]
 script = ExtResource("11_kfi3i")
+
+[node name="StateAnimations" type="Node" parent="."]
+script = ExtResource("21_t4yfa")
 
 [node name="CameraShader" type="MeshInstance3D" parent="."]
 extra_cull_margin = 16384.0

@@ -46,7 +46,6 @@ var timeline: Node3D = $"../Viewport/SubViewportContainer/SubViewport/Camera3DNo
 
 func _ready() -> void:
 	level.movable.connect(update_can_move)
-	level.timeline_adjustable.connect(update_can_use_timeline)
 	timeline_bvh = UTILS.get_bvh_dictionary("Hallway/timeline.bvh")
 
 

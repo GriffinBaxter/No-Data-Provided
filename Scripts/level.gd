@@ -2,7 +2,6 @@ extends Node3D
 
 signal level_node_ready
 signal movable
-signal timeline_adjustable
 signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
@@ -32,6 +31,7 @@ var intro_cutscene_started := false
 var end_cutscene_started := false
 
 @onready var pause_menu_node: Control = $PauseMenu
+@onready var state_animations: Node = $StateAnimations
 
 @onready var player: CharacterBody3D = $Player
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -70,36 +70,7 @@ func _process(_delta: float) -> void:
 
 	if state == State.BEFORE_INTRO_CUTSCENE and !intro_cutscene_started:
 		intro_cutscene_started = true
-		last_medium_presents.visible = true
-		player_camera.fov = 50
-		fade_in_out.visible = true
-		colour_rect.color = Color(0, 0, 0, 1)
-		var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
-		tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
-		blink_text_with_caret(3, last_medium_presents)
-		setup_motion_cutscene("Hallway/last_medium_presents.bvh", Motion.LAST_MEDIUM_PRESENTS, 10)
-		await get_tree().create_timer(3).timeout
-
-		fade_in_out.visible = false
-		await letter_by_letter(last_medium_presents, "last medium presents")
-
-		last_medium_presents.visible = false
-		no_data_provided.visible = true
-		setup_motion_cutscene("Hallway/no_data_provided.bvh", Motion.NO_DATA_PROVIDED, 6.6)
-		await letter_by_letter(no_data_provided, "no data provided")
-
-		no_data_provided.visible = false
-		player_camera.fov = 80
-		update_red_dither(1.6)
-		update_green_dither(0.15)
-		update_blue_dither(0.1)
-		animation_player.play("hallway_intro")
-		setup_motion_cutscene("Hallway/intro.bvh", Motion.HALLWAY_INTRO, 4.75, 0.1)
-		await get_tree().create_timer(4.75).timeout
-
-		wall_closing_dust_particles.emitting = true
-		await get_tree().create_timer(0.25).timeout
-
+		await state_animations.intro_cutscene()
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
 	if current_motion != Motion.NONE:
@@ -128,84 +99,7 @@ func _process(_delta: float) -> void:
 		)
 	):
 		update_state(State.MATCH_ANIMATION)
-		pickup_area_3d.picked_up = false
-		var tween_1 := get_tree().create_tween().set_parallel()
-		tween_1.tween_method(
-			update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 5, 1
-		)
-		tween_1.tween_method(
-			update_green_albedo,
-			table_slice.material_override["shader_parameter/green_albedo"],
-			5,
-			1
-		)
-		tween_1.tween_method(
-			update_blue_albedo, table_slice.material_override["shader_parameter/blue_albedo"], 5, 1
-		)
-		tween_1.tween_property(
-			inverse_table_slice, "global_position", table_slice.global_position, 1
-		)
-		tween_1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
-		tween_1.tween_property(inverse_table_slice, "rotation", table_slice.rotation, 1)
-		tween_1.tween_property(inverse_slicer, "rotation", slicer.rotation, 1)
-		await get_tree().create_timer(1).timeout
-
-		inverse_table_slice.visible = false
-		slicer.global_position += Vector3(0, 0.65, 0)
-		var tween_2 := get_tree().create_tween().set_parallel()
-		(
-			tween_2
-			. tween_method(
-				update_red_dither,
-				camera_shader.get_surface_override_material(0).get_shader_parameter("red_dither"),
-				2,
-				1,
-			)
-		)
-		(
-			tween_2
-			. tween_method(
-				update_green_dither,
-				camera_shader.get_surface_override_material(0).get_shader_parameter("green_dither"),
-				2,
-				1,
-			)
-		)
-		(
-			tween_2
-			. tween_method(
-				update_blue_dither,
-				camera_shader.get_surface_override_material(0).get_shader_parameter("blue_dither"),
-				2,
-				1,
-			)
-		)
-		(
-			tween_2
-			. tween_method(
-				update_dither_amount,
-				camera_shader.get_surface_override_material(0).get_shader_parameter("amount"),
-				0.05,
-				1,
-			)
-		)
-		tween_2.tween_method(
-			update_red_albedo, table_slice.material_override["shader_parameter/red_albedo"], 0, 1
-		)
-		tween_2.tween_method(
-			update_green_albedo,
-			table_slice.material_override["shader_parameter/green_albedo"],
-			0,
-			1
-		)
-		tween_2.tween_method(
-			update_blue_albedo, table_slice.material_override["shader_parameter/blue_albedo"], 0, 1
-		)
-		await get_tree().create_timer(1).timeout
-
-		tween_1.stop()
-		tween_2.stop()
-		inverse_table_slice.visible = false
+		await state_animations.match_animation()
 		update_state(State.MATCH)
 
 	if (
@@ -213,7 +107,8 @@ func _process(_delta: float) -> void:
 		and interacted_with_identification
 		and player.progress >= player.JUST_UNDER_ONE
 	):
-		end_cutscene()
+		end_cutscene_started = true
+		state_animations.end_cutscene()
 
 
 func pause_menu() -> void:
@@ -237,7 +132,7 @@ func load_game(save: Dictionary) -> void:
 func update_state(new_state: State, updated_from_autosave: bool = true) -> void:
 	state = new_state
 	if state == State.MATCH:
-		match_cutscene()
+		state_animations.match_cutscene()
 	if STATES_MOVEABLE.has(int(state)):
 		emit_signal("movable", true)
 	else:
@@ -337,35 +232,6 @@ func update_blue_albedo(value: float) -> void:
 	inverse_table_slice.material_override["shader_parameter/blue_albedo"] = value
 
 
-func match_cutscene() -> void:
-	var timeline_bvh := UTILS.get_bvh_dictionary("Hallway/timeline.bvh")
-	var final_pos := (
-		timeline_bvh.position[0] - timeline_bvh.position[-1] + Vector3(0, 1.75, -10) as Vector3
-	)
-	var final_rot := timeline_bvh.rotation[0] - timeline_bvh.rotation[-1] as Vector3
-	var initial_pos := player_camera.global_position
-	var initial_rot := player_camera.global_rotation_degrees
-	for n: PackedFloat64Array in [
-		[1. / 9., 2. / 9.],
-		[3. / 9., 4. / 9.],
-		[5. / 9., 6. / 9.],
-		[7. / 9., 8. / 9.],
-	]:
-		await match_tweens(n[0], final_pos, initial_pos, final_rot, initial_rot)
-
-		player_camera.fov -= 6
-		player_camera.global_position = UTILS.interpolate_vector(n[1], final_pos, initial_pos)
-		player_camera.global_rotation_degrees = UTILS.interpolate_vector(
-			n[1], final_rot, initial_rot
-		)
-
-	await match_tweens(1, final_pos, initial_pos, final_rot, initial_rot)
-
-	emit_signal("timeline_adjustable", true)
-	timeline_out_in_animation(false)
-	identification.visible = true
-
-
 func match_tweens(
 	n: float, final_pos: Vector3, initial_pos: Vector3, final_rot: Vector3, initial_rot: Vector3
 ) -> void:
@@ -399,24 +265,3 @@ func timeline_out_in_animation(out: bool) -> void:
 		timeline_tween.tween_property(timeline, "position", IN_POS, 0.5)
 		await get_tree().create_timer(0.5).timeout
 	timeline_tween.stop()
-
-
-func end_cutscene() -> void:
-	end_cutscene_started = true
-	emit_signal("timeline_adjustable", false)
-	timeline_out_in_animation(true)
-	fade_in_out.visible = true
-	var tween_1 := get_tree().create_tween().set_parallel()
-	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 13)
-	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 13)
-	recall.visible = true
-	await letter_by_letter(recall, "recall")
-
-	await get_tree().create_timer(1).timeout
-
-	chapter_one.visible = true
-	letter_by_letter(chapter_one, "chapter one")
-	await get_tree().create_timer(2).timeout
-
-	var tween_2 := get_tree().create_tween().set_ease(Tween.EASE_IN)
-	tween_2.tween_property(colour_rect, "color", Color(0, 0, 0, 1), 4.1)
