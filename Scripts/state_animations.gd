@@ -7,6 +7,7 @@ const UTILS := preload("res://Scripts/utils.gd")
 @onready var level: Node3D = $".."
 @onready var player: CharacterBody3D = $"../Player"
 
+
 func _ready() -> void:
 	timeline_adjustable.connect(player.update_can_use_timeline as Callable)
 
