@@ -34,27 +34,13 @@ var end_cutscene_started := false
 @onready var state_animations: Node = $StateAnimations
 
 @onready var player: CharacterBody3D = $Player
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var camera_shader: MeshInstance3D = $CameraShader
-@onready var last_medium_presents: Label3D = $LastMediumPresentsLabel3D
-@onready var no_data_provided: Label3D = $NoDataProvidedLabel3D
-@onready var chapter_one: Label3D = $TableWithSlice/Table/ChapterLabel3D
-@onready var recall: Label3D = $TableWithSlice/Table/ChapterTitleLabel3D
-@onready var fade_in_out: Control = $FadeInOut
-@onready var colour_rect: ColorRect = $FadeInOut/ColorRect
 
 @onready var timeline: Node3D = $Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline
 @onready var player_camera: Camera3D = $Player/Head/Camera3D
-@onready var player_head: Node3D = $Player/Head
 @onready var save_load: Node = $SaveLoad
-@onready var pickup_area_3d: Area3D = $TableWithInverseSlice/PickupArea3D
-
-@onready var slicer: MeshInstance3D = $TableWithSlice/Slicer
 @onready var table_slice: MeshInstance3D = $TableWithSlice/Table
-@onready var inverse_slicer: MeshInstance3D = $TableWithInverseSlice/Slicer
 @onready var inverse_table_slice: MeshInstance3D = $TableWithInverseSlice/TableSlice
-@onready var identification: Node3D = $Identification
-@onready var wall_closing_dust_particles: GPUParticles3D = $hallway/WallClosingDustParticles
 
 
 func _ready() -> void:
