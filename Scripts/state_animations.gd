@@ -84,9 +84,7 @@ func match_animation() -> void:
 		5,
 		1
 	)
-	tween_1.tween_property(
-		inverse_table_slice as MeshInstance3D, "global_position", table_slice.global_position, 1
-	)
+	tween_1.tween_property(inverse_table_slice, "global_position", table_slice.global_position, 1)
 	tween_1.tween_property(inverse_slicer, "global_position", slicer.global_position, 1)
 	tween_1.tween_property(inverse_table_slice, "rotation", table_slice.rotation, 1)
 	tween_1.tween_property(inverse_slicer, "rotation", slicer.rotation, 1)
@@ -190,10 +188,8 @@ func end_cutscene() -> void:
 	level.timeline_out_in_animation(true)
 	fade_in_out.visible = true
 	var tween_1 := get_tree().create_tween().set_parallel()
-	tween_1.tween_property(player_camera as Camera3D, "global_position", Vector3(0, 7.5, -44.5), 13)
-	tween_1.tween_property(
-		player_camera as Camera3D, "global_rotation_degrees", Vector3(-90, 11.6, 0), 13
-	)
+	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 13)
+	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 13)
 	recall.visible = true
 	await level.letter_by_letter(recall, "recall")
 
