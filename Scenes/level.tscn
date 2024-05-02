@@ -1,7 +1,7 @@
-[gd_scene load_steps=64 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=62 format=3 uid="uid://b387ywruadsvn"]
 
-[ext_resource type="Script" path="res://Scripts/player.gd" id="1_2b40y"]
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
+[ext_resource type="PackedScene" uid="uid://dnel7bafh8ko1" path="res://Scenes/player.tscn" id="2_yj0xb"]
 [ext_resource type="Shader" path="res://Shaders/camera.gdshader" id="3_wrwwu"]
 [ext_resource type="Script" path="res://Scripts/hallway.gd" id="4_1vink"]
 [ext_resource type="Material" uid="uid://cdki2xx3qhtfp" path="res://Materials/hallway_plane_start.tres" id="4_i03hr"]
@@ -23,18 +23,6 @@
 [ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
 [ext_resource type="Script" path="res://Scripts/state_animations.gd" id="21_t4yfa"]
 [ext_resource type="PackedScene" uid="uid://gfsgxg5mavtk" path="res://Scenes/timeline.tscn" id="24_xbjqi"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_kd552"]
-auto_exposure_enabled = true
-auto_exposure_speed = 2.0
-dof_blur_far_enabled = true
-dof_blur_far_distance = 15.0
-dof_blur_far_transition = 50.0
-dof_blur_amount = 0.05
-auto_exposure_min_sensitivity = 75.0
-auto_exposure_max_sensitivity = 350.0
 
 [sub_resource type="Animation" id="Animation_5plsx"]
 length = 0.001
@@ -277,22 +265,7 @@ shader_parameter/amount = 0.8
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
 
-[node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("1_2b40y")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
-shape = SubResource("CapsuleShape3D_8ocoo")
-
-[node name="Head" type="Node3D" parent="Player"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.75, 0)
-
-[node name="Camera3D" type="Camera3D" parent="Player/Head"]
-attributes = SubResource("CameraAttributesPractical_kd552")
-fov = 80.0
-
-[node name="Pickup" type="Node3D" parent="Player/Head/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3)
+[node name="Player" parent="." instance=ExtResource("2_yj0xb")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
