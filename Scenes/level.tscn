@@ -396,9 +396,6 @@ skeleton = NodePath("../..")
 script = ExtResource("7_r7jlu")
 inversed = true
 
-[node name="SliceMiddle" type="Node3D" parent="TableWithInverseSlice/TableSlice"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.275, 0.875, 0.048)
-
 [node name="PickupArea3D" type="Area3D" parent="TableWithInverseSlice"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, -29.75)
 script = ExtResource("13_utw7h")

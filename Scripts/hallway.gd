@@ -10,12 +10,6 @@ var random := RandomNumberGenerator.new()
 @onready var spot_light: SpotLight3D = $BackSpotLight
 @onready var omni_light: OmniLight3D = $OmniLight3D
 
-@onready var slice_middle: Node3D = $"../TableWithInverseSlice/TableSlice/SliceMiddle"
-@onready var top: MeshInstance3D = $PlaneTop
-@onready var bottom: MeshInstance3D = $PlaneBottom
-@onready var left: MeshInstance3D = $PlaneLeft
-@onready var right: MeshInstance3D = $PlaneRight
-
 
 func _ready() -> void:
 	var materials: Array[StandardMaterial3D] = [
