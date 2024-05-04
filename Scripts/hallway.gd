@@ -11,10 +11,6 @@ var random := RandomNumberGenerator.new()
 @onready var omni_light: OmniLight3D = $OmniLight3D
 
 @onready var slice_middle: Node3D = $"../TableWithInverseSlice/TableSlice/SliceMiddle"
-@onready var top_light: SpotLight3D = $TopSpotLight3D
-@onready var bottom_light: SpotLight3D = $BottomSpotLight3D
-@onready var left_light: SpotLight3D = $LeftSpotLight3D
-@onready var right_light: SpotLight3D = $RightSpotLight3D
 @onready var top: MeshInstance3D = $PlaneTop
 @onready var bottom: MeshInstance3D = $PlaneBottom
 @onready var left: MeshInstance3D = $PlaneLeft
@@ -60,30 +56,3 @@ func _ready() -> void:
 		await get_tree().create_timer(random.randf_range(0.15, 0.3)).timeout
 
 		tween_2.stop()
-
-
-func _process(_delta: float) -> void:
-	set_energy_y(top_light, top)
-	set_energy_y(bottom_light, bottom)
-	set_energy_x(left_light, left)
-	set_energy_x(right_light, right)
-
-	for light: SpotLight3D in [top_light, bottom_light, left_light, right_light]:
-		if light.light_energy <= 0:
-			light.visible = false
-		else:
-			light.visible = true
-
-
-func set_energy_y(light: SpotLight3D, plane: MeshInstance3D) -> void:
-	light.global_position.x = slice_middle.global_position.x
-	light.global_position.z = slice_middle.global_position.z
-	light.light_energy = (
-		-abs(abs(slice_middle.global_position.y) - abs(plane.global_position.y)) + 1
-	)
-
-
-func set_energy_x(light: SpotLight3D, plane: MeshInstance3D) -> void:
-	light.global_position.y = slice_middle.global_position.y
-	light.global_position.z = slice_middle.global_position.z
-	light.light_energy = -abs(slice_middle.global_position.x - plane.global_position.x) + 1

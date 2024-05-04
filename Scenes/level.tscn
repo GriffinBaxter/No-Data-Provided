@@ -323,26 +323,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 48)
 light_energy = 2.0
 omni_range = 15.0
 
-[node name="TopSpotLight3D" type="SpotLight3D" parent="hallway"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5, 0)
-visible = false
-spot_angle = 40.0
-
-[node name="BottomSpotLight3D" type="SpotLight3D" parent="hallway"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5, 0)
-visible = false
-spot_angle = 40.0
-
-[node name="LeftSpotLight3D" type="SpotLight3D" parent="hallway"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 5, 0)
-visible = false
-spot_angle = 40.0
-
-[node name="RightSpotLight3D" type="SpotLight3D" parent="hallway"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 5, 0)
-visible = false
-spot_angle = 40.0
-
 [node name="WallClosingDustParticles" type="GPUParticles3D" parent="hallway"]
 transform = Transform3D(2, 0, 0, 0, -8.74228e-08, 2, 0, -2, -8.74228e-08, 0, 5, 50.5)
 emitting = false
