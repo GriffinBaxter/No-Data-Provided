@@ -12,10 +12,16 @@ const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_A
 const STATES_SAVABLE: Array[State] = [
 	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
 ]
-const MOTION_FINAL_AND_INITIAL_DELTA := {
-	Motion.LAST_MEDIUM_PRESENTS: [Vector3(0, -1, 1), Vector3(70, 0, 0)],
-	Motion.NO_DATA_PROVIDED: [Vector3(1.5, 2.75, -48.5), Vector3(0, 150, 0)],
-	Motion.HALLWAY_INTRO: [Vector3(0, 1.75, 0), Vector3(0, -180, 0), Vector3(0, 0, -6)],
+const CAMERA_MOTIONS := {
+	Motion.LAST_MEDIUM_PRESENTS: {"final_pos": Vector3(0, -1, 1), "final_rot": Vector3(70, 0, 0)},
+	Motion.NO_DATA_PROVIDED:
+	{"final_pos": Vector3(1.5, 2.75, -48.5), "final_rot": Vector3(0, 150, 0)},
+	Motion.HALLWAY_INTRO:
+	{
+		"final_pos": Vector3(0, 1.75, 0),
+		"final_rot": Vector3(0, -180, 0),
+		"initial_pos_delta": Vector3(0, 0, -6)
+	},
 }
 const LEVEL := 0
 
@@ -60,20 +66,7 @@ func _process(_delta: float) -> void:
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
 	if current_motion != Motion.NONE:
-		update_camera_with_motion(
-			MOTION_FINAL_AND_INITIAL_DELTA[current_motion][0] as Vector3,
-			MOTION_FINAL_AND_INITIAL_DELTA[current_motion][1] as Vector3,
-			(
-				MOTION_FINAL_AND_INITIAL_DELTA[current_motion][2] as Vector3
-				if MOTION_FINAL_AND_INITIAL_DELTA[current_motion].size() >= 3
-				else Vector3(0, 0, 0)
-			),
-			(
-				MOTION_FINAL_AND_INITIAL_DELTA[current_motion][3] as Vector3
-				if MOTION_FINAL_AND_INITIAL_DELTA[current_motion].size() >= 4
-				else Vector3(0, 0, 0)
-			),
-		)
+		update_camera_with_motion(CAMERA_MOTIONS[current_motion] as Dictionary)
 
 	if (
 		state < State.MATCH_ANIMATION
@@ -163,12 +156,7 @@ func setup_timer(wait_time: float) -> void:
 	timer.start()
 
 
-func update_camera_with_motion(
-	final_position: Vector3,
-	final_rotation: Vector3,
-	initial_position_delta: Vector3,
-	initial_rotation_delta: Vector3,
-) -> void:
+func update_camera_with_motion(camera_motion: Dictionary) -> void:
 	if timer.time_left <= 0 and current_motion != Motion.NONE:
 		current_motion = Motion.NONE
 	else:
@@ -176,14 +164,28 @@ func update_camera_with_motion(
 		player_camera.global_position = (
 			UTILS.piecewise_linear_interpolation(bvh.position as PackedVector3Array, progress)
 			- bvh.position[-1]
-			+ final_position
-			+ (1 - progress) * initial_position_delta
+			+ camera_motion.final_pos
+			+ (
+				(1 - progress)
+				* (
+					camera_motion.initial_pos_delta
+					if camera_motion.has("initial_pos_delta")
+					else Vector3.ZERO
+				)
+			)
 		)
 		player_camera.global_rotation_degrees = (
 			UTILS.piecewise_linear_interpolation(bvh.rotation as PackedVector3Array, progress)
 			- bvh.rotation[-1]
-			+ final_rotation
-			+ (1 - progress) * initial_rotation_delta
+			+ camera_motion.final_rot
+			+ (
+				(1 - progress)
+				* (
+					camera_motion.initial_rot_delta
+					if camera_motion.has("initial_rot_delta")
+					else Vector3.ZERO
+				)
+			)
 		)
 
 
