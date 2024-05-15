@@ -1,8 +1,8 @@
-[gd_scene load_steps=62 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=54 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
 [ext_resource type="PackedScene" uid="uid://dnel7bafh8ko1" path="res://Scenes/player.tscn" id="2_yj0xb"]
-[ext_resource type="Shader" path="res://Shaders/camera.gdshader" id="3_wrwwu"]
+[ext_resource type="PackedScene" uid="uid://be653wunsbu5q" path="res://Scenes/world_environment.tscn" id="3_w03l8"]
 [ext_resource type="Material" uid="uid://cdki2xx3qhtfp" path="res://Materials/hallway_plane_start.tres" id="4_i03hr"]
 [ext_resource type="Texture2D" uid="uid://cw24t4bvfcfl2" path="res://Textures/Concrete.jpg" id="4_usu1b"]
 [ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
@@ -18,9 +18,9 @@
 [ext_resource type="Material" uid="uid://d3upuwvnikm4d" path="res://Materials/slice_material_depth_test_disabled.tres" id="16_nq7nw"]
 [ext_resource type="Script" path="res://Scripts/viewport.gd" id="18_n24nl"]
 [ext_resource type="FontFile" uid="uid://bu7vykn7473bi" path="res://Fonts/RobotoMono-SemiBold.ttf" id="19_clhhf"]
-[ext_resource type="Shader" path="res://Shaders/camera_chromatic_aberration.gdshader" id="20_msfbx"]
 [ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
 [ext_resource type="Script" path="res://Scripts/state_animations.gd" id="21_t4yfa"]
+[ext_resource type="PackedScene" uid="uid://0231f8x3nu50" path="res://Scenes/camera_shader.tscn" id="22_lwcip"]
 [ext_resource type="PackedScene" uid="uid://gfsgxg5mavtk" path="res://Scenes/timeline.tscn" id="24_xbjqi"]
 
 [sub_resource type="Animation" id="Animation_5plsx"]
@@ -235,23 +235,6 @@ _data = {
 "hallway_lights": SubResource("Animation_yr50n")
 }
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vuur2"]
-sky_top_color = Color(0, 0.392157, 0.980392, 1)
-sky_horizon_color = Color(0.345098, 0.686275, 1, 1)
-ground_bottom_color = Color(0.0980392, 0, 0.54902, 1)
-ground_horizon_color = Color(0.45098, 0.647059, 1, 1)
-
-[sub_resource type="Sky" id="Sky_jvnj2"]
-sky_material = SubResource("ProceduralSkyMaterial_vuur2")
-
-[sub_resource type="Environment" id="Environment_uxqxj"]
-background_mode = 2
-sky = SubResource("Sky_jvnj2")
-tonemap_mode = 2
-ssil_enabled = true
-sdfgi_enabled = true
-glow_enabled = true
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k7mup"]
 albedo_color = Color(0.25098, 0.25098, 0.25098, 1)
 albedo_texture = ExtResource("4_usu1b")
@@ -410,32 +393,6 @@ albedo_color = Color(1, 1, 1, 0)
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
 
-[sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
-flip_faces = true
-size = Vector2(2, 2)
-
-[sub_resource type="Gradient" id="Gradient_vf3b3"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_1dyuq"]
-gradient = SubResource("Gradient_vf3b3")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(3, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qune"]
-render_priority = 0
-shader = ExtResource("20_msfbx")
-shader_parameter/offset_image = SubResource("GradientTexture2D_1dyuq")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
-render_priority = 1
-next_pass = SubResource("ShaderMaterial_6qune")
-shader = ExtResource("3_wrwwu")
-shader_parameter/red_dither = 0.1
-shader_parameter/green_dither = 0.35
-shader_parameter/blue_dither = 1.5
-shader_parameter/amount = 0.8
-
 [node name="Level" type="Node3D"]
 script = ExtResource("1_n8obj")
 
@@ -447,8 +404,7 @@ libraries = {
 }
 autoplay = "hallway_lights"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_uxqxj")
+[node name="WorldEnvironment" parent="." instance=ExtResource("3_w03l8")]
 
 [node name="hallway" parent="." instance=ExtResource("6_ujk86")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -22.5)
@@ -679,10 +635,7 @@ script = ExtResource("11_kfi3i")
 [node name="StateAnimations" type="Node" parent="."]
 script = ExtResource("21_t4yfa")
 
-[node name="CameraShader" type="MeshInstance3D" parent="."]
-extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_vv2av")
-surface_material_override/0 = SubResource("ShaderMaterial_d8lee")
+[node name="CameraShader" parent="." instance=ExtResource("22_lwcip")]
 
 [connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
 

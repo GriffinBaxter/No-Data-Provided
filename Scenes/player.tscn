@@ -1,18 +1,9 @@
 [gd_scene load_steps=4 format=3 uid="uid://dnel7bafh8ko1"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_hi4w1"]
+[ext_resource type="PackedScene" uid="uid://bnquu8x3vrusk" path="res://Scenes/camera_3d.tscn" id="2_cfj15"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8ocoo"]
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_kd552"]
-auto_exposure_enabled = true
-auto_exposure_speed = 2.0
-dof_blur_far_enabled = true
-dof_blur_far_distance = 15.0
-dof_blur_far_transition = 50.0
-dof_blur_amount = 0.05
-auto_exposure_min_sensitivity = 75.0
-auto_exposure_max_sensitivity = 350.0
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -24,9 +15,4 @@ shape = SubResource("CapsuleShape3D_8ocoo")
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.75, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Head"]
-attributes = SubResource("CameraAttributesPractical_kd552")
-fov = 80.0
-
-[node name="Pickup" type="Node3D" parent="Head/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3)
+[node name="Camera3D" parent="Head" instance=ExtResource("2_cfj15")]

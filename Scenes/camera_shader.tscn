@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=3 uid="uid://0231f8x3nu50"]
+
+[ext_resource type="Shader" path="res://Shaders/camera_chromatic_aberration.gdshader" id="1_o6bup"]
+[ext_resource type="Shader" path="res://Shaders/camera.gdshader" id="2_tquie"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_vv2av"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="Gradient" id="Gradient_vf3b3"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1dyuq"]
+gradient = SubResource("Gradient_vf3b3")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(3, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qune"]
+render_priority = 0
+shader = ExtResource("1_o6bup")
+shader_parameter/offset_image = SubResource("GradientTexture2D_1dyuq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8lee"]
+render_priority = 1
+next_pass = SubResource("ShaderMaterial_6qune")
+shader = ExtResource("2_tquie")
+shader_parameter/red_dither = 0.1
+shader_parameter/green_dither = 0.35
+shader_parameter/blue_dither = 1.5
+shader_parameter/amount = 0.8
+
+[node name="CameraShader" type="MeshInstance3D"]
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_vv2av")
+surface_material_override/0 = SubResource("ShaderMaterial_d8lee")
