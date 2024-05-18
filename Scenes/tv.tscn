@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dl0lovsnmerqj"]
+[gd_scene load_steps=9 format=3 uid="uid://dl0lovsnmerqj"]
 
 [ext_resource type="PackedScene" uid="uid://sb0vc14m7jtx" path="res://Blender/tv_room.blend" id="1_esxom"]
 [ext_resource type="PackedScene" uid="uid://bnquu8x3vrusk" path="res://Scenes/camera_3d.tscn" id="1_mw1py"]
@@ -6,13 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://be653wunsbu5q" path="res://Scenes/world_environment.tscn" id="3_fm4v8"]
 [ext_resource type="PackedScene" uid="uid://0231f8x3nu50" path="res://Scenes/camera_shader.tscn" id="5_davce"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_figyk"]
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 8.0
+[sub_resource type="ViewportTexture" id="ViewportTexture_ml12k"]
+viewport_path = NodePath("Tv/Screen/SubViewport")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_sfu2p"]
-size = Vector2(0.525, 0.415)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1tgw"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_m1x0y"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -25,9 +25,34 @@ size = Vector2(0.525, 0.415)
 [node name="Camera3D" parent="Tv" instance=ExtResource("1_mw1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385, 1)
 
-[node name="Screen" type="MeshInstance3D" parent="Tv"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.385, 0.2)
-material_override = SubResource("StandardMaterial3D_figyk")
-mesh = SubResource("PlaneMesh_sfu2p")
+[node name="Screen" type="Node3D" parent="Tv"]
+
+[node name="Sprite3D" type="Sprite3D" parent="Tv/Screen"]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 0.386, 0.2)
+cast_shadow = 0
+pixel_size = 0.0175
+transparent = false
+texture = SubResource("ViewportTexture_ml12k")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Tv/Screen/Sprite3D"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, -12.5)
+light_color = Color(0.226693, 0.465123, 1, 1)
+light_energy = 16.0
+distance_fade_begin = 0.0
+distance_fade_length = 2.0
+spot_range = 2.0
+spot_angle = 60.0
+spot_angle_attenuation = 13.8361
+
+[node name="SubViewport" type="SubViewport" parent="Tv/Screen"]
+size = Vector2i(1000, 780)
+
+[node name="Camera3D" type="Camera3D" parent="Tv/Screen/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 
 [node name="CameraShader" parent="." instance=ExtResource("5_davce")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.33533, 0, -1.40607)
+material_override = SubResource("StandardMaterial3D_l1tgw")
+mesh = SubResource("PrismMesh_m1x0y")
