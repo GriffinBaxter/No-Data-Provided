@@ -45,8 +45,8 @@ var end_cutscene_started := false
 @onready var timeline: Node3D = $Viewport/SubViewportContainer/SubViewport/Camera3DNoShader/Timeline
 @onready var player_camera: Camera3D = $Player/Head/Camera3D
 @onready var save_load: Node = $SaveLoad
-@onready var table_slice: MeshInstance3D = $TableWithSlice/Table
-@onready var inverse_table_slice: MeshInstance3D = $TableWithInverseSlice/TableSlice
+@onready var table_slice: MeshInstance3D = $Hallway/TableWithSlice/Table
+@onready var inverse_table_slice: MeshInstance3D = $Hallway/TableWithInverseSlice/TableSlice
 
 
 func _ready() -> void:

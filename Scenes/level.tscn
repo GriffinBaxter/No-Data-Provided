@@ -1,21 +1,12 @@
-[gd_scene load_steps=54 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=19 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
 [ext_resource type="PackedScene" uid="uid://dnel7bafh8ko1" path="res://Scenes/player.tscn" id="2_yj0xb"]
 [ext_resource type="PackedScene" uid="uid://be653wunsbu5q" path="res://Scenes/world_environment.tscn" id="3_w03l8"]
-[ext_resource type="Material" uid="uid://cdki2xx3qhtfp" path="res://Materials/hallway_plane_start.tres" id="4_i03hr"]
-[ext_resource type="Texture2D" uid="uid://cw24t4bvfcfl2" path="res://Textures/Concrete.jpg" id="4_usu1b"]
-[ext_resource type="ArrayMesh" uid="uid://dhrpbe58stw2b" path="res://Blender/table.obj" id="5_3r5t2"]
-[ext_resource type="Shader" path="res://Shaders/slice.gdshader" id="5_ga2jv"]
-[ext_resource type="Texture2D" uid="uid://b14patx2c41tm" path="res://Textures/Table.jpg" id="5_ic4mh"]
-[ext_resource type="Material" uid="uid://bmnnx8pgjx821" path="res://Materials/black_with_white_emission.tres" id="6_tecba"]
-[ext_resource type="PackedScene" uid="uid://b2cv287efwgcu" path="res://Blender/hallway.blend" id="6_ujk86"]
-[ext_resource type="Script" path="res://Scripts/slice.gd" id="7_r7jlu"]
-[ext_resource type="Shader" path="res://Shaders/slice_depth_test_disabled.gdshader" id="9_jlak1"]
+[ext_resource type="PackedScene" uid="uid://lynl5m52u6pk" path="res://Scenes/hallway.tscn" id="4_bcnsp"]
+[ext_resource type="Script" path="res://Scripts/hallway.gd" id="5_eim3l"]
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
-[ext_resource type="Script" path="res://Scripts/pickup_area_3d.gd" id="13_utw7h"]
-[ext_resource type="Material" uid="uid://d3upuwvnikm4d" path="res://Materials/slice_material_depth_test_disabled.tres" id="16_nq7nw"]
 [ext_resource type="Script" path="res://Scripts/viewport.gd" id="18_n24nl"]
 [ext_resource type="FontFile" uid="uid://bu7vykn7473bi" path="res://Fonts/RobotoMono-SemiBold.ttf" id="19_clhhf"]
 [ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
@@ -28,7 +19,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("hallway/PlaneStart:position")
+tracks/0/path = NodePath("Hallway/Walls/PlaneStart:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -40,7 +31,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("hallway/PlaneEnd:material_override:emission_energy_multiplier")
+tracks/1/path = NodePath("Hallway/Walls/PlaneEnd:material_override:emission_energy_multiplier")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -52,7 +43,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("hallway/PlaneTopTriangle:material_override:emission_energy_multiplier")
+tracks/2/path = NodePath("Hallway/Walls/PlaneTopTriangle:material_override:emission_energy_multiplier")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -64,7 +55,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("hallway/PlaneBottomTriangle:material_override:emission_energy_multiplier")
+tracks/3/path = NodePath("Hallway/Walls/PlaneBottomTriangle:material_override:emission_energy_multiplier")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -76,7 +67,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("hallway/PlaneLeftTriangle:material_override:emission_energy_multiplier")
+tracks/4/path = NodePath("Hallway/Walls/PlaneLeftTriangle:material_override:emission_energy_multiplier")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -88,7 +79,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("hallway/PlaneRightTriangle:material_override:emission_energy_multiplier")
+tracks/5/path = NodePath("Hallway/Walls/PlaneRightTriangle:material_override:emission_energy_multiplier")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -100,7 +91,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("hallway/BackSpotLight:light_energy")
+tracks/6/path = NodePath("Hallway/Walls/BackSpotLight:light_energy")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -112,7 +103,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("hallway/OmniLight3D:light_energy")
+tracks/7/path = NodePath("Hallway/Walls/OmniLight3D:light_energy")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -128,7 +119,7 @@ length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("hallway/PlaneStart:position")
+tracks/0/path = NodePath("Hallway/Walls/PlaneStart:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -146,7 +137,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("hallway/PlaneEnd:material_override:emission_energy_multiplier")
+tracks/0/path = NodePath("Hallway/Walls/PlaneEnd:material_override:emission_energy_multiplier")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -158,7 +149,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("hallway/BackSpotLight:light_energy")
+tracks/1/path = NodePath("Hallway/Walls/BackSpotLight:light_energy")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -170,7 +161,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("hallway/PlaneTopTriangle:material_override:emission_energy_multiplier")
+tracks/2/path = NodePath("Hallway/Walls/PlaneTopTriangle:material_override:emission_energy_multiplier")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -182,7 +173,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("hallway/PlaneBottomTriangle:material_override:emission_energy_multiplier")
+tracks/3/path = NodePath("Hallway/Walls/PlaneBottomTriangle:material_override:emission_energy_multiplier")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -194,7 +185,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("hallway/PlaneLeftTriangle:material_override:emission_energy_multiplier")
+tracks/4/path = NodePath("Hallway/Walls/PlaneLeftTriangle:material_override:emission_energy_multiplier")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -206,7 +197,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("hallway/PlaneRightTriangle:material_override:emission_energy_multiplier")
+tracks/5/path = NodePath("Hallway/Walls/PlaneRightTriangle:material_override:emission_energy_multiplier")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -218,7 +209,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("hallway/OmniLight3D:light_energy")
+tracks/6/path = NodePath("Hallway/Walls/OmniLight3D:light_energy")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -234,158 +225,6 @@ _data = {
 "hallway_intro": SubResource("Animation_e4fgb"),
 "hallway_lights": SubResource("Animation_yr50n")
 }
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k7mup"]
-albedo_color = Color(0.25098, 0.25098, 0.25098, 1)
-albedo_texture = ExtResource("4_usu1b")
-albedo_texture_force_srgb = true
-uv1_scale = Vector3(1, 10, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cc0pc"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 6.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b86y2"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 6.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v3iw4"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 6.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nx6dd"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 6.0
-
-[sub_resource type="Gradient" id="Gradient_snv8h"]
-offsets = PackedFloat32Array(0, 0.25, 1)
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0.12549, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_1ktry"]
-gradient = SubResource("Gradient_snv8h")
-
-[sub_resource type="Curve" id="Curve_ijn0p"]
-_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_5sgyy"]
-curve = SubResource("Curve_ijn0p")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a2ogi"]
-lifetime_randomness = 0.2
-emission_shape = 3
-emission_box_extents = Vector3(2.5, 0, 2.5)
-direction = Vector3(0, 1, 0)
-spread = 0.0
-initial_velocity_min = 4.0
-initial_velocity_max = 8.0
-gravity = Vector3(0, 0, 0)
-linear_accel_min = -10.0
-linear_accel_max = -5.0
-radial_accel_min = -0.2
-radial_accel_max = 0.2
-scale_max = 2.0
-scale_curve = SubResource("CurveTexture_5sgyy")
-color_ramp = SubResource("GradientTexture1D_1ktry")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tp6pe"]
-render_priority = 2
-transparency = 1
-shading_mode = 0
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.32549, 0.32549, 0.32549, 0.501961)
-
-[sub_resource type="SphereMesh" id="SphereMesh_qpgk0"]
-material = SubResource("StandardMaterial3D_tp6pe")
-
-[sub_resource type="BoxMesh" id="BoxMesh_g4dm7"]
-size = Vector3(2.5, 0.01, 2.5)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_66kq1"]
-frequency = 0.025
-fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rb5dv"]
-seamless = true
-noise = SubResource("FastNoiseLite_66kq1")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t4cuu"]
-render_priority = 0
-shader = ExtResource("5_ga2jv")
-shader_parameter/slice_plane = null
-shader_parameter/inversed = false
-shader_parameter/_albedo = ExtResource("5_ic4mh")
-shader_parameter/_noise = SubResource("NoiseTexture2D_rb5dv")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_r7r0q"]
-frequency = 0.025
-fractal_type = 0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1y8xn"]
-seamless = true
-noise = SubResource("FastNoiseLite_r7r0q")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o47pw"]
-render_priority = 0
-next_pass = SubResource("ShaderMaterial_t4cuu")
-shader = ExtResource("9_jlak1")
-shader_parameter/slice_plane = null
-shader_parameter/inversed = false
-shader_parameter/red_albedo = 0.01
-shader_parameter/green_albedo = 0.01
-shader_parameter/blue_albedo = 0.1
-shader_parameter/_albedo = ExtResource("5_ic4mh")
-shader_parameter/_noise = SubResource("NoiseTexture2D_1y8xn")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_fpbco"]
-size = Vector3(0.8, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x23bt"]
-transparency = 1
-vertex_color_use_as_albedo = true
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-emission_energy_multiplier = 32.0
-
-[sub_resource type="Gradient" id="Gradient_mptdd"]
-offsets = PackedFloat32Array(0, 0.5, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.501961, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_mufij"]
-gradient = SubResource("Gradient_mptdd")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vl5dg"]
-emission_shape_scale = Vector3(2, 2, 2)
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
-angle_min = -720.0
-angle_max = 720.0
-gravity = Vector3(0, -0.1, 0)
-linear_accel_min = -0.5
-linear_accel_max = 0.5
-radial_accel_min = -0.5
-radial_accel_max = 0.5
-tangential_accel_min = -0.5
-tangential_accel_max = 0.5
-scale_min = 0.5
-color_ramp = SubResource("GradientTexture1D_mufij")
-
-[sub_resource type="SphereMesh" id="SphereMesh_pgjxy"]
-radius = 0.015
-height = 0.03
-radial_segments = 16
-rings = 8
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_xg647"]
-radius = 1.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1slep"]
 transparency = 1
@@ -406,154 +245,8 @@ autoplay = "hallway_lights"
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("3_w03l8")]
 
-[node name="hallway" parent="." instance=ExtResource("6_ujk86")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -22.5)
-
-[node name="PlaneBottom" parent="hallway" index="0"]
-material_override = SubResource("StandardMaterial3D_k7mup")
-
-[node name="PlaneLeft" parent="hallway" index="1"]
-material_override = SubResource("StandardMaterial3D_k7mup")
-
-[node name="PlaneRight" parent="hallway" index="2"]
-material_override = SubResource("StandardMaterial3D_k7mup")
-
-[node name="PlaneTop" parent="hallway" index="3"]
-material_override = SubResource("StandardMaterial3D_k7mup")
-
-[node name="PlaneEnd" parent="hallway" index="4"]
-material_override = ExtResource("6_tecba")
-
-[node name="PlaneStart" parent="hallway" index="5"]
-material_override = ExtResource("4_i03hr")
-
-[node name="PlaneTopTriangle" parent="hallway" index="6"]
-material_override = SubResource("StandardMaterial3D_cc0pc")
-
-[node name="PlaneBottomTriangle" parent="hallway" index="7"]
-material_override = SubResource("StandardMaterial3D_b86y2")
-
-[node name="PlaneLeftTriangle" parent="hallway" index="8"]
-material_override = SubResource("StandardMaterial3D_v3iw4")
-
-[node name="PlaneRightTriangle" parent="hallway" index="9"]
-material_override = SubResource("StandardMaterial3D_nx6dd")
-
-[node name="BackSpotLight" type="SpotLight3D" parent="hallway"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 5, -75)
-light_energy = 8.0
-shadow_enabled = true
-shadow_bias = 0.005
-shadow_blur = 4.0
-spot_range = 62.5
-spot_angle = 17.5
-
-[node name="OmniLight3D" type="OmniLight3D" parent="hallway"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 48)
-light_energy = 2.0
-omni_range = 15.0
-
-[node name="WallClosingDustParticles" type="GPUParticles3D" parent="hallway"]
-transform = Transform3D(2, 0, 0, 0, -8.74228e-08, 2, 0, -2, -8.74228e-08, 0, 5, 50.5)
-emitting = false
-amount = 250
-lifetime = 2.0
-one_shot = true
-process_material = SubResource("ParticleProcessMaterial_a2ogi")
-draw_pass_1 = SubResource("SphereMesh_qpgk0")
-
-[node name="TableWithSlice" type="Node3D" parent="."]
-
-[node name="Slicer" type="MeshInstance3D" parent="TableWithSlice"]
-transform = Transform3D(0.771927, -0.359955, 0.523986, 0.422618, 0.906308, 0, -0.474892, 0.221446, 0.851727, 0, 1.5, -44.5)
-visible = false
-mesh = SubResource("BoxMesh_g4dm7")
-skeleton = NodePath("../..")
-
-[node name="Table" type="MeshInstance3D" parent="TableWithSlice"]
-transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, 0, -44.5)
-material_override = SubResource("ShaderMaterial_o47pw")
-mesh = ExtResource("5_3r5t2")
-skeleton = NodePath("../..")
-script = ExtResource("7_r7jlu")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="TableWithSlice/Table"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TableWithSlice/Table/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.4, 0)
-shape = SubResource("BoxShape3D_fpbco")
-
-[node name="ChapterLabel3D" type="Label3D" parent="TableWithSlice/Table"]
-transform = Transform3D(0.075, 0, 0, 0, -3.27835e-09, 0.075, 0, -0.075, -3.27835e-09, -0.385, 0.901, -0.08)
-visible = false
-render_priority = 1
-text = "chapter one"
-font = ExtResource("19_clhhf")
-font_size = 310
-horizontal_alignment = 0
-
-[node name="ChapterTitleLabel3D" type="Label3D" parent="TableWithSlice/Table"]
-transform = Transform3D(0.075, 0, 0, 0, -3.27835e-09, 0.075, 0, -0.075, -3.27835e-09, -0.215, 0.901, 0.08)
-visible = false
-render_priority = 1
-text = "recall"
-font = ExtResource("19_clhhf")
-font_size = 310
-horizontal_alignment = 0
-
-[node name="DustParticles" type="GPUParticles3D" parent="TableWithSlice"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
-material_override = SubResource("StandardMaterial3D_x23bt")
-cast_shadow = 0
-amount = 25
-lifetime = 10.0
-process_material = SubResource("ParticleProcessMaterial_vl5dg")
-draw_pass_1 = SubResource("SphereMesh_pgjxy")
-
-[node name="TableWithInverseSlice" type="Node3D" parent="."]
-
-[node name="Slicer" type="MeshInstance3D" parent="TableWithInverseSlice"]
-transform = Transform3D(0.771927, -0.359955, 0.523986, 0.422618, 0.906308, -3.73445e-07, -0.474892, 0.221446, 0.851727, 0, 0.3, -30)
-visible = false
-mesh = SubResource("BoxMesh_g4dm7")
-skeleton = NodePath("../..")
-
-[node name="TableSlice" type="MeshInstance3D" parent="TableWithInverseSlice"]
-transform = Transform3D(2.44894, 0, 0.502695, 0, 1.5, 0, -0.502695, 0, 2.44894, 0, -1.199, -30)
-material_override = ExtResource("16_nq7nw")
-mesh = ExtResource("5_3r5t2")
-skeleton = NodePath("../..")
-script = ExtResource("7_r7jlu")
-inversed = true
-
-[node name="PickupArea3D" type="Area3D" parent="TableWithInverseSlice"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, -29.75)
-script = ExtResource("13_utw7h")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TableWithInverseSlice/PickupArea3D"]
-shape = SubResource("SphereShape3D_xg647")
-
-[node name="Identification" parent="." instance=ExtResource("21_s6ck1")]
-transform = Transform3D(0.68404, -1.5395, -1.07797, 0, 1.14715, -1.6383, 1.87939, 0.560333, 0.392349, 2.345, 0.134, -33.5)
-visible = false
-
-[node name="LastMediumPresentsLabel3D" type="Label3D" parent="."]
-transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, -2.4, 4.999, -1.5)
-visible = false
-render_priority = 2
-text = "last medium presents|"
-font = ExtResource("19_clhhf")
-font_size = 310
-horizontal_alignment = 0
-
-[node name="NoDataProvidedLabel3D" type="Label3D" parent="."]
-transform = Transform3D(-1.09278e-08, 0, 0.25, 0, 0.25, 0, -0.25, 0, -1.09278e-08, -2.499, 2.5, -42.5)
-visible = false
-render_priority = 2
-text = "no data provided|"
-font = ExtResource("19_clhhf")
-font_size = 310
-horizontal_alignment = 0
+[node name="Hallway" parent="." instance=ExtResource("4_bcnsp")]
+script = ExtResource("5_eim3l")
 
 [node name="Viewport" type="Control" parent="."]
 layout_mode = 3
@@ -637,7 +330,4 @@ script = ExtResource("21_t4yfa")
 
 [node name="CameraShader" parent="." instance=ExtResource("22_lwcip")]
 
-[connection signal="body_entered" from="TableWithInverseSlice/PickupArea3D" to="TableWithInverseSlice/PickupArea3D" method="_on_body_entered"]
-
-[editable path="hallway"]
 [editable path="Viewport/SubViewportContainer/SubViewport/IdentificationNoShader"]

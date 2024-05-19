@@ -8,21 +8,22 @@ const UTILS := preload("res://Scripts/utils.gd")
 @onready var player: CharacterBody3D = $"../Player"
 @onready var camera_shader: MeshInstance3D = $"../CameraShader"
 @onready var animation_player: AnimationPlayer = $"../AnimationPlayer"
-@onready var last_medium_presents: Label3D = $"../LastMediumPresentsLabel3D"
-@onready var no_data_provided: Label3D = $"../NoDataProvidedLabel3D"
-@onready var chapter_one: Label3D = $"../TableWithSlice/Table/ChapterLabel3D"
-@onready var recall: Label3D = $"../TableWithSlice/Table/ChapterTitleLabel3D"
+@onready var last_medium_presents: Label3D = $"../Hallway/LastMediumPresentsLabel3D"
+@onready var no_data_provided: Label3D = $"../Hallway/NoDataProvidedLabel3D"
+@onready var chapter_one: Label3D = $"../Hallway/TableWithSlice/Table/ChapterLabel3D"
+@onready var recall: Label3D = $"../Hallway/TableWithSlice/Table/ChapterTitleLabel3D"
 @onready var fade_in_out: Control = $"../FadeInOut"
 @onready var colour_rect: ColorRect = $"../FadeInOut/ColorRect"
 
 @onready var player_camera: Camera3D = $"../Player/Head/Camera3D"
-@onready var pickup_area_3d: Area3D = $"../TableWithInverseSlice/PickupArea3D"
-@onready var slicer: MeshInstance3D = $"../TableWithSlice/Slicer"
-@onready var inverse_slicer: MeshInstance3D = $"../TableWithInverseSlice/Slicer"
-@onready var table_slice: MeshInstance3D = $"../TableWithSlice/Table"
-@onready var inverse_table_slice: MeshInstance3D = $"../TableWithInverseSlice/TableSlice"
-@onready var identification: Node3D = $"../Identification"
-@onready var wall_closing_dust_particles: GPUParticles3D = $"../hallway/WallClosingDustParticles"
+@onready var hallway: Node3D = $"../Hallway"
+@onready var slicer: MeshInstance3D = $"../Hallway/TableWithSlice/Slicer"
+@onready var inverse_slicer: MeshInstance3D = $"../Hallway/TableWithInverseSlice/Slicer"
+@onready var table_slice: MeshInstance3D = $"../Hallway/TableWithSlice/Table"
+@onready var inverse_table_slice: MeshInstance3D = $"../Hallway/TableWithInverseSlice/TableSlice"
+@onready var identification: Node3D = $"../Hallway/Identification"
+@onready
+var wall_closing_dust_particles: GPUParticles3D = $"../Hallway/Walls/WallClosingDustParticles"
 
 
 func _ready() -> void:
@@ -64,7 +65,7 @@ func intro_cutscene() -> void:
 
 
 func match_animation() -> void:
-	pickup_area_3d.picked_up = false
+	hallway.picked_up = false
 	var tween_1 := get_tree().create_tween().set_parallel()
 	tween_1.tween_method(
 		level.update_red_albedo as Callable,

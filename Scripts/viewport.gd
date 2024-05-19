@@ -10,7 +10,7 @@ var identification_selectable := false
 @onready var viewport_identification: Node3D = $IdentificationNoShader
 
 @onready var player_camera: Camera3D = $"../../../Player/Head/Camera3D"
-@onready var identification: Node3D = $"../../../Identification"
+@onready var identification: Node3D = $"../../../Hallway/Identification"
 
 @onready var viewport_identification_mesh: MeshInstance3D = $IdentificationNoShader/Cube
 

@@ -4,18 +4,17 @@
 [ext_resource type="PackedScene" uid="uid://bnquu8x3vrusk" path="res://Scenes/camera_3d.tscn" id="1_mw1py"]
 [ext_resource type="PackedScene" uid="uid://djqtq4bqqr3d0" path="res://Blender/tv.blend" id="2_4s7ft"]
 [ext_resource type="PackedScene" uid="uid://be653wunsbu5q" path="res://Scenes/world_environment.tscn" id="3_fm4v8"]
-[ext_resource type="PackedScene" uid="uid://b387ywruadsvn" path="res://Scenes/level.tscn" id="5_a28v6"]
 [ext_resource type="PackedScene" uid="uid://0231f8x3nu50" path="res://Scenes/camera_shader.tscn" id="5_davce"]
+[ext_resource type="PackedScene" uid="uid://lynl5m52u6pk" path="res://Scenes/hallway.tscn" id="6_grdvg"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ml12k"]
-viewport_path = NodePath("LevelSubViewport")
+viewport_path = NodePath("HallwaySubViewport")
 
 [node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("3_fm4v8")]
 
 [node name="TvRoom" parent="." instance=ExtResource("1_esxom")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 0)
 
 [node name="Tv" parent="TvRoom" instance=ExtResource("2_4s7ft")]
 
@@ -43,7 +42,8 @@ spot_angle_attenuation = 13.8361
 
 [node name="CameraShader" parent="." instance=ExtResource("5_davce")]
 
-[node name="LevelSubViewport" type="SubViewport" parent="."]
+[node name="HallwaySubViewport" type="SubViewport" parent="."]
+own_world_3d = true
 size = Vector2i(1000, 780)
 
-[node name="Level" parent="LevelSubViewport" instance=ExtResource("5_a28v6")]
+[node name="Hallway" parent="HallwaySubViewport" instance=ExtResource("6_grdvg")]
