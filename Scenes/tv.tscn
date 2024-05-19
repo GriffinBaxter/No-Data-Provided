@@ -47,3 +47,6 @@ own_world_3d = true
 size = Vector2i(1000, 780)
 
 [node name="Hallway" parent="HallwaySubViewport" instance=ExtResource("6_grdvg")]
+
+[node name="Camera3D" parent="HallwaySubViewport/Hallway" instance=ExtResource("1_mw1py")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

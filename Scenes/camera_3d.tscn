@@ -13,6 +13,3 @@ auto_exposure_max_sensitivity = 350.0
 [node name="Camera3D" type="Camera3D"]
 attributes = SubResource("CameraAttributesPractical_kd552")
 fov = 80.0
-
-[node name="Pickup" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3)
