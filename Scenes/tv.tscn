@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dl0lovsnmerqj"]
+[gd_scene load_steps=9 format=3 uid="uid://dl0lovsnmerqj"]
 
 [ext_resource type="PackedScene" uid="uid://sb0vc14m7jtx" path="res://Blender/tv_room.blend" id="1_esxom"]
 [ext_resource type="PackedScene" uid="uid://bnquu8x3vrusk" path="res://Scenes/camera_3d.tscn" id="1_mw1py"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://be653wunsbu5q" path="res://Scenes/world_environment.tscn" id="3_fm4v8"]
 [ext_resource type="PackedScene" uid="uid://0231f8x3nu50" path="res://Scenes/camera_shader.tscn" id="5_davce"]
 [ext_resource type="PackedScene" uid="uid://lynl5m52u6pk" path="res://Scenes/hallway.tscn" id="6_grdvg"]
+[ext_resource type="Script" path="res://Scripts/cutscenes.gd" id="7_bbadk"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ml12k"]
 viewport_path = NodePath("HallwaySubViewport")
@@ -50,3 +51,8 @@ size = Vector2i(1000, 780)
 
 [node name="Camera3D" parent="HallwaySubViewport/Hallway" instance=ExtResource("1_mw1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Cutscenes" type="Node" parent="." node_paths=PackedStringArray("node", "camera")]
+script = ExtResource("7_bbadk")
+node = NodePath("..")
+camera = NodePath("../HallwaySubViewport/Hallway/Camera3D")

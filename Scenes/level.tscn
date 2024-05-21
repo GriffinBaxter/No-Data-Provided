@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b387ywruadsvn"]
+[gd_scene load_steps=20 format=3 uid="uid://b387ywruadsvn"]
 
 [ext_resource type="Script" path="res://Scripts/level.gd" id="1_n8obj"]
 [ext_resource type="PackedScene" uid="uid://dnel7bafh8ko1" path="res://Scenes/player.tscn" id="2_yj0xb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Scripts/hallway.gd" id="5_eim3l"]
 [ext_resource type="PackedScene" uid="uid://bu1pq2n30qnj7" path="res://Scenes/pause_menu.tscn" id="10_g66hf"]
 [ext_resource type="Script" path="res://Scripts/save_load.gd" id="11_kfi3i"]
+[ext_resource type="Script" path="res://Scripts/cutscenes.gd" id="14_544dw"]
 [ext_resource type="Script" path="res://Scripts/viewport.gd" id="18_n24nl"]
 [ext_resource type="FontFile" uid="uid://bu7vykn7473bi" path="res://Fonts/RobotoMono-SemiBold.ttf" id="19_clhhf"]
 [ext_resource type="PackedScene" uid="uid://drxjkbfx03hl0" path="res://Blender/identification.blend" id="21_s6ck1"]
@@ -329,5 +330,9 @@ script = ExtResource("11_kfi3i")
 script = ExtResource("21_t4yfa")
 
 [node name="CameraShader" parent="." instance=ExtResource("22_lwcip")]
+
+[node name="Cutscenes" type="Node" parent="." node_paths=PackedStringArray("node")]
+script = ExtResource("14_544dw")
+node = NodePath("..")
 
 [editable path="Viewport/SubViewportContainer/SubViewport/IdentificationNoShader"]

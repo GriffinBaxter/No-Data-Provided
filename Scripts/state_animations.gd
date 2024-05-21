@@ -24,6 +24,7 @@ const UTILS := preload("res://Scripts/utils.gd")
 @onready var identification: Node3D = $"../Hallway/Identification"
 @onready
 var wall_closing_dust_particles: GPUParticles3D = $"../Hallway/Walls/WallClosingDustParticles"
+@onready var cutscenes: Node = $"../Cutscenes"
 
 
 func _ready() -> void:
@@ -38,7 +39,7 @@ func intro_cutscene() -> void:
 	var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
 	tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
 	level.blink_text_with_caret(3, last_medium_presents)
-	level.setup_motion_cutscene(
+	cutscenes.setup_motion_cutscene(
 		"Hallway/last_medium_presents.bvh", level.Motion.LAST_MEDIUM_PRESENTS, 10
 	)
 	await get_tree().create_timer(3).timeout
@@ -48,7 +49,9 @@ func intro_cutscene() -> void:
 
 	last_medium_presents.visible = false
 	no_data_provided.visible = true
-	level.setup_motion_cutscene("Hallway/no_data_provided.bvh", level.Motion.NO_DATA_PROVIDED, 6.6)
+	cutscenes.setup_motion_cutscene(
+		"Hallway/no_data_provided.bvh", level.Motion.NO_DATA_PROVIDED, 6.6
+	)
 	await level.letter_by_letter(no_data_provided, "no data provided")
 
 	no_data_provided.visible = false
@@ -57,7 +60,7 @@ func intro_cutscene() -> void:
 	level.update_green_dither(0.15)
 	level.update_blue_dither(0.1)
 	animation_player.play("hallway_intro")
-	level.setup_motion_cutscene("Hallway/intro.bvh", level.Motion.HALLWAY_INTRO, 4.75, 0.1)
+	cutscenes.setup_motion_cutscene("Hallway/intro.bvh", level.Motion.HALLWAY_INTRO, 4.75, 0.1)
 	await get_tree().create_timer(4.75).timeout
 
 	wall_closing_dust_particles.emitting = true

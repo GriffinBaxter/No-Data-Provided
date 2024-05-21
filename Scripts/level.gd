@@ -30,8 +30,6 @@ var state: State = State.BEFORE_INTRO_CUTSCENE
 var current_motion: Motion = Motion.NONE
 var player_entered_area := false
 var interacted_with_identification := false
-var timer: Timer
-var bvh: Dictionary
 
 var intro_cutscene_started := false
 var end_cutscene_started := false
@@ -47,6 +45,7 @@ var end_cutscene_started := false
 @onready var save_load: Node = $SaveLoad
 @onready var table_slice: MeshInstance3D = $Hallway/TableWithSlice/Table
 @onready var inverse_table_slice: MeshInstance3D = $Hallway/TableWithInverseSlice/TableSlice
+@onready var cutscenes: Node = $Cutscenes
 
 
 func _ready() -> void:
@@ -66,7 +65,7 @@ func _process(_delta: float) -> void:
 		update_state(State.AFTER_INTRO_CUTSCENE)
 
 	if current_motion != Motion.NONE:
-		update_camera_with_motion(CAMERA_MOTIONS[current_motion] as Dictionary)
+		cutscenes.update_camera_with_motion(CAMERA_MOTIONS[current_motion] as Dictionary)
 
 	if (
 		state < State.MATCH_ANIMATION
@@ -137,56 +136,6 @@ func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
 		label.text = text + "|"
 		await get_tree().create_timer(0.5).timeout
 	label.text = text
-
-
-func setup_motion_cutscene(
-	path: String, motion: Motion, custom_time: float = 0, resolution: float = 1
-) -> void:
-	bvh = UTILS.get_bvh_dictionary(path, custom_time, resolution)
-	setup_timer(bvh.time as float)
-	current_motion = motion
-
-
-func setup_timer(wait_time: float) -> void:
-	timer = Timer.new()
-	add_child(timer)
-	timer.one_shot = true
-	timer.autostart = true
-	timer.wait_time = wait_time
-	timer.start()
-
-
-func update_camera_with_motion(camera_motion: Dictionary) -> void:
-	if timer.time_left <= 0 and current_motion != Motion.NONE:
-		current_motion = Motion.NONE
-	else:
-		var progress: float = (bvh.time - timer.time_left) / bvh.time
-		player_camera.global_position = (
-			UTILS.piecewise_linear_interpolation(bvh.position as PackedVector3Array, progress)
-			- bvh.position[-1]
-			+ camera_motion.final_pos
-			+ (
-				(1 - progress)
-				* (
-					camera_motion.initial_pos_delta
-					if camera_motion.has("initial_pos_delta")
-					else Vector3.ZERO
-				)
-			)
-		)
-		player_camera.global_rotation_degrees = (
-			UTILS.piecewise_linear_interpolation(bvh.rotation as PackedVector3Array, progress)
-			- bvh.rotation[-1]
-			+ camera_motion.final_rot
-			+ (
-				(1 - progress)
-				* (
-					camera_motion.initial_rot_delta
-					if camera_motion.has("initial_rot_delta")
-					else Vector3.ZERO
-				)
-			)
-		)
 
 
 func update_red_dither(value: float) -> void:
