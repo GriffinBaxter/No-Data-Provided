@@ -8,8 +8,6 @@ const UTILS := preload("res://Scripts/utils.gd")
 @onready var player: CharacterBody3D = $"../Player"
 @onready var camera_shader: MeshInstance3D = $"../CameraShader"
 @onready var animation_player: AnimationPlayer = $"../AnimationPlayer"
-@onready var last_medium_presents: Label3D = $"../Hallway/LastMediumPresentsLabel3D"
-@onready var no_data_provided: Label3D = $"../Hallway/NoDataProvidedLabel3D"
 @onready var chapter_one: Label3D = $"../Hallway/TableWithSlice/Table/ChapterLabel3D"
 @onready var recall: Label3D = $"../Hallway/TableWithSlice/Table/ChapterTitleLabel3D"
 @onready var fade_in_out: Control = $"../FadeInOut"
@@ -32,29 +30,6 @@ func _ready() -> void:
 
 
 func intro_cutscene() -> void:
-	last_medium_presents.visible = true
-	player_camera.fov = 50
-	fade_in_out.visible = true
-	colour_rect.color = Color(0, 0, 0, 1)
-	var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
-	tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
-	level.blink_text_with_caret(3, last_medium_presents)
-	cutscenes.setup_motion_cutscene(
-		"Hallway/last_medium_presents.bvh", level.Motion.LAST_MEDIUM_PRESENTS, 10
-	)
-	await get_tree().create_timer(3).timeout
-
-	fade_in_out.visible = false
-	await level.letter_by_letter(last_medium_presents, "last medium presents")
-
-	last_medium_presents.visible = false
-	no_data_provided.visible = true
-	cutscenes.setup_motion_cutscene(
-		"Hallway/no_data_provided.bvh", level.Motion.NO_DATA_PROVIDED, 6.6
-	)
-	await level.letter_by_letter(no_data_provided, "no data provided")
-
-	no_data_provided.visible = false
 	player_camera.fov = 80
 	level.update_red_dither(1.6)
 	level.update_green_dither(0.15)

@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dl0lovsnmerqj"]
+[gd_scene load_steps=10 format=3 uid="uid://dl0lovsnmerqj"]
 
 [ext_resource type="PackedScene" uid="uid://sb0vc14m7jtx" path="res://Blender/tv_room.blend" id="1_esxom"]
+[ext_resource type="Script" path="res://Scripts/tv.gd" id="1_m05pi"]
 [ext_resource type="PackedScene" uid="uid://bnquu8x3vrusk" path="res://Scenes/camera_3d.tscn" id="1_mw1py"]
 [ext_resource type="PackedScene" uid="uid://djqtq4bqqr3d0" path="res://Blender/tv.blend" id="2_4s7ft"]
 [ext_resource type="PackedScene" uid="uid://be653wunsbu5q" path="res://Scenes/world_environment.tscn" id="3_fm4v8"]
@@ -11,27 +12,28 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_ml12k"]
 viewport_path = NodePath("HallwaySubViewport")
 
-[node name="Node3D" type="Node3D"]
+[node name="Tv" type="Node3D"]
+script = ExtResource("1_m05pi")
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("3_fm4v8")]
 
 [node name="TvRoom" parent="." instance=ExtResource("1_esxom")]
 
-[node name="Tv" parent="TvRoom" instance=ExtResource("2_4s7ft")]
+[node name="TvModel" parent="TvRoom" instance=ExtResource("2_4s7ft")]
 
-[node name="Camera3D" parent="TvRoom/Tv" instance=ExtResource("1_mw1py")]
+[node name="Camera3D" parent="TvRoom/TvModel" instance=ExtResource("1_mw1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385, 1)
 
-[node name="Screen" type="Node3D" parent="TvRoom/Tv"]
+[node name="Screen" type="Node3D" parent="TvRoom/TvModel"]
 
-[node name="Sprite3D" type="Sprite3D" parent="TvRoom/Tv/Screen"]
+[node name="Sprite3D" type="Sprite3D" parent="TvRoom/TvModel/Screen"]
 transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 0.386, 0.2)
 cast_shadow = 0
 pixel_size = 0.0175
 transparent = false
 texture = SubResource("ViewportTexture_ml12k")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="TvRoom/Tv/Screen/Sprite3D"]
+[node name="SpotLight3D" type="SpotLight3D" parent="TvRoom/TvModel/Screen/Sprite3D"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, -12.5)
 light_color = Color(0.226693, 0.465123, 1, 1)
 light_energy = 16.0
@@ -51,6 +53,24 @@ size = Vector2i(1000, 780)
 
 [node name="Camera3D" parent="HallwaySubViewport/Hallway" instance=ExtResource("1_mw1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="FadeInOut" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="FadeInOut"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
 
 [node name="Cutscenes" type="Node" parent="." node_paths=PackedStringArray("node", "camera")]
 script = ExtResource("7_bbadk")
