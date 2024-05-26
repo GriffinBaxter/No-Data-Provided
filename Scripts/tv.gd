@@ -1,17 +1,11 @@
 extends Node3D
 
-enum Motion { NONE, LAST_MEDIUM_PRESENTS, NO_DATA_PROVIDED, HALLWAY_INTRO }
+enum Motion { NONE, LAST_MEDIUM_PRESENTS, NO_DATA_PROVIDED }
 
 const CAMERA_MOTIONS := {
 	Motion.LAST_MEDIUM_PRESENTS: {"final_pos": Vector3(0, -1, 1), "final_rot": Vector3(70, 0, 0)},
 	Motion.NO_DATA_PROVIDED:
 	{"final_pos": Vector3(1.5, 2.75, -48.5), "final_rot": Vector3(0, 150, 0)},
-	Motion.HALLWAY_INTRO:
-	{
-		"final_pos": Vector3(0, 1.75, 0),
-		"final_rot": Vector3(0, -180, 0),
-		"initial_pos_delta": Vector3(0, 0, -6)
-	},
 }
 
 var current_motion: Motion = Motion.NONE

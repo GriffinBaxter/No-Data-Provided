@@ -5,7 +5,7 @@ signal movable
 signal autosave
 
 enum State { BEFORE_INTRO_CUTSCENE, AFTER_INTRO_CUTSCENE, MATCH_ANIMATION, MATCH }
-enum Motion { NONE, LAST_MEDIUM_PRESENTS, NO_DATA_PROVIDED, HALLWAY_INTRO }
+enum Motion { NONE, HALLWAY_INTRO }
 
 const UTILS := preload("res://Scripts/utils.gd")
 const STATES_MOVEABLE: Array[State] = [State.AFTER_INTRO_CUTSCENE, State.MATCH_ANIMATION]
@@ -13,9 +13,6 @@ const STATES_SAVABLE: Array[State] = [
 	State.BEFORE_INTRO_CUTSCENE, State.AFTER_INTRO_CUTSCENE, State.MATCH
 ]
 const CAMERA_MOTIONS := {
-	Motion.LAST_MEDIUM_PRESENTS: {"final_pos": Vector3(0, -1, 1), "final_rot": Vector3(70, 0, 0)},
-	Motion.NO_DATA_PROVIDED:
-	{"final_pos": Vector3(1.5, 2.75, -48.5), "final_rot": Vector3(0, 150, 0)},
 	Motion.HALLWAY_INTRO:
 	{
 		"final_pos": Vector3(0, 1.75, 0),
