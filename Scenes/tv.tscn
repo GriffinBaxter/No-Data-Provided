@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dl0lovsnmerqj"]
+[gd_scene load_steps=13 format=3 uid="uid://dl0lovsnmerqj"]
 
 [ext_resource type="PackedScene" uid="uid://sb0vc14m7jtx" path="res://Blender/tv_room.blend" id="1_esxom"]
 [ext_resource type="Script" path="res://Scripts/tv.gd" id="1_m05pi"]
@@ -9,6 +9,67 @@
 [ext_resource type="PackedScene" uid="uid://lynl5m52u6pk" path="res://Scenes/hallway.tscn" id="6_grdvg"]
 [ext_resource type="Script" path="res://Scripts/cutscenes.gd" id="7_bbadk"]
 
+[sub_resource type="Animation" id="Animation_aw78j"]
+resource_name = "tv_camera"
+length = 20.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TvRoom/TvModel/Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0.385, 0.5), Vector3(0, 1, 1.75)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TvRoom/TvModel/Camera3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.349066, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_x7vvc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TvRoom/TvModel/Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.385, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TvRoom/TvModel/Camera3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h6l3c"]
+_data = {
+"RESET": SubResource("Animation_x7vvc"),
+"tv_camera": SubResource("Animation_aw78j")
+}
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_ml12k"]
 viewport_path = NodePath("HallwaySubViewport")
 
@@ -16,6 +77,10 @@ viewport_path = NodePath("HallwaySubViewport")
 script = ExtResource("1_m05pi")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_h6l3c")
+}
+autoplay = "tv_camera"
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("3_fm4v8")]
 
@@ -25,6 +90,7 @@ script = ExtResource("1_m05pi")
 
 [node name="Camera3D" parent="TvRoom/TvModel" instance=ExtResource("1_mw1py")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385, 1)
+fov = 50.0
 
 [node name="Screen" type="Node3D" parent="TvRoom/TvModel"]
 
