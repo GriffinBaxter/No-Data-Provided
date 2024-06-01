@@ -313,6 +313,24 @@ script = ExtResource("21_t4yfa")
 
 [node name="CameraShader" parent="." instance=ExtResource("22_lwcip")]
 
+[node name="FadeInOut" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="FadeInOut"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
 [node name="Cutscenes" type="Node" parent="." node_paths=PackedStringArray("node")]
 script = ExtResource("14_544dw")
 node = NodePath("..")

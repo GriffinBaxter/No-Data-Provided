@@ -170,12 +170,12 @@ func end_cutscene() -> void:
 	tween_1.tween_property(player_camera, "global_position", Vector3(0, 7.5, -44.5), 13)
 	tween_1.tween_property(player_camera, "global_rotation_degrees", Vector3(-90, 11.6, 0), 13)
 	recall.visible = true
-	await level.letter_by_letter(recall, "recall")
+	await cutscenes.letter_by_letter(recall, "recall")
 
 	await get_tree().create_timer(1).timeout
 
 	chapter_one.visible = true
-	level.letter_by_letter(chapter_one, "chapter one")
+	cutscenes.letter_by_letter(chapter_one, "chapter one")
 	await get_tree().create_timer(2).timeout
 
 	var tween_2 := get_tree().create_tween().set_ease(Tween.EASE_IN)

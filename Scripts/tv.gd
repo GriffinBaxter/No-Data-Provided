@@ -13,7 +13,7 @@ var current_motion: Motion = Motion.NONE
 @onready var cutscenes: Node = $Cutscenes
 
 @onready var last_medium_presents: Label3D = $HallwaySubViewport/Hallway/LastMediumPresentsLabel3D
-@onready var camera: Camera3D = $HallwaySubViewport/Hallway/Camera3D
+@onready var hallway_camera: Camera3D = $HallwaySubViewport/Hallway/Camera3D
 @onready var no_data_provided: Label3D = $HallwaySubViewport/Hallway/NoDataProvidedLabel3D
 @onready var fade_in_out: Control = $FadeInOut
 @onready var colour_rect: ColorRect = $FadeInOut/ColorRect
@@ -30,40 +30,21 @@ func _process(_delta: float) -> void:
 
 func intro_security_cam_cutscene() -> void:
 	last_medium_presents.visible = true
-	camera.fov = 50
+	hallway_camera.fov = 50
 	fade_in_out.visible = true
 	colour_rect.color = Color(0, 0, 0, 1)
 	var tween := get_tree().create_tween().set_ease(Tween.EASE_OUT)
 	tween.tween_property(colour_rect, "color", Color(0, 0, 0, 0), 3)
-	blink_text_with_caret(3, last_medium_presents)
+	cutscenes.blink_text_with_caret(3, last_medium_presents)
 	cutscenes.setup_motion_cutscene(
 		"Hallway/last_medium_presents.bvh", Motion.LAST_MEDIUM_PRESENTS, 10
 	)
 	await get_tree().create_timer(3).timeout
 
 	fade_in_out.visible = false
-	await letter_by_letter(last_medium_presents, "last medium presents")
+	await cutscenes.letter_by_letter(last_medium_presents, "last medium presents")
 
 	last_medium_presents.visible = false
 	no_data_provided.visible = true
 	cutscenes.setup_motion_cutscene("Hallway/no_data_provided.bvh", Motion.NO_DATA_PROVIDED, 6.6)
-	await letter_by_letter(no_data_provided, "no data provided")
-
-
-func letter_by_letter(label: Label3D, text: String) -> void:
-	await blink_text_with_caret(2, label)
-	var current_text := ""
-	for letter in text:
-		current_text += letter
-		label.text = current_text + "|"
-		await get_tree().create_timer(0.1).timeout
-	await blink_text_with_caret(3, label, text)
-
-
-func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
-	for _n: int in n:
-		label.text = text
-		await get_tree().create_timer(0.5).timeout
-		label.text = text + "|"
-		await get_tree().create_timer(0.5).timeout
-	label.text = text
+	await cutscenes.letter_by_letter(no_data_provided, "no data provided")

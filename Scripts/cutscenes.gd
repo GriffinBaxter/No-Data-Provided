@@ -62,3 +62,22 @@ func update_camera_with_motion(camera_motion: Dictionary) -> void:
 				)
 			)
 		)
+
+
+func letter_by_letter(label: Label3D, text: String) -> void:
+	await blink_text_with_caret(2, label)
+	var current_text := ""
+	for letter in text:
+		current_text += letter
+		label.text = current_text + "|"
+		await get_tree().create_timer(0.1).timeout
+	await blink_text_with_caret(3, label, text)
+
+
+func blink_text_with_caret(n: int, label: Label3D, text: String = "") -> void:
+	for _n: int in n:
+		label.text = text
+		await get_tree().create_timer(0.5).timeout
+		label.text = text + "|"
+		await get_tree().create_timer(0.5).timeout
+	label.text = text
