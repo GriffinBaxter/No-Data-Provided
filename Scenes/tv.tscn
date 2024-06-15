@@ -9,6 +9,33 @@
 [ext_resource type="PackedScene" uid="uid://lynl5m52u6pk" path="res://Scenes/hallway.tscn" id="6_grdvg"]
 [ext_resource type="Script" path="res://Scripts/cutscenes.gd" id="7_bbadk"]
 
+[sub_resource type="Animation" id="Animation_x7vvc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TvRoom/TvModel/Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.385, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TvRoom/TvModel/Camera3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_aw78j"]
 resource_name = "tv_camera"
 length = 20.0
@@ -35,33 +62,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(2, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.349066, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_x7vvc"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("TvRoom/TvModel/Camera3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0.385, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TvRoom/TvModel/Camera3D:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_h6l3c"]
