@@ -180,3 +180,7 @@ func end_cutscene() -> void:
 
 	var tween_2 := get_tree().create_tween().set_ease(Tween.EASE_IN)
 	tween_2.tween_property(colour_rect, "color", Color(0, 0, 0, 1), 4.1)
+	await get_tree().create_timer(4.1).timeout
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
