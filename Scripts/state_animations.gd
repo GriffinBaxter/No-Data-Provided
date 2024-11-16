@@ -8,7 +8,7 @@ const UTILS := preload("res://Scripts/utils.gd")
 @onready var player: CharacterBody3D = $"../Player"
 @onready var camera_shader: MeshInstance3D = $"../CameraShader"
 @onready var animation_player: AnimationPlayer = $"../AnimationPlayer"
-@onready var chapter_one: Label3D = $"../Hallway/TableWithSlice/Table/ChapterLabel3D"
+@onready var chapter_zero: Label3D = $"../Hallway/TableWithSlice/Table/ChapterLabel3D"
 @onready var recall: Label3D = $"../Hallway/TableWithSlice/Table/ChapterTitleLabel3D"
 @onready var fade_in_out: Control = $"../FadeInOut"
 @onready var colour_rect: ColorRect = $"../FadeInOut/ColorRect"
@@ -174,8 +174,8 @@ func end_cutscene() -> void:
 
 	await get_tree().create_timer(1).timeout
 
-	chapter_one.visible = true
-	cutscenes.letter_by_letter(chapter_one, "chapter one")
+	chapter_zero.visible = true
+	cutscenes.letter_by_letter(chapter_zero, "chapter zero")
 	await get_tree().create_timer(2).timeout
 
 	var tween_2 := get_tree().create_tween().set_ease(Tween.EASE_IN)
